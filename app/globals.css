@@ -1,0 +1,211 @@
+@import "tailwindcss";
+
+@theme {
+  /* Warm paper base — deliberately not pure white */
+  --color-paper: #fbf8f3;
+  --color-paper-2: #f5eee3;
+  --color-paper-3: #ece2d2;
+  --color-line: #e6dccb;
+  --color-line-strong: #d8ccb6;
+
+  /* Warm ink — deliberately not pure black */
+  --color-ink: #1c1712;
+  --color-ink-2: #4a4139;
+  --color-ink-3: #7d7166;
+
+  /* Brand */
+  --color-violet: #6c4cf1;
+  --color-violet-2: #8b6bff;
+  --color-violet-soft: #efeaff;
+
+  /* Filament — the warm half of the palette */
+  --color-filament: #f0a428;
+  --color-filament-2: #ffcb6b;
+  --color-filament-soft: #fdf0da;
+
+  /* Night band */
+  --color-night: #0c0912;
+  --color-night-2: #171122;
+  --color-night-3: #2a2038;
+
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-display: var(--font-fraunces), Georgia, "Times New Roman", serif;
+
+  --shadow-lift: 0 1px 2px rgba(28, 23, 18, 0.05), 0 8px 24px -8px rgba(28, 23, 18, 0.12);
+  --shadow-frame: 0 2px 4px rgba(28, 23, 18, 0.04), 0 24px 60px -20px rgba(28, 23, 18, 0.28),
+    0 60px 120px -60px rgba(108, 76, 241, 0.35);
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    background-color: var(--color-paper);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  ::selection {
+    background: #cdbcff;
+    color: #16102b;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-violet);
+    outline-offset: 3px;
+    border-radius: 4px;
+  }
+}
+
+@utility display {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-variation-settings: "SOFT" 0, "WONK" 0, "opsz" 40;
+  letter-spacing: -0.022em;
+  line-height: 1.03;
+}
+
+/* --- Ambient light: the "tubelight beam" behind the hero ------------------ */
+.beam {
+  background:
+    radial-gradient(60% 46% at 50% -6%, rgba(240, 164, 40, 0.24) 0%, rgba(240, 164, 40, 0) 62%),
+    radial-gradient(72% 60% at 50% -14%, rgba(108, 76, 241, 0.22) 0%, rgba(108, 76, 241, 0) 66%);
+}
+
+/* Paper grain — kills the flat-white feel without adding an image request */
+.grain::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.16;
+  mix-blend-mode: multiply;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='0.28'/%3E%3C/svg%3E");
+}
+
+.hairline {
+  border: 1px solid var(--color-line);
+}
+
+.card-paper {
+  background: linear-gradient(180deg, #fffdfa 0%, #fbf7f0 100%);
+  border: 1px solid var(--color-line);
+  box-shadow: var(--shadow-lift);
+}
+
+/* --- Keycap ------------------------------------------------------------- */
+.keycap {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 2.1em;
+  padding: 0.3em 0.55em;
+  border-radius: 0.5em;
+  background: linear-gradient(180deg, #ffffff 0%, #f2ece1 100%);
+  border: 1px solid var(--color-line-strong);
+  box-shadow: 0 2px 0 var(--color-line-strong), 0 3px 6px rgba(28, 23, 18, 0.1);
+  font-weight: 650;
+  font-size: 0.85em;
+  line-height: 1;
+  color: var(--color-ink);
+  transition: transform 120ms ease, box-shadow 120ms ease;
+}
+
+.keycap[data-pressed="true"] {
+  transform: translateY(2px);
+  box-shadow: 0 0 0 var(--color-line-strong), 0 1px 2px rgba(28, 23, 18, 0.12);
+  background: linear-gradient(180deg, #f7f1e6 0%, #eee6d8 100%);
+}
+
+/* --- Marker highlight (the "select the confusing bit" gesture) ----------- */
+.marker {
+  background-image: linear-gradient(180deg, rgba(255, 203, 107, 0) 52%, rgba(255, 203, 107, 0.55) 52%);
+  background-repeat: no-repeat;
+  background-size: 0% 100%;
+  transition: background-size 700ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+.marker[data-on="true"] {
+  background-size: 100% 100%;
+}
+
+/* --- Animations --------------------------------------------------------- */
+@keyframes filament-pulse {
+  0%, 100% { opacity: 0.55; }
+  50% { opacity: 1; }
+}
+.filament-glow { animation: filament-pulse 3.2s ease-in-out infinite; }
+
+@keyframes draw {
+  to { stroke-dashoffset: 0; }
+}
+
+@keyframes eq {
+  0%, 100% { transform: scaleY(0.35); }
+  50% { transform: scaleY(1); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .filament-glow,
+  [class*="animate-"] { animation: none !important; }
+  .marker { transition: none; background-size: 100% 100%; }
+}
+
+/* --- Demo stage: the window/panel split, animated as a grid ------------- */
+.demo-stage {
+  display: grid;
+  gap: 0.5rem;
+  grid-template-rows: 1fr 0fr;
+  transition: grid-template-rows 650ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+.demo-stage[data-open="true"] {
+  grid-template-rows: 1fr 1.15fr;
+}
+.demo-stage > * {
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+}
+.demo-panel {
+  opacity: 0;
+  transition: opacity 400ms ease 120ms;
+}
+.demo-stage[data-open="true"] .demo-panel {
+  opacity: 1;
+}
+
+@media (min-width: 640px) {
+  .demo-stage {
+    grid-template-rows: minmax(0, 1fr);
+    grid-template-columns: 1fr 0fr;
+    transition: grid-template-columns 650ms cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .demo-stage[data-open="true"] {
+    grid-template-rows: minmax(0, 1fr);
+    grid-template-columns: 1fr 1.3fr;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .demo-stage,
+  .demo-panel {
+    transition: none;
+  }
+}
+
+/* The kbd inside display type needs to read as text, not as a button */
+.keycap {
+  font-family: var(--font-sans);
+}
+.keycap-inline {
+  font-size: 0.44em;
+  min-width: 1.9em;
+  padding: 0.34em 0.5em;
+  vertical-align: 0.18em;
+}
