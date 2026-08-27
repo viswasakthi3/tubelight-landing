@@ -41,14 +41,14 @@ export const metadata: Metadata = {
     url: siteUrl,
     siteName: "Tubelight",
     type: "website",
-    images: [{ url: "/shots/hero-alte.webp", width: 1600, height: 789, alt: "Tubelight explaining a PDF beside it" }],
+    images: [{ url: "/shots/hero-main.webp", width: 2368, height: 1154, alt: "Tubelight explaining a PDF beside it" }],
   },
   twitter: {
     card: "summary_large_image",
     title: "Tubelight — understand anything, instantly",
     description:
       "Highlight any text on Windows, press Alt+E, and get a drawn explanation with a voice. Private beta.",
-    images: ["/shots/hero-alte.webp"],
+    images: ["/shots/hero-main.webp"],
   },
   icons: {
     icon: [{ url: "/brand/icon.png", type: "image/png" }],

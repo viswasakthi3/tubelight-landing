@@ -50,13 +50,14 @@ export function Hero() {
 
         <figure className="shadow-frame relative overflow-hidden rounded-[20px] bg-white p-1.5 ring-1 ring-line-strong/60 sm:rounded-[26px] sm:p-2.5">
           <Image
-            src="/shots/hero-alte.webp"
+            src="/shots/hero-main.webp"
             alt="A PDF about human memory on the left half of a Windows screen, with the Tubelight panel open on the right showing a labelled brain diagram, four numbered steps and an audio player."
-            width={1600}
-            height={789}
+            width={2368}
+            height={1154}
             priority
-            sizes="(max-width: 1024px) 100vw, 1024px"
-            className="w-full rounded-[14px] sm:rounded-[18px]"
+            quality={95}
+            sizes="(max-width: 1280px) 100vw, 1200px"
+            className="w-full rounded-[14px] sm:rounded-[18px] shadow-sm"
           />
         </figure>
 
