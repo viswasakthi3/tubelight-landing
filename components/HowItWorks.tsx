@@ -11,7 +11,7 @@ const STEPS = [
     triggerPhase: "select" as Phase,
   },
   {
-    label: "Press Alt+E",
+    label: "Press Alt + E",
     detail: "One shortcut, anywhere in Windows. Nothing to set up first.",
     phases: ["press"] as Phase[],
     triggerPhase: "press" as Phase,
@@ -46,12 +46,12 @@ export function HowItWorks() {
 
   return (
     <section id="how" className="relative mx-auto max-w-6xl px-6 py-20 md:py-28">
-      <div className="max-w-2xl">
+      <div className="max-w-4xl">
         <p className="text-sm font-semibold tracking-[0.14em] text-violet uppercase">How it works</p>
-        <h2 className="display mt-3 text-[2.1rem] text-ink sm:text-[2.7rem]">
+        <h2 className="display mt-3 text-[2.1rem] text-ink sm:text-[2.7rem] sm:whitespace-nowrap">
           Three seconds from &ldquo;what?&rdquo; to &ldquo;oh.&rdquo;
         </h2>
-        <p className="mt-4 text-lg leading-relaxed text-ink-2">
+        <p className="mt-4 max-w-2xl text-lg leading-relaxed text-ink-2">
           No new tab, no prompt to write, no wall of text to wade through. Watch it happen.
         </p>
       </div>

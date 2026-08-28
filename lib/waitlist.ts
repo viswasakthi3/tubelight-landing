@@ -1,5 +1,6 @@
 import { promises as fs } from "node:fs";
 import path from "node:path";
+import { Pool } from "pg";
 
 export type Signup = {
   email: string;
@@ -10,10 +11,40 @@ export type Signup = {
 
 const FILE = path.join(process.cwd(), "data", "waitlist.json");
 
+let pool: Pool | null = null;
+let tableInitialized = false;
+
+function getPool(): Pool | null {
+  const connectionString = process.env.DATABASE_URL;
+  if (!connectionString) return null;
+  if (!pool) {
+    pool = new Pool({
+      connectionString,
+      max: 10,
+      idleTimeoutMillis: 30000,
+      connectionTimeoutMillis: 5000,
+    });
+  }
+  return pool;
+}
+
+async function ensureTable(db: Pool): Promise<void> {
+  if (tableInitialized) return;
+  await db.query(`
+    CREATE TABLE IF NOT EXISTS tubelight_waitlist (
+      id SERIAL PRIMARY KEY,
+      email VARCHAR(255) NOT NULL UNIQUE,
+      role VARCHAR(100),
+      source VARCHAR(100) DEFAULT 'site',
+      created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+    );
+    CREATE INDEX IF NOT EXISTS idx_tubelight_waitlist_email ON tubelight_waitlist(email);
+  `);
+  tableInitialized = true;
+}
+
 /**
- * Local JSON storage. Fine for a beta list on a single box; on a read-only
- * host (Vercel, Netlify) writes fail silently and WAITLIST_WEBHOOK_URL /
- * Resend become the system of record instead.
+ * Local JSON storage fallback.
  */
 async function readAll(): Promise<Signup[]> {
   try {
@@ -26,6 +57,26 @@ async function readAll(): Promise<Signup[]> {
 }
 
 export async function saveSignup(signup: Signup): Promise<{ stored: boolean; duplicate: boolean; total: number }> {
+  const db = getPool();
+  if (db) {
+    try {
+      await ensureTable(db);
+      const insertRes = await db.query(
+        `INSERT INTO tubelight_waitlist (email, role, source)
+         VALUES ($1, $2, $3)
+         ON CONFLICT (email) DO NOTHING
+         RETURNING id`,
+        [signup.email, signup.role || null, signup.source || "site"],
+      );
+      const duplicate = (insertRes.rowCount ?? 0) === 0;
+      const countRes = await db.query<{ count: number }>(`SELECT COUNT(*)::int AS count FROM tubelight_waitlist`);
+      const total = countRes.rows[0]?.count ?? 0;
+      return { stored: true, duplicate, total };
+    } catch (err) {
+      console.error("[waitlist] Database query error, falling back to local file:", err);
+    }
+  }
+
   try {
     const all = await readAll();
     const duplicate = all.some((s) => s.email === signup.email);
@@ -87,3 +138,4 @@ export function isValidEmail(value: string): boolean {
   if (value.length > 254) return false;
   return /^[^\s@,;]+@[^\s@,;.]+(\.[^\s@,;.]+)+$/.test(value);
 }
+

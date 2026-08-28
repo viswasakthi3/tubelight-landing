@@ -7,15 +7,15 @@ const FAQ = [
   },
   {
     q: "Does it cost anything?",
-    a: "No. Beta users get five explanations per device per day, free, with the counter resetting at midnight IST. If a generation fails, the slot is handed back to you. Pricing after the beta hasn't been set, and beta users will hear about it before anyone else.",
+    a: "We offer 10 videos to try at the start to understand about the product.",
   },
   {
     q: "Is the text I highlight sent anywhere?",
-    a: "Your selection is sent to the backend to generate the explanation, and it is never logged or stored there. The finished explanations — pictures and audio — are saved locally on your machine, along with your name and notes if you add them. What's kept on the server is the anonymous device ID and how many explanations it used today.",
+    a: "Your selection is sent to the backend to generate the explanation, and it is never logged or stored there. The finished explanations — pictures and audio — are saved locally on your machine, along with your name and notes if you add them. What's kept on the server is the anonymous device ID and how many explanations it used.",
   },
   {
     q: "Windows only? What about Mac?",
-    a: "Windows 10 and 11 today — the global Alt+E shortcut and the window-snapping are built on Windows APIs. A Mac build is on the list, and joining the waitlist with a Mac is a useful vote for it.",
+    a: "Windows 10 and 11 today — the global Alt + E shortcut and the window-snapping are built on Windows APIs. A Mac build is on the list, and joining the waitlist with a Mac is a useful vote for it.",
   },
   {
     q: "What happens after I request access?",

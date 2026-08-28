@@ -2,12 +2,6 @@ import { Mark } from "./Logo";
 import { Reveal } from "./Reveal";
 import { WaitlistForm } from "./WaitlistForm";
 
-const INCLUDED = [
-  { label: "5 explanations a day", detail: "Free for the whole beta. No card, no trial clock." },
-  { label: "Windows 10 & 11", detail: "~120 MB installer, delivered by email when your invite lands." },
-  { label: "A say in what ships", detail: "Beta users get a direct line to the team building it." },
-];
-
 export function BetaCTA() {
   return (
     <section id="beta" className="relative px-6 pb-24 pt-4">
@@ -36,20 +30,6 @@ export function BetaCTA() {
             <div className="mx-auto mt-9 max-w-xl text-left">
               <WaitlistForm source="beta-cta" askRole />
             </div>
-
-            <dl className="mx-auto mt-12 grid max-w-3xl gap-6 border-t border-line pt-9 text-left sm:grid-cols-3">
-              {INCLUDED.map((item) => (
-                <div key={item.label}>
-                  <dt className="flex items-center gap-2 text-[0.98rem] font-semibold text-ink">
-                    <svg viewBox="0 0 20 20" fill="currentColor" className="h-4 w-4 shrink-0 text-filament" aria-hidden="true">
-                      <path d="M10 1.7 12.4 7l5.8.5-4.4 3.8 1.3 5.7L10 14l-5.1 3 1.3-5.7L1.8 7.5 7.6 7z" />
-                    </svg>
-                    {item.label}
-                  </dt>
-                  <dd className="mt-1.5 text-[0.92rem] leading-relaxed text-ink-2">{item.detail}</dd>
-                </div>
-              ))}
-            </dl>
           </div>
         </div>
       </Reveal>

@@ -19,9 +19,9 @@ const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
-  title: "Tubelight — select text, press Alt+E, understand instantly",
+  title: "Tubelight — select text, press Alt + E, understand instantly",
   description:
-    "Tubelight explains whatever you highlight on Windows. Press Alt+E and get a drawn diagram plus a voice walking you through it, right beside what you're reading. Now in private beta.",
+    "Tubelight explains whatever you highlight on Windows. Press Alt + E and get a drawn diagram plus a voice walking you through it, right beside what you're reading. Now in private beta.",
   applicationName: "Tubelight",
   authors: [{ name: "Tubelight" }],
   keywords: [
@@ -29,7 +29,7 @@ export const metadata: Metadata = {
     "explain anything",
     "visual explanations",
     "Windows app",
-    "Alt+E",
+    "Alt + E",
     "AI diagrams",
     "voice narration",
     "study tool",
@@ -37,21 +37,24 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Tubelight — understand anything, instantly",
     description:
-      "Highlight any text on Windows, press Alt+E, and a panel slides in with a drawn diagram and a voice that explains it. Private beta — request an invite.",
+      "Highlight any text on Windows, press Alt + E, and a panel slides in with a drawn diagram and a voice that explains it. Private beta — request an invite.",
     url: siteUrl,
     siteName: "Tubelight",
     type: "website",
-    images: [{ url: "/shots/hero-main.webp", width: 2368, height: 1154, alt: "Tubelight explaining a PDF beside it" }],
+    images: [{ url: "/shots/hero-blackhole.webp", width: 2590, height: 1632, alt: "Tubelight explaining a document with a drawn diagram and voice narration" }],
   },
   twitter: {
     card: "summary_large_image",
     title: "Tubelight — understand anything, instantly",
     description:
-      "Highlight any text on Windows, press Alt+E, and get a drawn explanation with a voice. Private beta.",
-    images: ["/shots/hero-main.webp"],
+      "Highlight any text on Windows, press Alt + E, and get a drawn explanation with a voice. Private beta.",
+    images: ["/shots/hero-blackhole.webp"],
   },
   icons: {
-    icon: [{ url: "/brand/icon.png", type: "image/png" }],
+    icon: [
+      { url: "/favicon.ico" },
+      { url: "/brand/icon.png", type: "image/png" },
+    ],
     apple: [{ url: "/brand/icon-512.png" }],
   },
 };

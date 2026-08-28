@@ -129,7 +129,7 @@ export function AltEDemo({ onPhase, overridePhase }: AltEDemoProps) {
               <kbd className="keycap" data-pressed={pressed}>
                 Alt
               </kbd>
-              <span className="text-[11px] font-bold text-ink-3">+</span>
+              <span className="mx-1 text-[11px] font-bold text-ink-3">+</span>
               <kbd className="keycap" data-pressed={pressed}>
                 E
               </kbd>

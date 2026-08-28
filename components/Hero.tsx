@@ -19,7 +19,7 @@ export function Hero() {
           Confused by something?
           <span className="mt-2 block text-violet">
             Press <kbd className="keycap keycap-inline">Alt</kbd>
-            <span className="mx-0.5 align-[0.22em] text-[0.42em] text-ink-3">+</span>
+            <span className="mx-2.5 align-[0.22em] text-[0.42em] text-ink-3">+</span>
             <kbd className="keycap keycap-inline">E</kbd>
           </span>
         </h1>
@@ -50,10 +50,10 @@ export function Hero() {
 
         <figure className="shadow-frame relative overflow-hidden rounded-[20px] bg-white p-1.5 ring-1 ring-line-strong/60 sm:rounded-[26px] sm:p-2.5">
           <Image
-            src="/shots/hero-main.webp"
-            alt="A PDF about human memory on the left half of a Windows screen, with the Tubelight panel open on the right showing a labelled brain diagram, four numbered steps and an audio player."
-            width={2368}
-            height={1154}
+            src="/shots/hero-blackhole.webp"
+            alt="A document about black holes on the left half of a Windows screen, with the Tubelight panel open on the right showing a drawn diagram of the Anatomy of a Black Hole and an audio player narration."
+            width={2590}
+            height={1632}
             priority
             quality={95}
             sizes="(max-width: 1280px) 100vw, 1200px"
@@ -62,7 +62,7 @@ export function Hero() {
         </figure>
 
         <figcaption className="mt-5 text-center text-[13px] text-ink-3">
-          Real output. Highlighted text in a PDF → a drawn explanation and narration, in the panel
+          Real output. Highlighted text in any app → a drawn explanation and narration, in the panel
           beside it.
         </figcaption>
       </div>

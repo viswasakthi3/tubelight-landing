@@ -1,15 +1,20 @@
 import Image from "next/image";
 
-export function Logo({ className = "h-8" }: { className?: string }) {
+export function Logo({ className = "" }: { className?: string }) {
   return (
-    <Image
-      src="/brand/logo.png"
-      alt="Tubelight"
-      width={985}
-      height={332}
-      priority
-      className={`${className} w-auto`}
-    />
+    <div className={`inline-flex items-center gap-3 sm:gap-3.5 ${className}`}>
+      <Image
+        src="/brand/mark.png"
+        alt=""
+        width={307}
+        height={332}
+        priority
+        className="h-9 w-auto sm:h-10.5 object-contain shrink-0"
+      />
+      <span className="text-[1.5rem] sm:text-[1.75rem] font-bold tracking-tight text-ink leading-none font-sans select-none">
+        tubelight
+      </span>
+    </div>
   );
 }
 

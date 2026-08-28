@@ -5,7 +5,7 @@ export function Footer() {
     <footer className="relative border-t border-line bg-paper-2/60">
       <div className="mx-auto flex max-w-6xl flex-col gap-6 px-6 py-10 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <Logo className="h-7" />
+          <Logo />
           <p className="mt-3 max-w-sm text-sm leading-relaxed text-ink-2">
             Light on the thing you are trying to understand — arriving fast enough to be worth it.
           </p>
@@ -14,9 +14,6 @@ export function Footer() {
         <nav className="flex flex-wrap items-center gap-x-6 gap-y-2 text-sm text-ink-2">
           <a className="transition-colors hover:text-ink" href="#how">
             How it works
-          </a>
-          <a className="transition-colors hover:text-ink" href="#features">
-            Features
           </a>
           <a className="transition-colors hover:text-ink" href="#faq">
             Beta FAQ
