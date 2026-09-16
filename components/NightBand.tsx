@@ -20,7 +20,7 @@ const POINTS = [
 
 export function NightBand() {
   return (
-    <section className="relative overflow-hidden bg-night text-white">
+    <section id="visual-engine" className="relative overflow-hidden bg-night text-white" aria-labelledby="nightband-heading">
       {/* Background ambient lighting */}
       <div
         aria-hidden="true"
@@ -37,7 +37,7 @@ export function NightBand() {
             <p className="text-sm font-semibold tracking-[0.14em] text-filament-2 uppercase">
               Built to be looked at
             </p>
-            <h2 className="display mt-3 text-[2.1rem] text-white sm:text-[2.7rem]">
+            <h2 id="nightband-heading" className="display mt-3 text-[2.1rem] text-white sm:text-[2.7rem]">
               It doesn&rsquo;t summarise. It draws.
             </h2>
             <p className="mt-4 text-lg leading-relaxed text-white/70">

@@ -1,0 +1,31 @@
+# Tubelight
+
+> Tubelight is a next-generation visual learning platform for Windows that turns complex text, documents, and technical topics into interactive UI diagrams and synchronized voice walkthroughs in under 3 seconds.
+
+## Overview
+Tubelight is built on the principle that the human brain processes visual diagrams and spatial relationships up to 60,000 times faster than raw text. Instead of answering questions with another wall of text or generic AI summaries, Tubelight instantly synthesizes the mental model you need: vector flowcharts, anatomical breakdowns, cycles, and multi-step slides paired with an engaging voice explanation.
+
+## How It Works
+1. **Highlight Any Text**: Highlight any confusing passage in any Windows application (Chrome, Edge, PDF readers, Microsoft Word, Slack, Notion, VS Code).
+2. **Press Alt + E**: Press the universal shortcut anywhere in Windows.
+3. **Instant Split-Screen UI**: Your active window smoothly shifts left while the Tubelight panel slides in on the right without obscuring your workspace.
+4. **Dual Stream Synthesis**: A custom visual synthesis engine draws vector diagrams while low-latency voice narration walks you through the concept step-by-step.
+
+## Key Capabilities
+- **Visual Synthesis Engine**: Renders progressive SVG diagrams, concept maps, and timelines tailored to the highlighted topic.
+- **Synchronized Voiceover**: Low-latency text-to-speech that explains visual landmarks in real time as they appear.
+- **Interactive Step-by-Step Slides**: Complex systems are broken down into sequentially illustrated, captioned cards.
+- **Dynamic Steering**: Refine any diagram with one click: "Simpler", "As a timeline", or "Give me a real-world analogy".
+- **Topic Search Mode**: Type any topic directly to generate visual explanations on demand with autocomplete suggestions.
+- **Local Knowledge Graph & Privacy**: Text selections are processed in memory and never logged or stored on remote servers. Personal explanation history and notes are saved locally on your device.
+
+## System Requirements & Availability
+- Operating System: Windows 10 & Windows 11 (64-bit).
+- Distribution: Private Beta with rolling weekly invite batches.
+- Trial: 10 full visual explanations included at signup.
+
+## Key URLs
+- Home: https://tubelight.net
+- Beta Access: https://tubelight.net/#beta
+- How It Works: https://tubelight.net/#how
+- Upgrade & Pro Plans: https://tubelight.net/upgrade

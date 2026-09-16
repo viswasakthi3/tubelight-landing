@@ -6,19 +6,19 @@ import { AltEDemo, type Phase } from "./AltEDemo";
 const STEPS = [
   {
     label: "Highlight it",
-    detail: "Any text, in any app — browser, PDF, Word, chat, code.",
+    detail: "Select any difficult text in any Windows app — browser, PDF, Word, chat, or code.",
     phases: ["read", "select"] as Phase[],
     triggerPhase: "select" as Phase,
   },
   {
     label: "Press Alt + E",
-    detail: "One shortcut, anywhere in Windows. Nothing to set up first.",
+    detail: "One universal shortcut anywhere on Windows. No new tabs, no prompt engineering required.",
     phases: ["press"] as Phase[],
     triggerPhase: "press" as Phase,
   },
   {
     label: "See it and hear it",
-    detail: "Your window snaps left. A diagram draws itself while a voice walks you through it.",
+    detail: "Your window snaps left. An interactive UI diagram draws itself while a voice walks you through it.",
     phases: ["open", "draw"] as Phase[],
     triggerPhase: "draw" as Phase,
   },
@@ -45,19 +45,19 @@ export function HowItWorks() {
   const activeIndex = STEPS.findIndex((step) => step.phases.includes(phase));
 
   return (
-    <section id="how" className="relative mx-auto max-w-6xl px-6 py-20 md:py-28">
+    <section id="how" className="relative mx-auto max-w-6xl px-6 py-20 md:py-28" aria-labelledby="how-heading">
       <div className="max-w-4xl">
         <p className="text-sm font-semibold tracking-[0.14em] text-violet uppercase">How it works</p>
-        <h2 className="display mt-3 text-[2.1rem] text-ink sm:text-[2.7rem] sm:whitespace-nowrap">
+        <h2 id="how-heading" className="display mt-3 text-[2.1rem] text-ink sm:text-[2.7rem] sm:whitespace-nowrap">
           Three seconds from &ldquo;what?&rdquo; to &ldquo;oh.&rdquo;
         </h2>
         <p className="mt-4 max-w-2xl text-lg leading-relaxed text-ink-2">
-          No new tab, no prompt to write, no wall of text to wade through. Watch it happen.
+          No new tab, no prompt to write, no wall of text to wade through. Watch the visual learning engine happen in real time.
         </p>
       </div>
 
       <div className="mt-12 grid items-center gap-10 lg:grid-cols-12 lg:gap-14">
-        <ol className="order-2 space-y-3 lg:order-1 lg:col-span-4">
+        <ol className="order-2 space-y-3 lg:order-1 lg:col-span-4" aria-label="Steps to use Tubelight">
           {STEPS.map((step, index) => {
             const active = index === activeIndex;
             return (

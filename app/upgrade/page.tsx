@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { useEffect, useState, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
@@ -12,19 +12,97 @@ interface UserProfile {
   email?: string;
 }
 
+const PLANS = {
+  boost_55: {
+    id: "boost_55",
+    name: "55 Credits Pack",
+    badge: "Instant Top-up",
+    priceInr: 300,
+    priceUsd: 4,
+    amountPaise: 30000,
+    period: "one-time",
+    credits: 55,
+    mix: "55 Fast / 27 Balanced / 18 Rich",
+    description: "Tubelight 55 Credits Pack (55 Fast, 27 Balanced, or 18 Rich explanations)",
+    perks: [
+      {
+        title: "55 credits added immediately",
+        body: "Instantly available for fast, balanced, or rich deck visual explanations.",
+      },
+      {
+        title: "Never expires until spent",
+        body: "Use your credits at your own pace whenever you need visual stories.",
+      },
+      {
+        title: "Full access to all models & narration",
+        body: "Access high-fidelity diagram generation, Gemini 3 Pro reasoning, and voices.",
+      },
+      {
+        title: "Instant desktop sync",
+        body: "Immediately reflects in your Tubelight desktop app without restarting.",
+      },
+    ],
+  },
+  pro: {
+    id: "pro",
+    name: "Tubelight Pro",
+    badge: "Monthly Plan",
+    priceInr: 599,
+    priceUsd: 9,
+    amountPaise: 59900,
+    period: "month",
+    credits: 100,
+    mix: "100 Fast / 50 Balanced / 33 Rich",
+    description: "Tubelight Pro Monthly (100 credits/mo)",
+    perks: [
+      {
+        title: "100 monthly credits",
+        body: "100 Fast, 50 Balanced, or 33 Rich visual explanations refilled every month.",
+      },
+      {
+        title: "Longer context memory",
+        body: "Select and paste large articles and maintain full story context.",
+      },
+      {
+        title: "Smarter voices & beta models",
+        body: "First access to highest fidelity narration and experimental visual engines.",
+      },
+      {
+        title: "Instant activation & priority",
+        body: "Syncs automatically with your desktop app session with priority support.",
+      },
+    ],
+  },
+} as const;
+
+type PlanKey = keyof typeof PLANS;
+
 function UpgradeContent() {
   const searchParams = useSearchParams();
   const cs = searchParams.get("cs") || searchParams.get("ticket") || "";
   const emailParam = searchParams.get("email") || "";
+  const initialPlanParam = searchParams.get("plan");
+  const initialPlan: PlanKey =
+    initialPlanParam === "boost_55" || initialPlanParam === "half" ? "boost_55" : "pro";
 
+  const [selectedPlan, setSelectedPlan] = useState<PlanKey>(initialPlan);
   const [inputEmail, setInputEmail] = useState(emailParam);
   const [inputName, setInputName] = useState("");
   const [loading, setLoading] = useState(false);
   const [user, setUser] = useState<UserProfile | null>(null);
-  const [orderReady, setOrderReady] = useState(false);
   const [orderData, setOrderData] = useState<any>(null);
   const [paymentSuccess, setPaymentSuccess] = useState(false);
   const [verifying, setVerifying] = useState(false);
+
+  const activePlanInfo = PLANS[selectedPlan];
+
+  useEffect(() => {
+    if (initialPlanParam === "boost_55" || initialPlanParam === "half") {
+      setSelectedPlan("boost_55");
+    } else if (initialPlanParam === "pro") {
+      setSelectedPlan("pro");
+    }
+  }, [initialPlanParam]);
 
   useEffect(() => {
     let isMounted = true;
@@ -32,14 +110,16 @@ function UpgradeContent() {
     async function initOrder() {
       try {
         setLoading(true);
-        // Call local Next.js Route Handler /api/billing/create-order
-        const res = await fetch("/api/billing/create-order", {
+        const isRecurring = selectedPlan === "pro";
+        const endpoint = isRecurring ? "/api/billing/create-subscription" : "/api/billing/create-order";
+        const res = await fetch(endpoint, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
             checkoutId: cs || undefined,
             email: emailParam || undefined,
-            amount: 59900,
+            amount: activePlanInfo.amountPaise,
+            plan: selectedPlan,
           }),
         });
 
@@ -48,12 +128,16 @@ function UpgradeContent() {
 
         if (res.ok && data.ok) {
           setOrderData(data);
+          if (data.plan === "boost_55" || data.plan === "half") {
+            setSelectedPlan("boost_55");
+          } else if (data.plan === "pro") {
+            setSelectedPlan("pro");
+          }
           if (data.user?.email) {
             setUser(data.user);
             setInputEmail(data.user.email);
             if (data.user.name) setInputName(data.user.name);
           }
-          setOrderReady(true);
         }
       } catch (err: any) {
         console.warn("[upgrade] Order init error:", err.message);
@@ -66,28 +150,34 @@ function UpgradeContent() {
     return () => {
       isMounted = false;
     };
-  }, [cs, emailParam]);
+  }, [cs, emailParam, selectedPlan]);
 
   const handleStartPayment = async () => {
     const targetEmail = user?.email || inputEmail.trim();
     if (!targetEmail || !targetEmail.includes("@")) {
-      alert("Please enter a valid email address for your Tubelight Pro subscription.");
+      alert("Please enter a valid email address for your Tubelight credits purchase.");
       return;
     }
 
     setLoading(true);
 
+    const isRecurring = selectedPlan === "pro";
     let activeOrder = orderData;
-    // If order was not prepared or email changed, fetch a fresh order
-    if (!activeOrder?.orderId || (!cs && targetEmail !== orderData?.user?.email)) {
+    const hasValidOrder = isRecurring
+      ? Boolean(activeOrder?.subscriptionId || activeOrder?.subscription_id)
+      : Boolean(activeOrder?.orderId || activeOrder?.order_id);
+
+    if (!hasValidOrder || activeOrder?.plan !== selectedPlan || (!cs && targetEmail !== orderData?.user?.email)) {
       try {
-        const res = await fetch("/api/billing/create-order", {
+        const endpoint = isRecurring ? "/api/billing/create-subscription" : "/api/billing/create-order";
+        const res = await fetch(endpoint, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
             checkoutId: cs || undefined,
             email: targetEmail,
-            amount: 59900,
+            amount: activePlanInfo.amountPaise,
+            plan: selectedPlan,
           }),
         });
         const data = await res.json();
@@ -95,7 +185,7 @@ function UpgradeContent() {
           activeOrder = data;
           setOrderData(data);
         } else {
-          alert(data.error || "Could not prepare checkout order.");
+          alert(data.error || "Could not prepare checkout.");
           setLoading(false);
           return;
         }
@@ -113,13 +203,10 @@ function UpgradeContent() {
       return;
     }
 
-    const options = {
-      key: activeOrder.keyId || activeOrder.key || "rzp_test_TVy6HCZNcxdabp",
-      order_id: activeOrder.orderId || activeOrder.order_id,
-      amount: activeOrder.amount || 59900,
-      currency: activeOrder.currency || "INR",
+    const options: any = {
+      key: activeOrder.keyId || activeOrder.key || "rzp_live_TWooT198obZdVD",
       name: "Tubelight",
-      description: "Tubelight Pro Monthly (100 credits/mo)",
+      description: activePlanInfo.description,
       image: "/brand/icon.png",
       prefill: {
         name: user?.name || inputName || "",
@@ -142,18 +229,20 @@ function UpgradeContent() {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
-              orderId: response.razorpay_order_id,
+              orderId: response.razorpay_order_id || response.razorpay_subscription_id,
+              subscriptionId: response.razorpay_subscription_id,
               paymentId: response.razorpay_payment_id,
               signature: response.razorpay_signature,
               checkoutId: cs || undefined,
               email: targetEmail,
+              plan: selectedPlan,
             }),
           });
 
           const verifyData = await verifyRes.json();
           if (verifyRes.ok && verifyData.ok) {
             setPaymentSuccess(true);
-            const targetUrl = `tubelight://subscription-success?cs=${encodeURIComponent(cs)}&pay_id=${encodeURIComponent(response.razorpay_payment_id || "")}`;
+            const targetUrl = `tubelight://subscription-success?cs=${encodeURIComponent(cs)}&plan=${encodeURIComponent(selectedPlan)}&pay_id=${encodeURIComponent(response.razorpay_payment_id || "")}`;
             try {
               window.location.href = targetUrl;
             } catch (e) {}
@@ -174,6 +263,14 @@ function UpgradeContent() {
         },
       },
     };
+
+    if (isRecurring) {
+      options.subscription_id = activeOrder.subscriptionId || activeOrder.subscription_id;
+    } else {
+      options.order_id = activeOrder.orderId || activeOrder.order_id;
+      options.amount = activeOrder.amount || activePlanInfo.amountPaise;
+      options.currency = activeOrder.currency || "INR";
+    }
 
     const rzp = new RazorpayConstructor(options);
     rzp.on("payment.failed", function (response: any) {
@@ -198,7 +295,7 @@ function UpgradeContent() {
           </Link>
           <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-violet bg-violet-soft px-3 py-1.5 rounded-full border border-violet/20">
             <span className="w-2 h-2 rounded-full bg-violet animate-pulse" />
-            Tubelight Pro
+            {selectedPlan === "boost_55" ? "55 Credits Top-up" : "Tubelight Pro"}
           </div>
         </div>
       </header>
@@ -214,15 +311,17 @@ function UpgradeContent() {
               </svg>
             </div>
             <h1 className="text-3xl sm:text-4xl font-bold font-display tracking-tight text-ink mb-3">
-              You&apos;re now on Tubelight Pro!
+              {selectedPlan === "boost_55" ? "55 Credits Added!" : "You're now on Tubelight Pro!"}
             </h1>
             <p className="text-base sm:text-lg text-ink-2 mb-8 max-w-md mx-auto">
-              Your 100 monthly credits and priority features are active. You can now open Tubelight to start creating visual explanations.
+              {selectedPlan === "boost_55"
+                ? "55 credits have been added to your balance. Open Tubelight to continue creating visual explanations."
+                : "Your 100 monthly credits and priority features are active. Open Tubelight to start creating visual explanations."}
             </p>
 
             <div className="flex flex-col sm:flex-row gap-3 justify-center">
               <a
-                href={`tubelight://subscription-success?cs=${encodeURIComponent(cs)}`}
+                href={`tubelight://subscription-success?cs=${encodeURIComponent(cs)}&plan=${encodeURIComponent(selectedPlan)}`}
                 className="inline-flex items-center justify-center gap-2 rounded-xl bg-violet hover:bg-violet-2 text-white font-semibold px-6 py-3.5 shadow-lift transition hover:scale-[1.02] active:scale-[0.98]"
               >
                 <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -241,19 +340,63 @@ function UpgradeContent() {
         ) : (
           /* Active Checkout Card */
           <div className="card-paper rounded-2xl p-6 sm:p-10 border border-line shadow-frame">
+            {/* Plan Selector Toggle */}
+            <div className="grid grid-cols-2 bg-paper-2 p-1.5 rounded-xl border border-line mb-8 gap-1.5">
+              <button
+                type="button"
+                onClick={() => setSelectedPlan("boost_55")}
+                className={`py-3 px-3 rounded-lg text-xs sm:text-sm font-semibold transition flex flex-col items-center justify-center gap-1 ${
+                  selectedPlan === "boost_55"
+                    ? "bg-white text-ink shadow-sm border border-line/80 font-bold"
+                    : "text-ink-2 hover:text-ink hover:bg-white/50"
+                }`}
+              >
+                <span className="flex items-center gap-1.5">
+                  <span>55 Credits Pack</span>
+                  <span className="text-[10px] uppercase tracking-wider bg-emerald-100 text-emerald-800 px-1.5 py-0.5 rounded font-bold">
+                    Save
+                  </span>
+                </span>
+                <span className="text-xs text-ink-3">₹300 / $4 (one-time)</span>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => setSelectedPlan("pro")}
+                className={`py-3 px-3 rounded-lg text-xs sm:text-sm font-semibold transition flex flex-col items-center justify-center gap-1 ${
+                  selectedPlan === "pro"
+                    ? "bg-white text-ink shadow-sm border border-line/80 font-bold"
+                    : "text-ink-2 hover:text-ink hover:bg-white/50"
+                }`}
+              >
+                <span className="flex items-center gap-1.5">
+                  <span>Tubelight Pro (100 Cr)</span>
+                  <span className="text-[10px] uppercase tracking-wider bg-violet-soft text-violet px-1.5 py-0.5 rounded font-bold">
+                    Popular
+                  </span>
+                </span>
+                <span className="text-xs text-ink-3">₹599 / $9 a month</span>
+              </button>
+            </div>
+
             <div className="flex items-center justify-between border-b border-line pb-6 mb-6">
               <div>
-                <span className="text-xs font-bold uppercase tracking-wider text-violet">Subscription Plan</span>
+                <span className="text-xs font-bold uppercase tracking-wider text-violet">
+                  {activePlanInfo.badge}
+                </span>
                 <h1 className="text-2xl sm:text-3xl font-bold font-display text-ink mt-0.5">
-                  Tubelight Pro
+                  {activePlanInfo.name}
                 </h1>
+                <p className="text-xs text-ink-3 mt-1">{activePlanInfo.mix}</p>
               </div>
               <div className="text-right">
                 <div className="text-2xl sm:text-3xl font-bold text-ink flex items-baseline justify-end gap-1">
-                  <span>₹599</span>
-                  <span className="text-xs sm:text-sm font-normal text-ink-3">/ month</span>
+                  <span>₹{activePlanInfo.priceInr}</span>
+                  <span className="text-xs sm:text-sm font-normal text-ink-3">
+                    {activePlanInfo.period === "one-time" ? " once" : " / month"}
+                  </span>
                 </div>
-                <div className="text-xs text-ink-3">($9 USD equivalent)</div>
+                <div className="text-xs text-ink-3">(${activePlanInfo.priceUsd} USD equivalent)</div>
               </div>
             </div>
 
@@ -305,49 +448,18 @@ function UpgradeContent() {
 
             {/* Perks Grid */}
             <div className="space-y-3 mb-8">
-              <div className="flex items-start gap-3 text-sm text-ink-2">
-                <div className="w-5 h-5 rounded-full bg-violet-soft text-violet flex items-center justify-center shrink-0 mt-0.5">
-                  <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
-                  </svg>
+              {activePlanInfo.perks.map((perk, idx) => (
+                <div key={idx} className="flex items-start gap-3 text-sm text-ink-2">
+                  <div className="w-5 h-5 rounded-full bg-violet-soft text-violet flex items-center justify-center shrink-0 mt-0.5">
+                    <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
+                    </svg>
+                  </div>
+                  <div>
+                    <strong className="text-ink">{perk.title}</strong> — {perk.body}
+                  </div>
                 </div>
-                <div>
-                  <strong className="text-ink">100 monthly credits</strong> (100 Fast, 50 Balanced, or 33 Rich visual explanations).
-                </div>
-              </div>
-
-              <div className="flex items-start gap-3 text-sm text-ink-2">
-                <div className="w-5 h-5 rounded-full bg-violet-soft text-violet flex items-center justify-center shrink-0 mt-0.5">
-                  <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
-                  </svg>
-                </div>
-                <div>
-                  <strong className="text-ink">Longer context</strong> — select and paste large articles with full memory.
-                </div>
-              </div>
-
-              <div className="flex items-start gap-3 text-sm text-ink-2">
-                <div className="w-5 h-5 rounded-full bg-violet-soft text-violet flex items-center justify-center shrink-0 mt-0.5">
-                  <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
-                  </svg>
-                </div>
-                <div>
-                  <strong className="text-ink">Smarter voices & beta models</strong> — first access to high-fidelity narration.
-                </div>
-              </div>
-
-              <div className="flex items-start gap-3 text-sm text-ink-2">
-                <div className="w-5 h-5 rounded-full bg-violet-soft text-violet flex items-center justify-center shrink-0 mt-0.5">
-                  <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
-                  </svg>
-                </div>
-                <div>
-                  <strong className="text-ink">Instant activation</strong> — syncs automatically with your desktop app.
-                </div>
-              </div>
+              ))}
             </div>
 
             {/* Pay Button */}
@@ -365,7 +477,9 @@ function UpgradeContent() {
                   <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
                   </svg>
-                  <span>Proceed to Payment — ₹599 / month</span>
+                  <span>
+                    Proceed to Payment — ₹{activePlanInfo.priceInr} ({activePlanInfo.credits} Credits)
+                  </span>
                 </>
               )}
             </button>
@@ -376,6 +490,22 @@ function UpgradeContent() {
               </svg>
               <span>Secured by Razorpay • UPI, Cards, NetBanking</span>
             </div>
+
+            {selectedPlan === "boost_55" && (
+              <div className="mt-3 text-center">
+                <a
+                  href="https://rzp.io/rzp/UR0ZLGd"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-xs text-violet hover:underline font-medium inline-flex items-center gap-1"
+                >
+                  <span>Or pay via Direct Razorpay Hosted Link</span>
+                  <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                  </svg>
+                </a>
+              </div>
+            )}
           </div>
         )}
       </main>

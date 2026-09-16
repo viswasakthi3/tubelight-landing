@@ -1,10 +1,10 @@
-﻿import { NextRequest, NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { createBillingOrder } from "@/lib/billing";
 
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json().catch(() => ({}));
-    const { checkoutId, cs, ticket, email, amount = 59900, currency = "INR" } = body;
+    const { checkoutId, cs, ticket, email, amount, currency = "INR", plan = "pro" } = body;
     const sessionCs = checkoutId || cs || ticket;
 
     const result = await createBillingOrder({
@@ -12,6 +12,7 @@ export async function POST(req: NextRequest) {
       email,
       amount,
       currency,
+      plan,
     });
 
     return NextResponse.json(result);

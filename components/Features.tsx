@@ -6,29 +6,30 @@ import { SteerDemo } from "./SteerDemo";
 const SMALL = [
   {
     title: "Snaps beside your work",
-    body: "Your window moves left, the panel slides in right. Drag the edge to resize — nothing gets covered up.",
+    body: "Your active window moves left, the Tubelight visual panel slides in right. Drag the edge to resize — your reading context is never covered up.",
   },
   {
-    title: "No account, no setup",
-    body: "Install it and the shortcut works. A device ID tracks your daily allowance — there is nothing to sign into.",
+    title: "Instant learning, zero setup",
+    body: "Install once and the global Alt + E shortcut works everywhere. Start with 10 free visual explanations with no sign-in or credit card required.",
   },
   {
-    title: "Your reading stays yours",
-    body: "The text you select is never logged or stored on the server. History lives on your own machine.",
+    title: "Your reading stays private",
+    body: "The text you select is processed in ephemeral memory and never logged or stored on remote servers. All your diagrams and notes live on your machine.",
   },
 ];
 
 export function Features() {
   return (
-    <section id="features" className="relative mx-auto max-w-6xl px-6 py-20 md:py-28">
+    <section id="features" className="relative mx-auto max-w-6xl px-6 py-20 md:py-28" aria-labelledby="features-heading">
       <Reveal>
         <div className="max-w-2xl">
-          <p className="text-sm font-semibold tracking-[0.14em] text-violet uppercase">What you get</p>
-          <h2 className="display mt-3 text-[2.1rem] text-ink sm:text-[2.7rem]">
-            Six ways it beats another search tab.
+          <p className="text-sm font-semibold tracking-[0.14em] text-violet uppercase">Visual Learning Platform</p>
+          <h2 id="features-heading" className="display mt-3 text-[2.1rem] text-ink sm:text-[2.7rem]">
+            Why UI diagrams help you learn 3x faster.
           </h2>
           <p className="mt-4 text-lg leading-relaxed text-ink-2">
-            Everything below is designed for visual thinkers — fast, clear, and interactive.
+            Reading walls of text creates cognitive fatigue. Tubelight synthesizes dynamic visual UI models
+            and synchronized audio that map directly to how your brain stores knowledge.
           </p>
         </div>
       </Reveal>
@@ -40,15 +41,15 @@ export function Features() {
             <span className="w-fit rounded-full bg-filament-soft px-3 py-1 text-[12px] font-semibold text-[#9a6410]">
               Nothing to highlight?
             </span>
-            <h3 className="display mt-4 text-[1.6rem] text-ink">Just type the topic.</h3>
+            <h3 className="display mt-4 text-[1.6rem] text-ink">Topic search: Just type what you want to learn.</h3>
             <p className="mt-2.5 max-w-md text-[0.98rem] leading-relaxed text-ink-2">
-              Suggestions appear as you type, so &ldquo;inflation&rdquo; asks whether you want the
-              underlying causes, current rates, or real-world analogies. Pick a speed and go.
+              Intelligent suggestions appear as you type, so &ldquo;inflation&rdquo; asks whether you want the
+              underlying causes, current rates, or real-world analogies. Pick your learning speed and explore.
             </p>
             <div className="mt-6 -mb-14 overflow-hidden rounded-t-2xl ring-1 ring-line shadow-sm">
               <Image
                 src="/shots/f-topics.webp"
-                alt="Tubelight's topic box with the question 'why does inflation happen?' typed in, speed options, and a scrollable list of suggested topics."
+                alt="Tubelight visual learning topic search: Typing a concept to generate visual diagrams with difficulty speed options and suggested subtopics."
                 width={715}
                 height={825}
                 quality={95}
@@ -66,14 +67,14 @@ export function Features() {
             <span className="w-fit rounded-full bg-[#d8efd5] px-3 py-1 text-[12px] font-semibold text-[#2f6b3c]">
               Step by step
             </span>
-            <h3 className="display mt-4 text-[1.6rem] text-ink">Slides you can actually follow.</h3>
+            <h3 className="display mt-4 text-[1.6rem] text-ink">Interactive slides you can actually follow.</h3>
             <p className="mt-2.5 text-[0.98rem] leading-relaxed text-ink-2">
-              Big idea broken into numbered panels, each one drawn and captioned, narrated in order.
+              Complex ideas are broken into numbered visual panels, each one dynamically drawn and captioned, narrated in logical order.
             </p>
             <div className="mt-6 overflow-hidden rounded-2xl ring-1 ring-[#cfe6cd] shadow-sm">
               <Image
                 src="/shots/f-slides.webp"
-                alt="Four numbered illustrated slides explaining why inflation happens, with an audio player underneath."
+                alt="Tubelight interactive slides interface: Four numbered visual cards breaking down complex concepts with audio narration playback."
                 width={770}
                 height={850}
                 quality={95}
@@ -91,11 +92,11 @@ export function Features() {
               <span className="w-fit rounded-full bg-violet-soft px-3 py-1 text-[12px] font-semibold text-violet">
                 Didn&rsquo;t land?
               </span>
-              <h3 className="display mt-4 text-[1.6rem] text-ink">Ask for it a different way.</h3>
+              <h3 className="display mt-4 text-[1.6rem] text-ink">Steerable learning: Ask for it a different way.</h3>
               <p className="mt-2.5 max-w-lg text-[0.98rem] leading-relaxed text-ink-2">
                 &ldquo;Simpler.&rdquo; &ldquo;As a timeline.&rdquo; &ldquo;Give me a real-world
-                analogy.&rdquo; The same idea gets redrawn until it clicks — and you can keep asking
-                follow-ups in the side chat.
+                analogy.&rdquo; The diagram gets redrawn until the concept clicks — and you can keep asking
+                follow-up questions in the interactive side drawer.
               </p>
               <div className="mt-6">
                 <SteerDemo />
@@ -108,18 +109,17 @@ export function Features() {
         <Reveal delay={0.12} className="lg:col-span-5">
           <article className="flex h-full flex-col overflow-hidden rounded-3xl border border-[#cadcf2] bg-[linear-gradient(180deg,#f4f8fd_0%,#e7f0fb_100%)] p-6 shadow-lift sm:p-8">
             <span className="w-fit rounded-full bg-[#d6e6f8] px-3 py-1 text-[12px] font-semibold text-[#1f5a99]">
-              Watch and listen
+              Dual-Channel Synthesis
             </span>
-            <h3 className="display mt-4 text-[1.6rem] text-ink">It reads to you while it draws.</h3>
+            <h3 className="display mt-4 text-[1.6rem] text-ink">It explains with voice while it draws.</h3>
             <p className="mt-2.5 text-[0.98rem] leading-relaxed text-ink-2">
-              Picture and narration are generated at the same time, so the voice is usually talking
-              before the last arrow lands.
+              Visual elements and voiceover stream simultaneously, leveraging Dual-Coding Theory so your mind absorbs the structure effortlessly.
             </p>
 
             <div className="mt-6 rounded-2xl bg-white/80 p-3 ring-1 ring-[#cadcf2] shadow-sm">
               <Image
                 src="/shots/f-memory-panel.webp"
-                alt="Tubelight visual explanation of how human memory works with brain anatomy diagram, numbered steps, and audio player."
+                alt="Tubelight dual-channel visual learning panel showing brain memory stages diagram, numbered steps, and live waveform audio narration."
                 width={1225}
                 height={1070}
                 quality={95}

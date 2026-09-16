@@ -1,4 +1,4 @@
-﻿import { NextRequest, NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { verifyBillingPayment } from "@/lib/billing";
 
 export async function POST(req: NextRequest) {
@@ -14,6 +14,7 @@ export async function POST(req: NextRequest) {
       checkoutId,
       cs,
       email,
+      plan,
     } = body;
 
     const cleanOrderId = orderId || razorpay_order_id;
@@ -34,6 +35,7 @@ export async function POST(req: NextRequest) {
       signature: cleanSignature,
       checkoutId: cleanCs,
       email,
+      plan,
     });
 
     return NextResponse.json(result);

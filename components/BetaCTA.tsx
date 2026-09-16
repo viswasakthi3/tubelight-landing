@@ -20,11 +20,10 @@ export function BetaCTA() {
             <Mark className="mx-auto h-14 w-auto filament-glow" />
 
             <h2 className="display mx-auto mt-6 max-w-2xl text-[2.2rem] text-ink sm:text-[3rem]">
-              Put a light on it.
+              Start learning visually today.
             </h2>
             <p className="mx-auto mt-4 max-w-xl text-lg leading-relaxed text-ink-2">
-              Tubelight is open to a small group of beta users while we get it right. Leave your
-              email and we&rsquo;ll send an invite in the next batch.
+              Join students, researchers, and engineers who use Tubelight to understand complex topics fast on Windows. Includes 10 free visual diagram explanations at signup.
             </p>
 
             <div className="mx-auto mt-9 max-w-xl text-left">

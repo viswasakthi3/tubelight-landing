@@ -1,0 +1,48 @@
+# Tubelight — The Visual Learning Platform for Fast Understanding
+
+## Executive Summary
+Tubelight (https://tubelight.net) is an AI-powered visual learning platform built for Windows. It is designed specifically for students, researchers, engineers, doctors, and visual thinkers who need to understand complex academic, technical, and professional content fast. By integrating a global desktop shortcut (Alt + E) with real-time vector UI generation and synchronized audio narration, Tubelight eliminates reading fatigue and transforms abstract text into intuitive visual mental models in under 3 seconds.
+
+## The Problem: Text Overload & Comprehension Friction
+When modern readers encounter challenging texts—scientific papers, dense documentation, financial reports, or codebases—traditional AI tools reply with even more text. This exacerbates cognitive load:
+1. Readers lose spatial context by tabbing back and forth between apps.
+2. Prompt engineering requires extra cognitive effort and breaks deep reading flow.
+3. Reading comprehension for dense text is slow (avg. 200–250 words per minute) compared to visual assimilation.
+
+## The Tubelight Solution: Dual-Coding Visual Learning
+Tubelight leverages Allan Paivio's Dual-Coding Theory, which demonstrates that information processed simultaneously through visual and verbal channels yields significantly higher comprehension and retention rates.
+
+When a user selects text and triggers Alt + E:
+1. **Zero Context Switching**: The user's current application window automatically docks to the left half of the display.
+2. **Instant UI Panel**: Tubelight's lightweight interface opens on the right half, preventing obstruction of the source text.
+3. **Real-Time Vector Rendering**: The visual engine generates clean, animated vector diagrams (anatomies, causal loops, flowcharts, architectures, timelines).
+4. **Synchronized Audio Walkthrough**: High-fidelity narration explains each visual landmark simultaneously as the diagram renders.
+5. **Interactive Steering**: If the explanation needs adjustment, users can click quick steering tags ("Simpler", "Timeline", "Analogy") or ask conversational follow-up questions in the side drawer.
+
+## Supported Software & Environments
+Because Tubelight operates at the Windows OS level via native Windows APIs, it works across every reading surface:
+- Web Browsers: Google Chrome, Microsoft Edge, Mozilla Firefox, Brave.
+- Document Readers: Adobe Acrobat, Foxit PDF, Microsoft Word, Kindle desktop.
+- Productivity & Collaboration: Notion, Slack, Microsoft Teams, Obsidian, Discord.
+- Development Environments: Visual Studio Code, JetBrains IDEs, Windows Terminal.
+
+## Architecture & Technical Stack
+- **Client App**: Lightweight Windows native application (compatible with Windows 10 build 19041+ and Windows 11).
+- **Global Hotkey Daemon**: Low-latency Alt + E global listener utilizing Windows accessibility and input APIs.
+- **Rendering Pipeline**: Hardware-accelerated SVG and Canvas vector renderer operating at 60 FPS.
+- **Synthesis Engine**: LLM-driven structural semantic parser converting raw text into semantic visual node graphs and time-synchronized speech scripts.
+- **Privacy & Security Architecture**:
+  - Zero-storage policy on highlighted user text.
+  - Ephemeral backend processing in memory without retaining source documents.
+  - User history, bookmarks, notes, and local knowledge graphs persist exclusively in local device storage.
+  - Anonymous cryptographic device ID tracking for quota enforcement.
+
+## Pricing & Availability
+- **Private Beta**: Rolling access with weekly invite distributions.
+- **Free Quota**: 10 complete multi-slide visual video and audio explanations upon onboarding.
+- **Pro Tier**: Available via subscription or lifetime access with unlimited visual generations and custom steering options (https://tubelight.net/upgrade).
+
+## Contact & Inquiries
+- Website: https://tubelight.net
+- Waitlist: https://tubelight.net/#beta
+- Upgrade: https://tubelight.net/upgrade
