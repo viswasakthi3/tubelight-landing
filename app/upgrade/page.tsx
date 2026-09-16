@@ -73,6 +73,40 @@ const PLANS = {
       },
     ],
   },
+  max: {
+    id: "max",
+    name: "Tubelight Max",
+    badge: "Power Plan",
+    priceInr: 1999,
+    priceUsd: 27,
+    amountPaise: 199900,
+    period: "month",
+    credits: 375,
+    mix: "375 Fast / 187 Balanced / 125 Rich",
+    description: "Tubelight Max Monthly (375 credits/mo)",
+    perks: [
+      {
+        title: "375 monthly credits",
+        body: "375 Fast, 187 Balanced, or 125 Rich visual explanations refilled every month.",
+      },
+      {
+        title: "2× Faster Rendering",
+        body: "Priority processing queues on our fastest GPU clusters for instant results.",
+      },
+      {
+        title: "Longest context memory",
+        body: "Select and paste entire articles, books, and maintain full story context.",
+      },
+      {
+        title: "Every voice & beta model",
+        body: "First access to highest fidelity neural narration and experimental visual engines.",
+      },
+      {
+        title: "Instant activation & VIP priority",
+        body: "Syncs automatically with your desktop app session with priority support.",
+      },
+    ],
+  },
 } as const;
 
 type PlanKey = keyof typeof PLANS;
@@ -83,7 +117,11 @@ function UpgradeContent() {
   const emailParam = searchParams.get("email") || "";
   const initialPlanParam = searchParams.get("plan");
   const initialPlan: PlanKey =
-    initialPlanParam === "boost_55" || initialPlanParam === "half" ? "boost_55" : "pro";
+    initialPlanParam === "max"
+      ? "max"
+      : initialPlanParam === "boost_55" || initialPlanParam === "half"
+      ? "boost_55"
+      : "pro";
 
   const [selectedPlan, setSelectedPlan] = useState<PlanKey>(initialPlan);
   const [inputEmail, setInputEmail] = useState(emailParam);
@@ -97,7 +135,9 @@ function UpgradeContent() {
   const activePlanInfo = PLANS[selectedPlan];
 
   useEffect(() => {
-    if (initialPlanParam === "boost_55" || initialPlanParam === "half") {
+    if (initialPlanParam === "max") {
+      setSelectedPlan("max");
+    } else if (initialPlanParam === "boost_55" || initialPlanParam === "half") {
       setSelectedPlan("boost_55");
     } else if (initialPlanParam === "pro") {
       setSelectedPlan("pro");
@@ -110,7 +150,7 @@ function UpgradeContent() {
     async function initOrder() {
       try {
         setLoading(true);
-        const isRecurring = selectedPlan === "pro";
+        const isRecurring = selectedPlan === "pro" || selectedPlan === "max";
         const endpoint = isRecurring ? "/api/billing/create-subscription" : "/api/billing/create-order";
         const res = await fetch(endpoint, {
           method: "POST",
@@ -128,7 +168,9 @@ function UpgradeContent() {
 
         if (res.ok && data.ok) {
           setOrderData(data);
-          if (data.plan === "boost_55" || data.plan === "half") {
+          if (data.plan === "max") {
+            setSelectedPlan("max");
+          } else if (data.plan === "boost_55" || data.plan === "half") {
             setSelectedPlan("boost_55");
           } else if (data.plan === "pro") {
             setSelectedPlan("pro");
@@ -161,7 +203,7 @@ function UpgradeContent() {
 
     setLoading(true);
 
-    const isRecurring = selectedPlan === "pro";
+    const isRecurring = selectedPlan === "pro" || selectedPlan === "max";
     let activeOrder = orderData;
     const hasValidOrder = isRecurring
       ? Boolean(activeOrder?.subscriptionId || activeOrder?.subscription_id)
@@ -295,7 +337,7 @@ function UpgradeContent() {
           </Link>
           <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-violet bg-violet-soft px-3 py-1.5 rounded-full border border-violet/20">
             <span className="w-2 h-2 rounded-full bg-violet animate-pulse" />
-            {selectedPlan === "boost_55" ? "55 Credits Top-up" : "Tubelight Pro"}
+            {selectedPlan === "boost_55" ? "55 Credits Top-up" : selectedPlan === "max" ? "Tubelight Max (375 Cr)" : "Tubelight Pro (100 Cr)"}
           </div>
         </div>
       </header>
@@ -311,11 +353,17 @@ function UpgradeContent() {
               </svg>
             </div>
             <h1 className="text-3xl sm:text-4xl font-bold font-display tracking-tight text-ink mb-3">
-              {selectedPlan === "boost_55" ? "55 Credits Added!" : "You're now on Tubelight Pro!"}
+              {selectedPlan === "boost_55"
+                ? "55 Credits Added!"
+                : selectedPlan === "max"
+                ? "You're now on Tubelight Max!"
+                : "You're now on Tubelight Pro!"}
             </h1>
             <p className="text-base sm:text-lg text-ink-2 mb-8 max-w-md mx-auto">
               {selectedPlan === "boost_55"
                 ? "55 credits have been added to your balance. Open Tubelight to continue creating visual explanations."
+                : selectedPlan === "max"
+                ? "Your 375 monthly credits and 2× faster rendering features are active. Open Tubelight to start creating visual explanations."
                 : "Your 100 monthly credits and priority features are active. Open Tubelight to start creating visual explanations."}
             </p>
 
@@ -341,11 +389,11 @@ function UpgradeContent() {
           /* Active Checkout Card */
           <div className="card-paper rounded-2xl p-6 sm:p-10 border border-line shadow-frame">
             {/* Plan Selector Toggle */}
-            <div className="grid grid-cols-2 bg-paper-2 p-1.5 rounded-xl border border-line mb-8 gap-1.5">
+            <div className="grid grid-cols-1 sm:grid-cols-3 bg-paper-2 p-1.5 rounded-xl border border-line mb-8 gap-1.5">
               <button
                 type="button"
                 onClick={() => setSelectedPlan("boost_55")}
-                className={`py-3 px-3 rounded-lg text-xs sm:text-sm font-semibold transition flex flex-col items-center justify-center gap-1 ${
+                className={`py-3 px-2 rounded-lg text-xs sm:text-sm font-semibold transition flex flex-col items-center justify-center gap-1 ${
                   selectedPlan === "boost_55"
                     ? "bg-white text-ink shadow-sm border border-line/80 font-bold"
                     : "text-ink-2 hover:text-ink hover:bg-white/50"
@@ -363,7 +411,7 @@ function UpgradeContent() {
               <button
                 type="button"
                 onClick={() => setSelectedPlan("pro")}
-                className={`py-3 px-3 rounded-lg text-xs sm:text-sm font-semibold transition flex flex-col items-center justify-center gap-1 ${
+                className={`py-3 px-2 rounded-lg text-xs sm:text-sm font-semibold transition flex flex-col items-center justify-center gap-1 ${
                   selectedPlan === "pro"
                     ? "bg-white text-ink shadow-sm border border-line/80 font-bold"
                     : "text-ink-2 hover:text-ink hover:bg-white/50"
@@ -376,6 +424,24 @@ function UpgradeContent() {
                   </span>
                 </span>
                 <span className="text-xs text-ink-3">₹599 / $9 a month</span>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => setSelectedPlan("max")}
+                className={`py-3 px-2 rounded-lg text-xs sm:text-sm font-semibold transition flex flex-col items-center justify-center gap-1 ${
+                  selectedPlan === "max"
+                    ? "bg-white text-ink shadow-sm border border-line/80 font-bold ring-1 ring-violet"
+                    : "text-ink-2 hover:text-ink hover:bg-white/50"
+                }`}
+              >
+                <span className="flex items-center gap-1.5">
+                  <span>Tubelight Max (375 Cr)</span>
+                  <span className="text-[10px] uppercase tracking-wider bg-violet text-white px-1.5 py-0.5 rounded font-bold">
+                    Power
+                  </span>
+                </span>
+                <span className="text-xs text-ink-3">₹1,999 / $27 a month</span>
               </button>
             </div>
 

@@ -4,13 +4,14 @@ import { createBillingSubscription } from "@/lib/billing";
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json().catch(() => ({}));
-    const { checkoutId, cs, ticket, email, planId } = body;
+    const { checkoutId, cs, ticket, email, planId, plan } = body;
     const sessionCs = checkoutId || cs || ticket;
 
     const result = await createBillingSubscription({
       checkoutId: sessionCs,
       email,
       planId,
+      plan,
     });
 
     return NextResponse.json(result);

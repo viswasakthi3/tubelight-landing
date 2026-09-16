@@ -38,10 +38,12 @@ export async function createBillingOrder({
   currency?: string;
   plan?: string;
 }) {
+  const isMax = plan === "max";
   const isBoost = plan === "boost_55" || plan === "half";
-  const defaultAmount = isBoost ? 30000 : 59900;
+  const defaultAmount = isMax ? 199900 : (isBoost ? 30000 : 59900);
   const cleanAmount = Math.max(100, Math.round(Number(amount) || defaultAmount));
-  const cleanPlan = isBoost ? "boost_55" : "pro";
+  const cleanPlan = isMax ? "max" : (isBoost ? "boost_55" : "pro");
+  const planCredits = isMax ? 375 : (isBoost ? 55 : 100);
   const db = getPool();
   const rzp = getRazorpayClient();
 
@@ -114,7 +116,7 @@ export async function createBillingOrder({
     amount: cleanAmount,
     currency,
     plan: cleanPlan,
-    credits: isBoost ? 55 : 100,
+    credits: planCredits,
     keyId: process.env.RAZORPAY_KEY_ID || process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID || "rzp_test_TVy6HCZNcxdabp",
     user: userRecord,
     checkoutId: sessionCs,
@@ -125,20 +127,22 @@ export async function createBillingSubscription({
   checkoutId,
   email,
   planId,
+  plan,
 }: {
   checkoutId?: string;
   email?: string;
   planId?: string;
+  plan?: string;
 }) {
   const db = getPool();
   const rzp = getRazorpayClient();
-  const targetPlanId = planId || process.env.RAZORPAY_PLAN_ID || "plan_TbyD2peyeHtfSt";
 
   let userRecord: { id?: string; email?: string; name?: string; deviceId?: string } = {
     email: email || "",
   };
 
   let sessionCs = checkoutId;
+  let sessionPlan = plan || "pro";
 
   if (db && sessionCs) {
     try {
@@ -157,11 +161,20 @@ export async function createBillingSubscription({
           email: rows[0].email || email,
           name: rows[0].name || rows[0].username,
         };
+        if (rows[0].plan) {
+          sessionPlan = rows[0].plan;
+        }
       }
     } catch (e) {
       console.warn("[billing] Could not read checkout session from DB:", e);
     }
   }
+
+  const isMax = sessionPlan === "max";
+  const defaultPlanId = isMax
+    ? (process.env.RAZORPAY_MAX_PLAN_ID || "plan_TcnNKaWjw0CvPr")
+    : (process.env.RAZORPAY_PLAN_ID || "plan_TbyD2peyeHtfSt");
+  const targetPlanId = planId || defaultPlanId;
 
   let subscriptionId = `sub_mock_${randomBytes(8).toString("hex")}`;
   if (rzp) {
@@ -173,7 +186,7 @@ export async function createBillingSubscription({
         customer_notify: 1,
         notes: {
           csId: sessionCs || "",
-          plan: "pro",
+          plan: sessionPlan,
           email: userRecord.email || "",
           userId: userRecord.id || "",
           deviceId: userRecord.deviceId || "",
@@ -189,8 +202,8 @@ export async function createBillingSubscription({
   if (db && sessionCs) {
     try {
       await db.query(
-        `UPDATE t2u_checkout_sessions SET provider = 'razorpay', provider_ref = $2, plan = 'pro' WHERE id = $1`,
-        [sessionCs, subscriptionId]
+        `UPDATE t2u_checkout_sessions SET provider = 'razorpay', provider_ref = $2, plan = $3 WHERE id = $1`,
+        [sessionCs, subscriptionId, sessionPlan]
       );
     } catch (e) {}
   }
@@ -200,8 +213,8 @@ export async function createBillingSubscription({
     subscriptionId,
     subscription_id: subscriptionId,
     planId: targetPlanId,
-    plan: "pro",
-    credits: 100,
+    plan: sessionPlan,
+    credits: isMax ? 375 : 100,
     keyId: process.env.RAZORPAY_KEY_ID || process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID || "rzp_live_TWooT198obZdVD",
     user: userRecord,
     checkoutId: sessionCs,
@@ -269,7 +282,10 @@ export async function verifyBillingPayment({
         }
       }
 
+      const isMax = sessionPlan === "max";
       const isBoost = sessionPlan === "boost_55" || sessionPlan === "half";
+      const targetCredits = isMax ? 375 : 100;
+      const cleanPlan = isMax ? "max" : (isBoost ? "boost_55" : "pro");
 
       if (isBoost) {
         // Grant 55 credits pack
@@ -292,23 +308,23 @@ export async function verifyBillingPayment({
           );
         }
       } else {
-        // Grant Pro Tier
+        // Grant Pro or Max Tier
         if (targetUserId) {
-          await db.query(`UPDATE t2u_users SET tier = 'pro', updated_at = now() WHERE id = $1`, [targetUserId]);
+          await db.query(`UPDATE t2u_users SET tier = 'pro', plan = $2, updated_at = now() WHERE id = $1`, [targetUserId, cleanPlan]);
         }
         if (targetEmail) {
-          await db.query(`UPDATE t2u_users SET tier = 'pro', updated_at = now() WHERE lower(email) = lower($1)`, [
-            targetEmail.trim(),
+          await db.query(`UPDATE t2u_users SET tier = 'pro', plan = $2, updated_at = now() WHERE lower(email) = lower($1)`, [
+            targetEmail.trim(), cleanPlan
           ]);
           await db.query(
-            `UPDATE t2u_devices SET tier = 'pro', custom_limit = 100, boosted_at = now() WHERE lower(email) = lower($1)`,
-            [targetEmail.trim()]
+            `UPDATE t2u_devices SET tier = 'pro', plan = $3, custom_limit = $2, boosted_at = now() WHERE lower(email) = lower($1)`,
+            [targetEmail.trim(), targetCredits, cleanPlan]
           );
         }
         if (targetDeviceId) {
           await db.query(
-            `UPDATE t2u_devices SET tier = 'pro', custom_limit = 100, boosted_at = now() WHERE device_id = $1`,
-            [targetDeviceId]
+            `UPDATE t2u_devices SET tier = 'pro', plan = $3, custom_limit = $2, boosted_at = now() WHERE device_id = $1`,
+            [targetDeviceId, targetCredits, cleanPlan]
           );
         }
       }
@@ -317,14 +333,15 @@ export async function verifyBillingPayment({
     }
   }
 
+  const isMax = sessionPlan === "max";
   const isBoost = sessionPlan === "boost_55" || sessionPlan === "half";
 
   return {
     ok: true,
     verified: true,
-    plan: isBoost ? "boost_55" : "pro",
+    plan: isMax ? "max" : (isBoost ? "boost_55" : "pro"),
     tier: isBoost ? "free" : "pro",
-    credits: isBoost ? 55 : 100,
+    credits: isMax ? 375 : (isBoost ? 55 : 100),
     orderId,
     paymentId
   };
