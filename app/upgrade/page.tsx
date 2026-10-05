@@ -245,8 +245,15 @@ function UpgradeContent() {
       return;
     }
 
+    const razorpayKey = activeOrder.keyId || activeOrder.key || process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID;
+    if (!razorpayKey) {
+      alert("Checkout is not available right now (payment key is not configured).");
+      setLoading(false);
+      return;
+    }
+
     const options: any = {
-      key: activeOrder.keyId || activeOrder.key || "rzp_live_TWooT198obZdVD",
+      key: razorpayKey,
       name: "Tubelight",
       description: activePlanInfo.description,
       image: "/brand/icon.png",

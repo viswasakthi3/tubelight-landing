@@ -12,3 +12,16 @@ tsconfig.tsbuildinfo
 /data/waitlist.json
 .claude/
 
+
+# secrets (baseline, see SECURITY.md)
+.env.*
+!.env.example
+*.env
+*.key
+*.pfx
+*.p12
+*service-account*.json
+credentials*.json
+secrets/
+.history/
+.lh/

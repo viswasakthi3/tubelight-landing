@@ -18,6 +18,14 @@ export function getPool(): Pool | null {
   return pool;
 }
 
+export function getRazorpayKeyId(): string {
+  const keyId = process.env.RAZORPAY_KEY_ID || process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID;
+  if (!keyId) {
+    throw new Error("RAZORPAY_KEY_ID is not configured.");
+  }
+  return keyId;
+}
+
 export function getRazorpayClient(): Razorpay | null {
   const key_id = process.env.RAZORPAY_KEY_ID;
   const key_secret = process.env.RAZORPAY_KEY_SECRET;
@@ -117,7 +125,7 @@ export async function createBillingOrder({
     currency,
     plan: cleanPlan,
     credits: planCredits,
-    keyId: process.env.RAZORPAY_KEY_ID || process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID || "rzp_test_TVy6HCZNcxdabp",
+    keyId: getRazorpayKeyId(),
     user: userRecord,
     checkoutId: sessionCs,
   };
@@ -215,7 +223,7 @@ export async function createBillingSubscription({
     planId: targetPlanId,
     plan: sessionPlan,
     credits: isMax ? 375 : 100,
-    keyId: process.env.RAZORPAY_KEY_ID || process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID || "rzp_live_TWooT198obZdVD",
+    keyId: getRazorpayKeyId(),
     user: userRecord,
     checkoutId: sessionCs,
   };
