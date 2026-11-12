@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Inter, Fraunces } from "next/font/google";
 import { FAQS } from "@/components/Faq";
+import { CrispChat } from "@/components/CrispChat";
 import "./globals.css";
 
 const inter = Inter({
@@ -181,6 +182,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           Skip to content
         </a>
         {children}
+        <CrispChat />
       </body>
     </html>
   );
