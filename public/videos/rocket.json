@@ -1,0 +1,100 @@
+{
+  "slug": "rocket",
+  "title": "How a Rocket Engine Works",
+  "duration": 58.656,
+  "cues": [
+    {
+      "start": 0,
+      "end": 6.342,
+      "text": "How does a massive rocket lift itself off the ground when there is no air in space to push against?"
+    },
+    {
+      "start": 6.342,
+      "end": 9.096,
+      "text": "That is the work of a liquid rocket engine."
+    },
+    {
+      "start": 9.096,
+      "end": 11.575,
+      "text": "See the twin tanks feeding fluid downward?"
+    },
+    {
+      "start": 11.575,
+      "end": 17.712,
+      "text": "Liquid fuel and liquid oxygen are pumped from their storage tanks directly into the heart of the engine."
+    },
+    {
+      "start": 17.712,
+      "end": 20.29,
+      "text": "Now look at the glowing chamber at the center."
+    },
+    {
+      "start": 20.29,
+      "end": 26.568,
+      "text": "The two liquids mix and burn violently inside the combustion chamber, creating extremely hot, high-pressure gas."
+    },
+    {
+      "start": 26.568,
+      "end": 29.151,
+      "text": "See the gas squeeze through the narrow throat?"
+    },
+    {
+      "start": 29.151,
+      "end": 35.496,
+      "text": "The high pressure gas rushes toward the narrowest part of the nozzle, speeding up dramatically as it is squeezed."
+    },
+    {
+      "start": 35.496,
+      "end": 38.467,
+      "text": "Now look at the wide nozzle on the right."
+    },
+    {
+      "start": 38.467,
+      "end": 46.8,
+      "text": "As the gas expands and exits the nozzle at high speed, it creates the massive thrust that pushes the rocket upward."
+    },
+    {
+      "start": 46.8,
+      "end": 52.888,
+      "text": "By burning propellants inside a sealed chamber and forcing the hot gas through a narrow nozzle,"
+    },
+    {
+      "start": 52.888,
+      "end": 58.656,
+      "text": "a rocket engine turns chemical energy into the powerful thrust that carries us into space."
+    }
+  ],
+  "shortDuration": 26.568,
+  "shortCues": [
+    {
+      "start": 0,
+      "end": 6.342,
+      "text": "How does a massive rocket lift itself off the ground when there is no air in space to push against?"
+    },
+    {
+      "start": 6.342,
+      "end": 9.096,
+      "text": "That is the work of a liquid rocket engine."
+    },
+    {
+      "start": 9.096,
+      "end": 11.575,
+      "text": "See the twin tanks feeding fluid downward?"
+    },
+    {
+      "start": 11.575,
+      "end": 17.712,
+      "text": "Liquid fuel and liquid oxygen are pumped from their storage tanks directly into the heart of the engine."
+    },
+    {
+      "start": 17.712,
+      "end": 20.29,
+      "text": "Now look at the glowing chamber at the center."
+    },
+    {
+      "start": 20.29,
+      "end": 26.568,
+      "text": "The two liquids mix and burn violently inside the combustion chamber, creating extremely hot, high-pressure gas."
+    }
+  ]
+}

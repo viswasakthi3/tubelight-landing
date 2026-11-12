@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
-import { forwardSignup, isValidEmail, saveSignup, type Signup } from "@/lib/waitlist";
+import { forwardSignup, getPosition, isValidEmail, saveSignup, type Signup } from "@/lib/waitlist";
+import { signToken } from "@/lib/waitlist-token";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -60,9 +61,14 @@ export async function POST(request: Request) {
   const result = await saveSignup(signup);
   await forwardSignup(signup);
 
+  const position = await getPosition(email);
+
   return NextResponse.json({
     ok: true,
     duplicate: result.duplicate,
     message: result.duplicate ? "You're already on the list — invite is on its way." : "You're on the list.",
+    position,
+    total: result.total,
+    token: signToken(email),
   });
 }

@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Inter, Fraunces } from "next/font/google";
+import { Inter, Fraunces, Bricolage_Grotesque, DM_Sans } from "next/font/google";
 import { FAQS } from "@/components/Faq";
 import { CrispChat } from "@/components/CrispChat";
 import "./globals.css";
@@ -15,6 +15,20 @@ const fraunces = Fraunces({
   variable: "--font-fraunces",
   display: "swap",
   axes: ["SOFT", "WONK", "opsz"],
+});
+
+const bricolage = Bricolage_Grotesque({
+  subsets: ["latin"],
+  variable: "--font-bricolage",
+  display: "swap",
+  axes: ["opsz"],
+});
+
+const dmSans = DM_Sans({
+  subsets: ["latin"],
+  variable: "--font-dm",
+  display: "swap",
+  axes: ["opsz"],
 });
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://tubelight.net";
@@ -162,7 +176,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   };
 
   return (
-    <html lang="en" className={`${inter.variable} ${fraunces.variable}`}>
+    <html lang="en" className={`${inter.variable} ${fraunces.variable} ${bricolage.variable} ${dmSans.variable}`}>
       <head>
         {/* Scroll reveals start hidden — without JS they must not blank the page. */}
         <noscript>

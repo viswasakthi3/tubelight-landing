@@ -1,0 +1,90 @@
+{
+  "slug": "dna",
+  "title": "How DNA Works",
+  "duration": 49.536,
+  "cues": [
+    {
+      "start": 0,
+      "end": 6.403,
+      "text": "DNA, the instruction book for life, is made of repeating building blocks called nucleotides."
+    },
+    {
+      "start": 6.403,
+      "end": 13.224,
+      "text": "Each nucleotide has three main parts: a phosphate group, a sugar molecule, and a nitrogenous base."
+    },
+    {
+      "start": 13.224,
+      "end": 20.523,
+      "text": "These nucleotides link together, with phosphates and sugars forming a strong backbone, creating a single strand."
+    },
+    {
+      "start": 20.523,
+      "end": 25.541,
+      "text": "Two of these strands then pair up, with their bases connecting in the middle,"
+    },
+    {
+      "start": 25.541,
+      "end": 29.712,
+      "text": "and twist into the famous Double Helix — a twisted ladder shape."
+    },
+    {
+      "start": 29.712,
+      "end": 37.206,
+      "text": "The secret to DNA's information storage lies in how its bases pair: Adenine (A) always pairs with Thymine (T),"
+    },
+    {
+      "start": 37.206,
+      "end": 40.407,
+      "text": "and Cytosine (C) always pairs with Guanine (G)."
+    },
+    {
+      "start": 40.407,
+      "end": 49.536,
+      "text": "This specific pairing creates a unique sequence along the ladder, forming the genetic code that carries all the instructions for life."
+    }
+  ],
+  "shortDuration": 49.536,
+  "shortCues": [
+    {
+      "start": 0,
+      "end": 6.403,
+      "text": "DNA, the instruction book for life, is made of repeating building blocks called nucleotides."
+    },
+    {
+      "start": 6.403,
+      "end": 13.224,
+      "text": "Each nucleotide has three main parts: a phosphate group, a sugar molecule, and a nitrogenous base."
+    },
+    {
+      "start": 13.224,
+      "end": 20.523,
+      "text": "These nucleotides link together, with phosphates and sugars forming a strong backbone, creating a single strand."
+    },
+    {
+      "start": 20.523,
+      "end": 25.541,
+      "text": "Two of these strands then pair up, with their bases connecting in the middle,"
+    },
+    {
+      "start": 25.541,
+      "end": 29.712,
+      "text": "and twist into the famous Double Helix — a twisted ladder shape."
+    },
+    {
+      "start": 29.712,
+      "end": 37.206,
+      "text": "The secret to DNA's information storage lies in how its bases pair: Adenine (A) always pairs with Thymine (T),"
+    },
+    {
+      "start": 37.206,
+      "end": 40.407,
+      "text": "and Cytosine (C) always pairs with Guanine (G)."
+    },
+    {
+      "start": 40.407,
+      "end": 49.536,
+      "text": "This specific pairing creates a unique sequence along the ladder, forming the genetic code that carries all the instructions for life."
+    }
+  ]
+}

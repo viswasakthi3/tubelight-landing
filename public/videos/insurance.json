@@ -1,0 +1,67 @@
+{
+  "slug": "insurance",
+  "title": "How a Life Insurance Policy Works",
+  "duration": 56.232,
+  "cues": [
+    {
+      "start": 0,
+      "end": 4.186,
+      "text": "What happens to the money you pay into life insurance year after year?"
+    },
+    {
+      "start": 4.186,
+      "end": 10.704,
+      "text": "That is a life insurance policy at work, turning small regular contributions into a secure family safety net."
+    },
+    {
+      "start": 10.704,
+      "end": 12.632,
+      "text": "See Dev paying his monthly premium?"
+    },
+    {
+      "start": 12.632,
+      "end": 18.528,
+      "text": "Every month, Dev pays a regular fee called a premium to his insurance provider to keep his coverage active."
+    },
+    {
+      "start": 18.528,
+      "end": 21.306,
+      "text": "Now look at the large shared pool on the right."
+    },
+    {
+      "start": 21.306,
+      "end": 27.984,
+      "text": "The company collects these payments from thousands of people, gathering them into one large shared pool of money."
+    },
+    {
+      "start": 27.984,
+      "end": 29.75,
+      "text": "See the arrow leaving the pool?"
+    },
+    {
+      "start": 29.75,
+      "end": 35.16,
+      "text": "When a policyholder passes away, a valid claim triggers a payout from that shared accumulation."
+    },
+    {
+      "start": 35.16,
+      "end": 37.894,
+      "text": "Now look at the family receiving the funds."
+    },
+    {
+      "start": 37.894,
+      "end": 45.144,
+      "text": "The company disburses a large tax-free lump sum known as a death benefit to support the beneficiaries financially."
+    },
+    {
+      "start": 45.144,
+      "end": 47.386,
+      "text": "By pooling regular payments together,"
+    },
+    {
+      "start": 47.386,
+      "end": 56.232,
+      "text": "life insurance transforms steady contributions into a guaranteed financial cushion. You can now spot how shared risk protects families everywhere."
+    }
+  ]
+}
