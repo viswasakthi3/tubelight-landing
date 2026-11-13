@@ -71,7 +71,9 @@
       "src": "/videos/zombie-cells/p0.webp",
       "thumb": "/videos/zombie-cells/p0-s.webp",
       "start": 0,
-      "end": 31.248
+      "end": 31.248,
+      "walk": true,
+      "pw": 1
     },
     {
       "index": 1,
@@ -79,7 +81,9 @@
       "src": "/videos/zombie-cells/p1.webp",
       "thumb": "/videos/zombie-cells/p1-s.webp",
       "start": 31.248,
-      "end": 59.136
+      "end": 59.136,
+      "walk": true,
+      "pw": 1
     }
   ],
   "beats": [
@@ -87,37 +91,55 @@
       "start": 0,
       "end": 12.336,
       "sheet": 0,
-      "say": "Inside your body, billions of cells do something strange — they stop dividing, but refuse to die. That's a senescent cell: a damaged worker that turns into a toxic zombie."
+      "say": "Inside your body, billions of cells do something strange — they stop dividing, but refuse to die. That's a senescent cell: a damaged worker that turns into a toxic zombie.",
+      "ptr": null
     },
     {
       "start": 12.336,
       "end": 20.544,
       "sheet": 0,
-      "say": "See the bright cell splitting into two? Normally, our cells divide constantly to heal and maintain our organs, copying their DNA with high precision."
+      "say": "See the bright cell splitting into two? Normally, our cells divide constantly to heal and maintain our organs, copying their DNA with high precision.",
+      "ptr": {
+        "x": 0.2345,
+        "y": 0.4945
+      }
     },
     {
       "start": 20.544,
       "end": 31.248,
       "sheet": 0,
-      "say": "Now look at the amber cell on the right. When DNA gets heavily damaged by stress or time, the cell triggers an alarm and locks its machinery, entering senescence to prevent passing on mutations."
+      "say": "Now look at the amber cell on the right. When DNA gets heavily damaged by stress or time, the cell triggers an alarm and locks its machinery, entering senescence to prevent passing on mutations.",
+      "ptr": {
+        "x": 0.7675,
+        "y": 0.5015
+      }
     },
     {
       "start": 31.248,
       "end": 40.776,
       "sheet": 1,
-      "say": "See the swollen amber cell in the center? Instead of dying and letting the body sweep it away, it stays alive like a zombie, pumping out a chemical cloud called SASP."
+      "say": "See the swollen amber cell in the center? Instead of dying and letting the body sweep it away, it stays alive like a zombie, pumping out a chemical cloud called SASP.",
+      "ptr": {
+        "x": 0.499,
+        "y": 0.4955
+      }
     },
     {
       "start": 40.776,
       "end": 49.752,
       "sheet": 1,
-      "say": "Watch those purple clouds drift to the healthy cells. These chemicals inflame surrounding tissue, degrading collagen and turning healthy neighbors sluggish too."
+      "say": "Watch those purple clouds drift to the healthy cells. These chemicals inflame surrounding tissue, degrading collagen and turning healthy neighbors sluggish too.",
+      "ptr": {
+        "x": 0.495,
+        "y": 0.4965
+      }
     },
     {
       "start": 49.752,
       "end": 59.136,
       "sheet": 1,
-      "say": "By refusing to divide, senescent cells protect us from cancer in youth, but accumulate to cause aging in later life. Clearing them out is how science plans to keep tissues young."
+      "say": "By refusing to divide, senescent cells protect us from cancer in youth, but accumulate to cause aging in later life. Clearing them out is how science plans to keep tissues young.",
+      "ptr": null
     }
   ],
   "typed": "senescent cell"

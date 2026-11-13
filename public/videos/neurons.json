@@ -96,7 +96,9 @@
       "src": "/videos/neurons/p0.webp",
       "thumb": "/videos/neurons/p0-s.webp",
       "start": 0,
-      "end": 28.2
+      "end": 28.2,
+      "walk": true,
+      "pw": 1
     },
     {
       "index": 1,
@@ -104,7 +106,9 @@
       "src": "/videos/neurons/p1.webp",
       "thumb": "/videos/neurons/p1-s.webp",
       "start": 28.2,
-      "end": 54.384
+      "end": 54.384,
+      "walk": true,
+      "pw": 1
     },
     {
       "index": 2,
@@ -112,7 +116,9 @@
       "src": "/videos/neurons/p2.webp",
       "thumb": "/videos/neurons/p2-s.webp",
       "start": 54.384,
-      "end": 87.672
+      "end": 87.672,
+      "walk": true,
+      "pw": 1
     }
   ],
   "beats": [
@@ -120,55 +126,91 @@
       "start": 0,
       "end": 10.536,
       "sheet": 0,
-      "say": "See the dark gap between these two brain cells? When you experience something new, electrical signals race down your neurons until they reach this tiny microscopic bridge called the synapse."
+      "say": "See the dark gap between these two brain cells? When you experience something new, electrical signals race down your neurons until they reach this tiny microscopic bridge called the synapse.",
+      "ptr": {
+        "x": 0.5025,
+        "y": 0.2688
+      }
     },
     {
       "start": 10.536,
       "end": 18.864,
       "sheet": 0,
-      "say": "The first neuron spits out chemical messengers called neurotransmitters, which cross the gap to knock on the receiving cell's doors."
+      "say": "The first neuron spits out chemical messengers called neurotransmitters, which cross the gap to knock on the receiving cell's doors.",
+      "ptr": {
+        "x": 0.5005,
+        "y": 0.4697
+      }
     },
     {
       "start": 18.864,
       "end": 28.2,
       "sheet": 0,
-      "say": "Notice these closed protein channels waiting below. Normally, these receptors only let a trickle of ions through, keeping the neural connection quiet and temporary."
+      "say": "Notice these closed protein channels waiting below. Normally, these receptors only let a trickle of ions through, keeping the neural connection quiet and temporary.",
+      "ptr": {
+        "x": 0.5035,
+        "y": 0.7317
+      }
     },
     {
       "start": 28.2,
       "end": 36.216,
       "sheet": 1,
-      "say": "Look at the rapid flashes on the left. But if signals fire over and over in rapid succession, the electrical voltage of the receiving cell spikes sharply upward."
+      "say": "Look at the rapid flashes on the left. But if signals fire over and over in rapid succession, the electrical voltage of the receiving cell spikes sharply upward.",
+      "ptr": {
+        "x": 0.2385,
+        "y": 0.5263
+      }
     },
     {
       "start": 36.216,
       "end": 44.4,
       "sheet": 1,
-      "say": "That voltage shift creates a magnetic repulsion, popping out a magnesium ion that was plugging the receptor like a cork."
+      "say": "That voltage shift creates a magnetic repulsion, popping out a magnesium ion that was plugging the receptor like a cork.",
+      "ptr": {
+        "x": 0.788,
+        "y": 0.2311
+      }
     },
     {
       "start": 44.4,
       "end": 54.384,
       "sheet": 1,
-      "say": "Now watch the bright yellow calcium pour inside. With the plug gone, a heavy flood of calcium ions rushes into the cell, acting as a powerful molecular alarm bell."
+      "say": "Now watch the bright yellow calcium pour inside. With the plug gone, a heavy flood of calcium ions rushes into the cell, acting as a powerful molecular alarm bell.",
+      "ptr": {
+        "x": 0.843,
+        "y": 0.7034
+      }
     },
     {
       "start": 54.384,
       "end": 66.168,
       "sheet": 2,
-      "say": "See those internal storage vesicles fusing with the membrane? That calcium flood triggers an internal factory reset, ordering the cell to drag extra receptors out of storage and plug them into the surface."
+      "say": "See those internal storage vesicles fusing with the membrane? That calcium flood triggers an internal factory reset, ordering the cell to drag extra receptors out of storage and plug them into the surface.",
+      "ptr": {
+        "x": 0.689,
+        "y": 0.4057
+      }
     },
     {
       "start": 66.168,
       "end": 75.024,
       "sheet": 2,
-      "say": "This physical upgrade is called long-term potentiation, permanently lowering the electrical threshold required to activate this pathway."
+      "say": "This physical upgrade is called long-term potentiation, permanently lowering the electrical threshold required to activate this pathway.",
+      "ptr": {
+        "x": 0.5395,
+        "y": 0.6335
+      }
     },
     {
       "start": 75.024,
       "end": 87.672,
       "sheet": 2,
-      "say": "Now look how easily signals cross this reinforced pathway. This is how experiences physically rewire your brain—not by saving a file, but by permanently beefing up the connections where memories live."
+      "say": "Now look how easily signals cross this reinforced pathway. This is how experiences physically rewire your brain—not by saving a file, but by permanently beefing up the connections where memories live.",
+      "ptr": {
+        "x": 0.903,
+        "y": 0.5709
+      }
     }
   ],
   "typed": "explain something complex and intersting in neurophyscology"

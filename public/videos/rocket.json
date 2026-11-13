@@ -71,7 +71,9 @@
       "src": "/videos/rocket/p0.webp",
       "thumb": "/videos/rocket/p0-s.webp",
       "start": 0,
-      "end": 26.568
+      "end": 26.568,
+      "walk": true,
+      "pw": 1
     },
     {
       "index": 1,
@@ -79,7 +81,9 @@
       "src": "/videos/rocket/p1.webp",
       "thumb": "/videos/rocket/p1-s.webp",
       "start": 26.568,
-      "end": 58.656
+      "end": 58.656,
+      "walk": true,
+      "pw": 1
     }
   ],
   "beats": [
@@ -87,37 +91,55 @@
       "start": 0,
       "end": 9.096,
       "sheet": 0,
-      "say": "How does a massive rocket lift itself off the ground when there is no air in space to push against? That is the work of a liquid rocket engine."
+      "say": "How does a massive rocket lift itself off the ground when there is no air in space to push against? That is the work of a liquid rocket engine.",
+      "ptr": null
     },
     {
       "start": 9.096,
       "end": 17.712,
       "sheet": 0,
-      "say": "See the twin tanks feeding fluid downward? Liquid fuel and liquid oxygen are pumped from their storage tanks directly into the heart of the engine."
+      "say": "See the twin tanks feeding fluid downward? Liquid fuel and liquid oxygen are pumped from their storage tanks directly into the heart of the engine.",
+      "ptr": {
+        "x": 0.5175,
+        "y": 0.4816
+      }
     },
     {
       "start": 17.712,
       "end": 26.568,
       "sheet": 0,
-      "say": "Now look at the glowing chamber at the center. The two liquids mix and burn violently inside the combustion chamber, creating extremely hot, high-pressure gas."
+      "say": "Now look at the glowing chamber at the center. The two liquids mix and burn violently inside the combustion chamber, creating extremely hot, high-pressure gas.",
+      "ptr": {
+        "x": 0.4825,
+        "y": 0.5149
+      }
     },
     {
       "start": 26.568,
       "end": 35.496,
       "sheet": 1,
-      "say": "See the gas squeeze through the narrow throat? The high pressure gas rushes toward the narrowest part of the nozzle, speeding up dramatically as it is squeezed."
+      "say": "See the gas squeeze through the narrow throat? The high pressure gas rushes toward the narrowest part of the nozzle, speeding up dramatically as it is squeezed.",
+      "ptr": {
+        "x": 0.2495,
+        "y": 0.5918
+      }
     },
     {
       "start": 35.496,
       "end": 46.8,
       "sheet": 1,
-      "say": "Now look at the wide nozzle on the right. As the gas expands and exits the nozzle at high speed, it creates the massive thrust that pushes the rocket upward."
+      "say": "Now look at the wide nozzle on the right. As the gas expands and exits the nozzle at high speed, it creates the massive thrust that pushes the rocket upward.",
+      "ptr": {
+        "x": 0.7625,
+        "y": 0.5
+      }
     },
     {
       "start": 46.8,
       "end": 58.656,
       "sheet": 1,
-      "say": "By burning propellants inside a sealed chamber and forcing the hot gas through a narrow nozzle, a rocket engine turns chemical energy into the powerful thrust that carries us into space."
+      "say": "By burning propellants inside a sealed chamber and forcing the hot gas through a narrow nozzle, a rocket engine turns chemical energy into the powerful thrust that carries us into space.",
+      "ptr": null
     }
   ],
   "typed": "how rocket engine works",

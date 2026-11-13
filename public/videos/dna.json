@@ -51,7 +51,9 @@
       "src": "/videos/dna/p0.webp",
       "thumb": "/videos/dna/p0-s.webp",
       "start": 0,
-      "end": 13.224
+      "end": 13.224,
+      "walk": false,
+      "pw": 1
     },
     {
       "index": 1,
@@ -59,7 +61,9 @@
       "src": "/videos/dna/p1.webp",
       "thumb": "/videos/dna/p1-s.webp",
       "start": 13.224,
-      "end": 29.712
+      "end": 29.712,
+      "walk": false,
+      "pw": 1
     },
     {
       "index": 2,
@@ -67,7 +71,9 @@
       "src": "/videos/dna/p2.webp",
       "thumb": "/videos/dna/p2-s.webp",
       "start": 29.712,
-      "end": 49.536
+      "end": 49.536,
+      "walk": false,
+      "pw": 1
     }
   ],
   "beats": [
@@ -75,19 +81,22 @@
       "start": 0,
       "end": 13.224,
       "sheet": 0,
-      "say": "DNA, the instruction book for life, is made of repeating building blocks called nucleotides. Each nucleotide has three main parts: a phosphate group, a sugar molecule, and a nitrogenous base."
+      "say": "DNA, the instruction book for life, is made of repeating building blocks called nucleotides. Each nucleotide has three main parts: a phosphate group, a sugar molecule, and a nitrogenous base.",
+      "ptr": null
     },
     {
       "start": 13.224,
       "end": 29.712,
       "sheet": 1,
-      "say": "These nucleotides link together, with phosphates and sugars forming a strong backbone, creating a single strand. Two of these strands then pair up, with their bases connecting in the middle, and twist into the famous Double Helix — a twisted ladder shape."
+      "say": "These nucleotides link together, with phosphates and sugars forming a strong backbone, creating a single strand. Two of these strands then pair up, with their bases connecting in the middle, and twist into the famous Double Helix — a twisted ladder shape.",
+      "ptr": null
     },
     {
       "start": 29.712,
       "end": 49.536,
       "sheet": 2,
-      "say": "The secret to DNA's information storage lies in how its bases pair: Adenine (A) always pairs with Thymine (T), and Cytosine (C) always pairs with Guanine (G). This specific pairing creates a unique sequence along the ladder, forming the genetic code that carries all the instructions for life."
+      "say": "The secret to DNA's information storage lies in how its bases pair: Adenine (A) always pairs with Thymine (T), and Cytosine (C) always pairs with Guanine (G). This specific pairing creates a unique sequence along the ladder, forming the genetic code that carries all the instructions for life.",
+      "ptr": null
     }
   ],
   "typed": "teach me about dna and its fasinating details",

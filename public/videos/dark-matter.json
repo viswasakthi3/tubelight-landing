@@ -81,7 +81,9 @@
       "src": "/videos/dark-matter/p0.webp",
       "thumb": "/videos/dark-matter/p0-s.webp",
       "start": 0,
-      "end": 23.136
+      "end": 23.136,
+      "walk": true,
+      "pw": 1
     },
     {
       "index": 1,
@@ -89,7 +91,9 @@
       "src": "/videos/dark-matter/p1.webp",
       "thumb": "/videos/dark-matter/p1-s.webp",
       "start": 23.136,
-      "end": 49.752
+      "end": 49.752,
+      "walk": false,
+      "pw": 1
     },
     {
       "index": 2,
@@ -97,7 +101,9 @@
       "src": "/videos/dark-matter/p2.webp",
       "thumb": "/videos/dark-matter/p2-s.webp",
       "start": 49.752,
-      "end": 73.896
+      "end": 73.896,
+      "walk": true,
+      "pw": 0.9844
     }
   ],
   "beats": [
@@ -105,55 +111,79 @@
       "start": 0,
       "end": 7.848,
       "sheet": 0,
-      "say": "A galaxy is a massive collection of stars, gas, and dust, all held together by the gravity of everything we can see."
+      "say": "A galaxy is a massive collection of stars, gas, and dust, all held together by the gravity of everything we can see.",
+      "ptr": {
+        "x": 0.18,
+        "y": 0.5
+      }
     },
     {
       "start": 7.848,
       "end": 16.272,
       "sheet": 0,
-      "say": "If you calculate the gravity based only on that visible light, outer stars should move slowly, or they would fly off into space."
+      "say": "If you calculate the gravity based only on that visible light, outer stars should move slowly, or they would fly off into space.",
+      "ptr": {
+        "x": 0.82,
+        "y": 0.5
+      }
     },
     {
       "start": 16.272,
       "end": 23.136,
       "sheet": 0,
-      "say": "But we see the opposite; those outer stars are whipping around the center at speeds that should tear the galaxy apart."
+      "say": "But we see the opposite; those outer stars are whipping around the center at speeds that should tear the galaxy apart.",
+      "ptr": {
+        "x": 0.82,
+        "y": 0.5
+      }
     },
     {
       "start": 23.136,
       "end": 31.632,
       "sheet": 1,
-      "say": "We think galaxies are embedded in a massive, spherical halo of dark matter, an invisible substance that doesn't interact with light."
+      "say": "We think galaxies are embedded in a massive, spherical halo of dark matter, an invisible substance that doesn't interact with light.",
+      "ptr": null
     },
     {
       "start": 31.632,
       "end": 41.568,
       "sheet": 1,
-      "say": "Even though we can't see it, this halo contains far more mass than all the stars combined, creating a deep gravitational well."
+      "say": "Even though we can't see it, this halo contains far more mass than all the stars combined, creating a deep gravitational well.",
+      "ptr": null
     },
     {
       "start": 41.568,
       "end": 49.752,
       "sheet": 1,
-      "say": "This immense hidden weight provides the extra gravitational force needed to keep those fast outer stars tethered to the galaxy."
+      "say": "This immense hidden weight provides the extra gravitational force needed to keep those fast outer stars tethered to the galaxy.",
+      "ptr": null
     },
     {
       "start": 49.752,
       "end": 57.6,
       "sheet": 2,
-      "say": "Just as the Sun's gravity keeps Earth in orbit, dark matter acts as an invisible anchor, holding the entire structure together."
+      "say": "Just as the Sun's gravity keeps Earth in orbit, dark matter acts as an invisible anchor, holding the entire structure together.",
+      "ptr": {
+        "x": 0.5,
+        "y": 0.5
+      }
     },
     {
       "start": 57.6,
       "end": 65.448,
       "sheet": 2,
-      "say": "Without this hidden mass, our galaxy would simply drift apart; dark matter is the silent glue that makes the galaxy possible."
+      "say": "Without this hidden mass, our galaxy would simply drift apart; dark matter is the silent glue that makes the galaxy possible.",
+      "ptr": null
     },
     {
       "start": 65.448,
       "end": 73.896,
       "sheet": 2,
-      "say": "It is this combined gravity of visible stars and the dark matter halo that keeps the outermost stars on their track."
+      "say": "It is this combined gravity of visible stars and the dark matter halo that keeps the outermost stars on their track.",
+      "ptr": {
+        "x": 0.815,
+        "y": 0.5
+      }
     }
   ],
   "typed": "The **dark matter** acts like an invisible anchor for the galaxy. While the Sun's gravity keeps planets in orbit around "

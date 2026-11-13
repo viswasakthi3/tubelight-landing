@@ -86,7 +86,9 @@
       "src": "/videos/kidneys/p0.webp",
       "thumb": "/videos/kidneys/p0-s.webp",
       "start": 0,
-      "end": 27.936
+      "end": 27.936,
+      "walk": true,
+      "pw": 1
     },
     {
       "index": 1,
@@ -94,7 +96,9 @@
       "src": "/videos/kidneys/p1.webp",
       "thumb": "/videos/kidneys/p1-s.webp",
       "start": 27.936,
-      "end": 48.312
+      "end": 48.312,
+      "walk": true,
+      "pw": 1
     },
     {
       "index": 2,
@@ -102,7 +106,9 @@
       "src": "/videos/kidneys/p2.webp",
       "thumb": "/videos/kidneys/p2-s.webp",
       "start": 48.312,
-      "end": 70.872
+      "end": 70.872,
+      "walk": true,
+      "pw": 1
     }
   ],
   "beats": [
@@ -110,55 +116,91 @@
       "start": 0,
       "end": 9.624,
       "sheet": 0,
-      "say": "Your kidneys are like a recycling plant that never stops. The renal artery acts as the main delivery road, bringing raw, unfiltered blood directly from your heart."
+      "say": "Your kidneys are like a recycling plant that never stops. The renal artery acts as the main delivery road, bringing raw, unfiltered blood directly from your heart.",
+      "ptr": {
+        "x": 0.18,
+        "y": 0.5
+      }
     },
     {
       "start": 9.624,
       "end": 19.392,
       "sheet": 0,
-      "say": "Inside the kidney, over a million tiny machines called nephrons get to work. Each one acts like a precise sieve, sorting what the body needs from what it must discard."
+      "say": "Inside the kidney, over a million tiny machines called nephrons get to work. Each one acts like a precise sieve, sorting what the body needs from what it must discard.",
+      "ptr": {
+        "x": 0.82,
+        "y": 0.5
+      }
     },
     {
       "start": 19.392,
       "end": 27.936,
       "sheet": 0,
-      "say": "As blood flows through, the nephron filters out waste but carefully reabsorbs water and nutrients, sending them back into your bloodstream."
+      "say": "As blood flows through, the nephron filters out waste but carefully reabsorbs water and nutrients, sending them back into your bloodstream.",
+      "ptr": {
+        "x": 0.82,
+        "y": 0.5
+      }
     },
     {
       "start": 27.936,
       "end": 35.472,
       "sheet": 1,
-      "say": "Once the good stuff is reclaimed, the remaining waste and excess water become urine. This liquid collects at the base of each nephron."
+      "say": "Once the good stuff is reclaimed, the remaining waste and excess water become urine. This liquid collects at the base of each nephron.",
+      "ptr": {
+        "x": 0.5,
+        "y": 0.2767
+      }
     },
     {
       "start": 35.472,
       "end": 41.376,
       "sheet": 1,
-      "say": "The ureter acts as a dedicated pipe, carrying this waste liquid away from the kidney to be stored for later disposal."
+      "say": "The ureter acts as a dedicated pipe, carrying this waste liquid away from the kidney to be stored for later disposal.",
+      "ptr": {
+        "x": 0.5,
+        "y": 0.7233
+      }
     },
     {
       "start": 41.376,
       "end": 48.312,
       "sheet": 1,
-      "say": "This constant flow ensures waste is moved efficiently out of your filtering plant and toward your storage tank."
+      "say": "This constant flow ensures waste is moved efficiently out of your filtering plant and toward your storage tank.",
+      "ptr": {
+        "x": 0.5,
+        "y": 0.7233
+      }
     },
     {
       "start": 48.312,
       "end": 57.24,
       "sheet": 2,
-      "say": "The urine travels down to your bladder, which acts as a temporary storage tank. It holds the waste until your body is ready to expel it."
+      "say": "The urine travels down to your bladder, which acts as a temporary storage tank. It holds the waste until your body is ready to expel it.",
+      "ptr": {
+        "x": 0.5,
+        "y": 0.5
+      }
     },
     {
       "start": 57.24,
       "end": 63.384,
       "sheet": 2,
-      "say": "When the tank is full, you feel the urge to go, and the waste is finally cleared from your body."
+      "say": "When the tank is full, you feel the urge to go, and the waste is finally cleared from your body.",
+      "ptr": {
+        "x": 0.5,
+        "y": 0.7233
+      }
     },
     {
       "start": 63.384,
       "end": 70.872,
       "sheet": 2,
-      "say": "By constantly filtering and storing waste, your kidneys ensure that only clean, balanced blood keeps circulating through your body."
+      "say": "By constantly filtering and storing waste, your kidneys ensure that only clean, balanced blood keeps circulating through your body.",
+      "ptr": {
+        "x": 0.5,
+        "y": 0.2767
+      }
     }
   ],
   "typed": "Imagine your kidneys are like a super-efficient recycling and waste disposal plant for your body. Here's how the filteri"

@@ -96,7 +96,9 @@
       "src": "/videos/supernova/p0.webp",
       "thumb": "/videos/supernova/p0-s.webp",
       "start": 0,
-      "end": 33.24
+      "end": 33.24,
+      "walk": false,
+      "pw": 1
     },
     {
       "index": 1,
@@ -104,7 +106,9 @@
       "src": "/videos/supernova/p1.webp",
       "thumb": "/videos/supernova/p1-s.webp",
       "start": 33.24,
-      "end": 57.912
+      "end": 57.912,
+      "walk": false,
+      "pw": 1
     },
     {
       "index": 2,
@@ -112,7 +116,9 @@
       "src": "/videos/supernova/p2.webp",
       "thumb": "/videos/supernova/p2-s.webp",
       "start": 57.912,
-      "end": 77.16
+      "end": 77.16,
+      "walk": false,
+      "pw": 0.9844
     }
   ],
   "beats": [
@@ -120,61 +126,71 @@
       "start": 0,
       "end": 10.488,
       "sheet": 0,
-      "say": "Massive stars end when their core turns to iron, which consumes energy instead of releasing it. With no outward pressure left, gravity causes a sudden, catastrophic collapse."
+      "say": "Massive stars end when their core turns to iron, which consumes energy instead of releasing it. With no outward pressure left, gravity causes a sudden, catastrophic collapse.",
+      "ptr": null
     },
     {
       "start": 10.488,
       "end": 18.936,
       "sheet": 0,
-      "say": "The infalling material bounces off the dense core, sending a powerful shockwave that blasts the star's outer layers into space."
+      "say": "The infalling material bounces off the dense core, sending a powerful shockwave that blasts the star's outer layers into space.",
+      "ptr": null
     },
     {
       "start": 18.936,
       "end": 26.304,
       "sheet": 0,
-      "say": "In binary systems, a white dwarf can steal gas from a neighbor, slowly gaining mass until it hits the Chandrasekhar limit."
+      "say": "In binary systems, a white dwarf can steal gas from a neighbor, slowly gaining mass until it hits the Chandrasekhar limit.",
+      "ptr": null
     },
     {
       "start": 26.304,
       "end": 33.24,
       "sheet": 0,
-      "say": "Once that limit is reached, the pressure triggers a runaway nuclear reaction, causing the entire star to detonate as a Type Ia supernova."
+      "say": "Once that limit is reached, the pressure triggers a runaway nuclear reaction, causing the entire star to detonate as a Type Ia supernova.",
+      "ptr": null
     },
     {
       "start": 33.24,
       "end": 41.064,
       "sheet": 1,
-      "say": "After a massive star explodes, a dense core remnant is left behind. If this core is heavy enough, it cannot stabilize."
+      "say": "After a massive star explodes, a dense core remnant is left behind. If this core is heavy enough, it cannot stabilize.",
+      "ptr": null
     },
     {
       "start": 41.064,
       "end": 49.488,
       "sheet": 1,
-      "say": "Gravity crushes this core into a singularity, a point of infinite density where all the star's mass is packed into almost no space."
+      "say": "Gravity crushes this core into a singularity, a point of infinite density where all the star's mass is packed into almost no space.",
+      "ptr": null
     },
     {
       "start": 49.488,
       "end": 57.912,
       "sheet": 1,
-      "say": "The event horizon forms around this point, creating a boundary of no return where gravity is so strong that even light cannot escape."
+      "say": "The event horizon forms around this point, creating a boundary of no return where gravity is so strong that even light cannot escape.",
+      "ptr": null
     },
     {
       "start": 57.912,
       "end": 63.648,
       "sheet": 2,
-      "say": "Both supernova types and black hole formation are triggered by the star running out of nuclear fuel."
+      "say": "Both supernova types and black hole formation are triggered by the star running out of nuclear fuel.",
+      "ptr": null
     },
     {
       "start": 63.648,
       "end": 70.464,
       "sheet": 2,
-      "say": "A supernova is the violent expulsion of a star's outer layers, driven by either core collapse or runaway fusion."
+      "say": "A supernova is the violent expulsion of a star's outer layers, driven by either core collapse or runaway fusion.",
+      "ptr": null
     },
     {
       "start": 70.464,
       "end": 77.16,
       "sheet": 2,
-      "say": "A black hole forms only when the remaining core is so massive that gravity crushes it completely, trapping everything inside."
+      "say": "A black hole forms only when the remaining core is so massive that gravity crushes it completely, trapping everything inside.",
+      "ptr": null
     }
   ],
   "typed": "The dramatic events of a **supernova** explosion and the formation of a **black hole** are both consequences of a star e"
