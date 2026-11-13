@@ -197,3 +197,68 @@ Owner asks: maximise button; hero shows all pictures; search icon; a better play
 
 ### FAQ (new)
 - **Can I try it before I’m invited?** Yes. Type a topic in the search box and Tubelight makes a free preview video right on this page — one a day. You’ll need your email to watch it, which also puts you on the waitlist.
+
+## 8. Revision v5.4 (14 Nov 2026) — seekable timelines, pointer, search-first hero, better questions
+
+Owner's list (see `docs/HANDOFF-v5.4.md`), refined. Done one by one, design first on the canvas (artboards **V54** desktop + **V54m** 390 px phone; V53 and older kept), then ported to the code, each checked in the browser at 1440 and 375 px.
+
+### 8.1 Every timeline is seekable, with play/pause beside it (I24, I23, I35, I29)
+- **Problem:** the hero's progress bar ignores clicks; a green dot (the voice "wave") sits where people expect a play button.
+- **Hero panel and hero search player:** the transport row becomes **[play/pause button] [timeline] [0:12 / 1:10]**. The button is a 36 px round button (purple on white, `aria-label` Play/Pause) and replaces the green wave. The play/pause icon in the panel's title bar goes (one control, one place); Replay, Maximise and Sound stay.
+- **Timeline behaviour (hero and big player, one shared implementation):** `role="slider"`, `aria-label="Seek"`, `aria-valuetext="0:12 of 1:10"`; click anywhere to jump, press-and-drag to scrub (pointer capture, works with touch), keys ←/→ 5 s, PageUp/PageDown 10 s, Home/End. Visual: 6 px track in a 24 px tall hit area; a 14 px knob shows on hover, focus and while dragging; visible focus ring. Seeking while idle starts the video at that point.
+- **Big player:** the existing seek bar gets drag + keyboard (it was click-only); its play/pause already sits at the start of the controls row, directly under the bar. Arrow keys on the focused timeline seek; elsewhere in the player they still change slides.
+- **Demo film:** keeps the browser's native controls once started (already seekable by mouse and keyboard). Checked, no change.
+
+### 8.2 The app's pointer over the hero video (I11, I09, I30)
+- **Data:** the render script exports, per beat, the pointer place the app would use: the `focus` box if the picture was measured, else the plan's `at` zone (same `ZONE_RECTS` as `Spotlight.jsx`), converted to fractions of the 1280×720 video frame (the picture is letterboxed inside it). `null` for `whole` or no zone. A picture only gets a pointer when its beats point at two or more different places (the `walk.js` rule), so DNA (no pointer data) shows none, which is the honest answer.
+- **Look:** the app's default **Pointer (orb)**: a small white-cored, warm-orange glowing light (9–22 px, sized to the picture) that glides 720 ms between places and breathes gently. Nothing is dimmed (the app's "Highlight" is its stronger, optional mode; not used here).
+- **Timing:** on only while the video is actually playing; off when paused, ended or idle; 600 ms of the whole picture before it appears on each new picture (as in the app). Positioned against the real picture box inside the `<video>` (object-fit contain), re-measured on resize.
+- **Reduced motion:** no glide and no breathing; the light simply moves. Decorative (`aria-hidden`); the captions carry the meaning.
+- Used in the hero (both modes) and in the big player (same data, cheap).
+
+### 8.3 The sign-up number (I19, I27, I17 — P0 to stay truthful)
+Real counts on 14 Nov (read-only): landing waitlist **1**; old app waitlist 3; PCs that installed the app **82** (47 active in the last 30 days); accounts 5; logged explanations 29 (39 by daily usage) from 4 devices. **There is no truthful number near 1,500–2,000.**
+- **Shipped:** unchanged rule — the live count appears only above `WAITLIST_SHOW_MIN`; below it the line reads "Invites go out in batches — earlier sign-ups get in first". The canvas now defaults to the real count (1), so it shows what visitors see.
+- **For the owner to decide:** once the list passes the threshold the live count shows by itself. A fixed "1,500+" is only allowed if the owner confirms it after seeing these numbers; the book treats an invented count as a P0 failure (I27).
+
+### 8.4 Questions rewritten as customer discovery, each with "Other" (I22, I14, C2, The Mom Test)
+Ask about the last real episode, not "would you use…". Six short steps, all skippable, every answered step +60 spots (same server rule). Every chip question ends with an **Other** chip; picking it opens an inline text box right under the chips ("Tell us in a few words", 80 characters, focused). Stored as `"Other: …"`.
+
+| # | Question | Kind | Options |
+|---|---|---|---|
+| 0 | Which best describes you? | one | School student · College student · Working professional · Teacher or researcher · Just curious · Other |
+| 1 | Think of the last time you got stuck on something you were reading. Where were you reading it? | one + optional text "What was it about?" | A PDF or e-book · A website or article · Word or Google Docs · Notion or OneNote · Slack, Teams or email · Other |
+| 2 | What did you do to understand it? | any | Googled it · Asked ChatGPT or another AI · Watched a YouTube video · Asked a friend or teacher · Gave up and moved on · Other |
+| 3 | In the last 7 days, how many times did that happen? | one | Not once · Once or twice · 3 to 5 times · Almost every day |
+| 4 | What do you pay for today to learn or understand things? | any | Nothing, free tools only · ChatGPT Plus or another AI plan · Coaching or tuition · Online courses or apps · Books or test series · Other |
+| 5 | How did you hear about Tubelight? | one | A friend · YouTube · Instagram · LinkedIn · Google search · Other |
+
+- Server: question keys become "0"–"5"; the "What was it about?" text is saved with question 1 as `"About: …"`. The topic from a live preview stays in `answers.searched` (it no longer pre-fills a question).
+- Intro stays: "Tell us how you’ll use Tubelight. Every answer moves you up the line, so you’re invited sooner."
+
+### 8.5 Hero copy: search first (I08, I13, I07)
+- **Body:** "Search a topic, or select any text and press Alt + E. Tubelight explains it with pictures and a voice in under 15 seconds."
+- **Truth check:** Fast makes one in ≈ 11 s (Sept 2026 runs); Rich takes up to 30 s. Every time line now says it the same way: hero note "In the app, Fast makes one in about 11 seconds (Rich takes up to 30); here they play straight away." · comparison "How long": "Under 15 seconds on Fast, up to 30 on Rich" · the web free preview keeps its own measured "about 20 s" (it runs on our shared servers and streams to the page).
+
+### 8.6 No more "You typed" lines (owner; D11 removal test)
+- Removed from the gallery cards and their screen-reader labels. The typed topic still shows where it is the input being demonstrated: the hero search box.
+
+### 8.7 A milder play mark (I23, I09)
+- Gallery, saved tiles and feature pictures: a 40 px disc in the **bottom-left corner** (12 px inset), dark glass `rgba(20,16,40,.38)` with a white triangle, light blur, no big shadow. It never covers the middle of the picture. On hover/focus it turns white with a purple triangle and grows to 44 px. The whole card stays the button (large target, small visible icon).
+
+### 8.8 Search mode first and open on load (I21, I28, I30)
+- Mode switch order: **Search a topic** (default, open on load) · **Select text · Alt + E**.
+- On load the sample topic types itself and presses Enter; the video plays **muted** (no sound without a press, I30). Reduced motion: the topic appears at once and nothing plays until pressed.
+
+### 8.9 Search-mode hero layout like the app (I07, I10, I32)
+- **Before playing:** one wide Tubelight window fills the whole demo area (no empty page on the left): heading "What do you want to understand?", a **real** search box (search icon · input · **Explain it** button with an Enter key cap) and two hints: "You can paste a whole paragraph too." and "Your own topic? Press Enter for a free preview · about 20 s · email needed to watch" (said before the click, I20, I25).
+  - The sample topic types itself; clicking into the box stops the typing and selects it so the visitor can type over it. A sample topic plays its ready video in place; anything else opens the live preview (same flow as the gallery search).
+- **Once playing:** the window becomes the app's player: a slim bar with the topic in a search pill (click = edit), Sound and Maximise; the **video takes the full width with the slide rail on the right** (numbered thumbnails, current one ringed purple with the speaking wave, click = jump); captions under the video; then the transport from 8.1.
+- **Select mode** keeps the sample page + panel split (with the new transport and the pointer).
+- **Phone:** box and button stack full width; while playing the rail becomes a horizontal strip under the transport.
+
+### 8.10 Quick Search AI block gets a mild colour (I34, D4)
+- The "More from Tubelight" card gets a soft tint from the hero palette: a light lavender-to-peach wash (`#F4F0FF` → `#FFF4E4`) with a faint sky-blue glow in one corner and a 1 px lavender edge. Text contrast unchanged (≥ 4.5:1); nothing animated.
+
+### 8.11 Book review and phone equivalence (F1, E3, I32)
+- Re-run F1 + E3 on the finished page; record the result in `docs/landing-v5-review.md` (section "v5.4"). Phone (375 px) keeps the same meaning in the same order: purpose → how (mode switch, search first) → action → demo → proof.
