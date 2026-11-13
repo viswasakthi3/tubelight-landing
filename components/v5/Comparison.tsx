@@ -15,7 +15,7 @@ const ROWS: [string, string, string][] = [
   ["Where you go", "A new tab — and you lose your place", "Nowhere. It opens beside your page"],
   ["What you do", "Type a question, then dig through results", "Press Alt + E, or type a topic"],
   ["What you get", "Long articles, long videos or a wall of text", "Pictures and a voice about exactly what you selected"],
-  ["How long", "Minutes", "About 10–30 seconds to make"],
+  ["How long", "Minutes", "Under 15 seconds on Fast, up to 30 on Rich"],
 ];
 
 export function Comparison() {

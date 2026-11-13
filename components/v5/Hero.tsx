@@ -258,7 +258,7 @@ export function Hero() {
             </span>
           </h1>
           <p className="rise d2" style={{ margin: 0, maxWidth: 430, fontSize: "clamp(18px, 1.5vw, 20px)", lineHeight: 1.6, color: "#57536E", textWrap: "pretty" }}>
-            Select any text and press <span className="kbd">Alt</span> + <span className="kbd">E</span>, or just type a topic. Tubelight explains it with pictures and a voice.
+            Search a topic, or select any text and press <span className="kbd">Alt</span> + <span className="kbd">E</span>. Tubelight explains it with pictures and a voice in under 15 seconds.
           </p>
           <div className="rise d3" style={{ width: "100%", display: "flex", flexDirection: "column", gap: 14, marginTop: 2 }}>
             {!w.sent ? <SignupForm id="em-hero" placement="hero" label="Join the waitlist" /> : <Joined />}
@@ -478,7 +478,7 @@ export function Hero() {
               </button>
             ))}
           </div>
-          <p className="real">Real Tubelight explanations in its own voice, made from exactly the topics shown in “Type or paste”. Making one takes about 10–30 seconds; here it plays straight away. The page in “Select text” is a sample. Use <span aria-hidden="true">⤢</span> to watch it big.</p>
+          <p className="real">Real Tubelight explanations in its own voice, made from the topics shown. In the app, Fast makes one in about 11 seconds (Rich takes up to 30); here they play straight away. The page in “Select text” is a sample. Use <span aria-hidden="true">⤢</span> to watch it big.</p>
         </div>
       </div>
     </section>
