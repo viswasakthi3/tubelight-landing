@@ -53,7 +53,7 @@ export async function POST(request: Request) {
   }
 
   const q = body.question;
-  if (typeof q !== "number" || !Number.isInteger(q) || q < 0 || q > 4) {
+  if (typeof q !== "number" || !Number.isInteger(q) || q < 0 || q > 5) {
     return NextResponse.json({ ok: false, error: "Unknown question." }, { status: 400 });
   }
 

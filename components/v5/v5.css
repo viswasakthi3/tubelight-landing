@@ -186,6 +186,11 @@
 .v5 .qchip{display:inline-flex;align-items:center;gap:6px;min-height:46px;padding:0 18px;border-radius:999px;border:0;background:#F4F1FA;color:#221E3F;cursor:pointer;font:500 15.5px var(--font-dm),ui-sans-serif,sans-serif;transition:background .2s,color .2s,transform .15s}
 .v5 .qchip:hover{background:#ECE6FF}
 .v5 .qchip.on{background:#6C4DF6;color:#FFFFFF}
+.v5 .qfield{display:flex;flex-direction:column;gap:6px}
+.v5 .qfield label{font-size:14px;font-weight:600;color:#57536E}
+.v5 .qopt{font-weight:400;color:#6F6B86}
+.v5 .qinput{width:100%;min-height:46px;padding:0 16px;border-radius:14px;border:1px solid #E1DCEB;background:#FFFFFF;color:#221E3F;font:400 16px var(--font-dm),ui-sans-serif,sans-serif;outline:0}
+.v5 .qinput:focus-visible{border-color:#6C4DF6;outline:2px solid #6C4DF6;outline-offset:2px}
 .v5 .qtext{width:100%;min-height:96px;padding:14px 16px;border-radius:16px;border:1px solid #E1DCEB;background:#FFFFFF;color:#221E3F;font:400 16px var(--font-dm),ui-sans-serif,sans-serif;resize:vertical;outline:0}
 .v5 .qtext:focus{border-color:#6C4DF6;box-shadow:0 0 0 4px rgba(108,77,246,.14)}
 .v5 .big-ic{display:inline-flex;align-items:center;justify-content:center;width:64px;height:64px;border-radius:20px;background:#FFF1CC}

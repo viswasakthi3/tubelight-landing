@@ -1,8 +1,8 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, type KeyboardEvent } from "react";
 import { fmt, trapTab } from "./media";
-import { QS } from "./questions";
+import { OTHER, QS } from "./questions";
 import { Proof, SignupForm } from "./SignupForm";
 import { useWaitlist } from "./WaitlistContext";
 
@@ -13,6 +13,13 @@ const X = (
 export function WaitlistDialog() {
   const w = useWaitlist();
   const dlg = useRef<HTMLDivElement | null>(null);
+  const otherRef = useRef<HTMLInputElement | null>(null);
+  const otherOn = w.modal === "q" && w.picked.includes(OTHER);
+
+  // Focus the "Other" box as soon as it appears.
+  useEffect(() => {
+    if (otherOn) otherRef.current?.focus();
+  }, [otherOn, w.qi]);
 
   // Move focus into the dialog whenever it opens or changes step.
   useEffect(() => {
@@ -25,6 +32,14 @@ export function WaitlistDialog() {
 
   const hasCount = w.position !== null;
   const q = QS[Math.min(w.qi, QS.length - 1)];
+  const showNext = q.multi || !!q.about || otherOn;
+  const answered = w.picked.length > 0 || w.aboutText.trim() !== "";
+  const onEnter = (e: KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      if (answered) w.nextQ();
+    }
+  };
   const posText = "#" + fmt(w.shown);
   const emailShown = w.email.trim();
 
@@ -87,45 +102,56 @@ export function WaitlistDialog() {
 
             <div className="fade" key={w.qi} style={{ display: "flex", flexDirection: "column", gap: 12 }}>
               <p style={{ margin: 0, fontSize: 14, fontWeight: 600, color: "#6F6B86" }}>
-                Question {Math.min(w.qi + 1, QS.length)} of 5{q.multi ? " · pick any" : q.text ? " · optional" : ""}
+                Question {Math.min(w.qi + 1, QS.length)} of {QS.length}{q.multi ? " · pick any" : ""}
               </p>
               <p className="disp" style={{ margin: 0, fontSize: 22, fontWeight: 600, letterSpacing: "-0.02em", textWrap: "balance" }}>{q.q}</p>
-              {!q.text ? (
-                <div className="qchips">
-                  {(q.opts ?? []).map((label) => {
-                    const on = w.picked.includes(label);
-                    return (
-                      <button key={label} type="button" className={"qchip" + (on ? " on" : "")} aria-pressed={on} onClick={() => w.pick(label)}>
-                        {label}
-                      </button>
-                    );
-                  })}
-                </div>
-              ) : (
-                <>
-                  <label htmlFor="q-wish" className="sr">{q.q}</label>
-                  <textarea
-                    id="q-wish"
-                    className="qtext"
-                    maxLength={200}
-                    placeholder="e.g. how mutual funds actually make money"
-                    value={w.wish}
-                    onChange={(e) => w.setWish(e.target.value)}
+              <div className="qchips">
+                {[...q.opts, ...(q.other ? [OTHER] : [])].map((label) => {
+                  const on = w.picked.includes(label);
+                  return (
+                    <button key={label} type="button" className={"qchip" + (on ? " on" : "")} aria-pressed={on} onClick={() => w.pick(label)}>
+                      {label}
+                    </button>
+                  );
+                })}
+              </div>
+              {otherOn ? (
+                <div className="qfield">
+                  <label htmlFor="q-other">Tell us in a few words</label>
+                  <input
+                    id="q-other"
+                    ref={otherRef}
+                    className="qinput"
+                    type="text"
+                    maxLength={80}
+                    value={w.otherText}
+                    onChange={(e) => w.setOtherText(e.target.value)}
+                    onKeyDown={onEnter}
                   />
-                </>
-              )}
+                </div>
+              ) : null}
+              {q.about ? (
+                <div className="qfield">
+                  <label htmlFor="q-about">{q.about.label} <span className="qopt">(optional)</span></label>
+                  <input
+                    id="q-about"
+                    className="qinput"
+                    type="text"
+                    maxLength={120}
+                    placeholder={q.about.placeholder}
+                    value={w.aboutText}
+                    onChange={(e) => w.setAboutText(e.target.value)}
+                    onKeyDown={onEnter}
+                  />
+                </div>
+              ) : null}
             </div>
             {w.answerErr ? <p className="err" role="alert">{w.answerErr}</p> : null}
             <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 12, flexWrap: "wrap" }}>
               <button type="button" className="linkbtn" style={{ color: "#6F6B86" }} onClick={w.skipQ}>Skip this question</button>
-              {q.multi || q.text ? (
-                <button
-                  type="button"
-                  className="btn sm"
-                  disabled={q.multi ? w.picked.length === 0 : !w.wish.trim()}
-                  onClick={w.nextQ}
-                >
-                  {q.text ? "Finish" : "Next"}
+              {showNext ? (
+                <button type="button" className="btn sm" disabled={!answered} onClick={w.nextQ}>
+                  Next
                 </button>
               ) : null}
             </div>

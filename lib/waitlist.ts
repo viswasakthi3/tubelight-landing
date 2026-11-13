@@ -170,8 +170,8 @@ export async function getTotal(): Promise<number> {
 
 /* ---------- answers ---------- */
 
-/** Only the five questions (keys "0"-"4") count; other keys such as "searched" never move anyone up. */
-const QUESTION_KEYS = ["0", "1", "2", "3", "4"];
+/** Only the six questions (keys "0"-"5") count; other keys such as "searched" never move anyone up. */
+const QUESTION_KEYS = ["0", "1", "2", "3", "4", "5"];
 
 function countAnswered(answers: Answers): number {
   return QUESTION_KEYS.map((k) => answers[k]).filter((v) => (Array.isArray(v) ? v.length > 0 : typeof v === "string" && v.trim() !== "")).length;

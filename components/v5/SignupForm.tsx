@@ -1,6 +1,7 @@
 "use client";
 
 import { fmt } from "./media";
+import { QS } from "./questions";
 import { useWaitlist, type Placement } from "./WaitlistContext";
 
 /** The email field + button, shared by the hero, the final call-to-action and the dialog. */
@@ -65,7 +66,7 @@ export function SignupForm({
 /** "You're on the waitlist — #N in line" + the button that opens the dialog. */
 export function Joined() {
   const w = useWaitlist();
-  const done = w.qi >= 5;
+  const done = w.qi >= QS.length;
   return (
     <div className="joined fade" role="status">
       <span className="okdot" aria-hidden="true">

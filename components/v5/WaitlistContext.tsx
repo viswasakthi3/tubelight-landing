@@ -2,7 +2,7 @@
 
 import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState } from "react";
 import { track } from "@/lib/track";
-import { QS } from "./questions";
+import { OTHER, QS } from "./questions";
 
 export type Placement = "hero" | "final" | "dialog" | "preview";
 export type Step = null | "email" | "q" | "done";
@@ -32,8 +32,12 @@ export type WaitlistApi = {
   closeModal: () => void;
   qi: number;
   picked: string[];
-  wish: string;
+  /** @deprecated no free-text step any more; kept as a no-op so Player.tsx still compiles */
   setWish: (v: string) => void;
+  otherText: string;
+  setOtherText: (v: string) => void;
+  aboutText: string;
+  setAboutText: (v: string) => void;
   answerErr: string;
   pick: (label: string) => void;
   nextQ: () => void;
@@ -63,7 +67,8 @@ export function WaitlistProvider({ children }: { children: React.ReactNode }) {
   const [modal, setModal] = useState<Step>(null);
   const [qi, setQi] = useState(0);
   const [picked, setPickedState] = useState<string[]>([]);
-  const [wish, setWishRaw] = useState("");
+  const [otherText, setOtherRaw] = useState("");
+  const [aboutText, setAboutRaw] = useState("");
   const [answerErr, setAnswerErr] = useState("");
 
   const token = useRef("");
@@ -72,6 +77,8 @@ export function WaitlistProvider({ children }: { children: React.ReactNode }) {
   const shownRef = useRef(0);
   const qiRef = useRef(0);
   const pickedRef = useRef<string[]>([]);
+  const otherRef = useRef("");
+  const aboutRef = useRef("");
   const timers = useRef<{ tick?: ReturnType<typeof setInterval>; nq?: ReturnType<typeof setTimeout>; dt?: ReturnType<typeof setTimeout> }>({});
 
   useEffect(() => {
@@ -101,7 +108,23 @@ export function WaitlistProvider({ children }: { children: React.ReactNode }) {
     setEmailRaw(v);
     setErr("");
   }, []);
-  const setWish = useCallback((v: string) => setWishRaw(v.slice(0, 200)), []);
+  const setOtherText = useCallback((v: string) => {
+    const t = v.slice(0, 80);
+    otherRef.current = t;
+    setOtherRaw(t);
+  }, []);
+  const setAboutText = useCallback((v: string) => {
+    const t = v.slice(0, 120);
+    aboutRef.current = t;
+    setAboutRaw(t);
+  }, []);
+  const setWish = useCallback((_v: string) => undefined, []);
+  const clearTexts = useCallback(() => {
+    otherRef.current = "";
+    aboutRef.current = "";
+    setOtherRaw("");
+    setAboutRaw("");
+  }, []);
   const setPicked = useCallback((p: string[]) => {
     pickedRef.current = p;
     setPickedState(p);
@@ -160,7 +183,7 @@ export function WaitlistProvider({ children }: { children: React.ReactNode }) {
         setPicked([]);
         setQiBoth(0);
         setAnswerErr("");
-        if (searched) setWishRaw(searched);
+        clearTexts();
         if (!opts?.quiet) setModal("q");
         track("waitlist_submit", { placement, duplicate: !!j.duplicate });
         return true;
@@ -171,7 +194,7 @@ export function WaitlistProvider({ children }: { children: React.ReactNode }) {
         setSubmitting(false);
       }
     },
-    [email, setPicked, setQiBoth],
+    [email, setPicked, setQiBoth, clearTexts],
   );
 
   const openModal = useCallback(() => {
@@ -192,6 +215,7 @@ export function WaitlistProvider({ children }: { children: React.ReactNode }) {
       const q = qiRef.current;
       const next = q + 1;
       setPicked([]);
+      clearTexts();
       setAnswerErr("");
       setQiBoth(next);
       track("waitlist_answer", { question: q, skipped: !counted });
@@ -229,7 +253,7 @@ export function WaitlistProvider({ children }: { children: React.ReactNode }) {
           if (next >= QS.length) goDone(0);
         });
     },
-    [goDone, tickTo, setPicked, setQiBoth],
+    [goDone, tickTo, setPicked, setQiBoth, clearTexts],
   );
 
   const pick = useCallback(
@@ -243,19 +267,34 @@ export function WaitlistProvider({ children }: { children: React.ReactNode }) {
         setPicked(p);
         return;
       }
-      if (pickedRef.current.length) return;
+      const cur = pickedRef.current;
+      // A plain pick on a question that auto-advances is already on its way; ignore further taps.
+      if (cur.length && cur[0] !== OTHER && !q.about) return;
+      if (cur[0] === label) {
+        setPicked([]);
+        return;
+      }
       setPicked([label]);
       clearTimeout(timers.current.nq);
-      timers.current.nq = setTimeout(() => advance(label, true), 320);
+      // "Other" and the optional "about" box need a Next press; everything else moves on by itself.
+      if (label !== OTHER && !q.about) timers.current.nq = setTimeout(() => nextQRef.current(), 320);
     },
-    [advance, setPicked],
+    [setPicked],
   );
 
   const nextQ = useCallback(() => {
-    const q = QS[Math.min(qiRef.current, QS.length - 1)];
-    if (q.text) advance(wish.trim(), true);
-    else advance(pickedRef.current.slice(), true);
-  }, [advance, wish]);
+    clearTimeout(timers.current.nq);
+    const out = pickedRef.current.map((l) => {
+      if (l !== OTHER) return l;
+      const t = otherRef.current.trim();
+      return t ? `Other: ${t}` : "Other";
+    });
+    const about = aboutRef.current.trim();
+    if (about) out.push(`About: ${about}`);
+    advance(out, true);
+  }, [advance]);
+  const nextQRef = useRef(nextQ);
+  nextQRef.current = nextQ;
 
   const skipQ = useCallback(() => {
     clearTimeout(timers.current.nq);
@@ -263,8 +302,8 @@ export function WaitlistProvider({ children }: { children: React.ReactNode }) {
   }, [advance]);
 
   const value = useMemo<WaitlistApi>(
-    () => ({ email, setEmail, err, submitting, sent, submit, position, shown, delta, moved, stats, modal, openModal, closeModal, qi, picked, wish, setWish, answerErr, pick, nextQ, skipQ }),
-    [email, setEmail, err, submitting, sent, submit, position, shown, delta, moved, stats, modal, openModal, closeModal, qi, picked, wish, setWish, answerErr, pick, nextQ, skipQ],
+    () => ({ email, setEmail, err, submitting, sent, submit, position, shown, delta, moved, stats, modal, openModal, closeModal, qi, picked, setWish, otherText, setOtherText, aboutText, setAboutText, answerErr, pick, nextQ, skipQ }),
+    [email, setEmail, err, submitting, sent, submit, position, shown, delta, moved, stats, modal, openModal, closeModal, qi, picked, setWish, otherText, setOtherText, aboutText, setAboutText, answerErr, pick, nextQ, skipQ],
   );
 
   return <Ctx.Provider value={value}>{children}</Ctx.Provider>;
