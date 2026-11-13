@@ -28,7 +28,7 @@ export function Gallery() {
                 type="button"
                 className="gcard"
                 onClick={() => player.open(g.slug, 0)}
-                aria-label={`Play: ${v.title}, ${mmss(v.duration)}. Made from the typed topic: ${g.typed}`}
+                aria-label={`Play: ${v.title}, ${mmss(v.duration)}`}
               >
                 <span className="gpic">
                   <img src={v.thumb} alt="" loading="lazy" />
@@ -39,7 +39,6 @@ export function Gallery() {
                 </span>
                 <span className="gtag" style={{ background: g.bg, color: g.fg }}>{g.tag}</span>
                 <span className="gtitle">{v.title}</span>
-                <span className="typed">You typed: <q>{g.typed}</q></span>
               </button>
             );
           })}

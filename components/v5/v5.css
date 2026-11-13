@@ -195,8 +195,6 @@
 .v5 .qtext:focus{border-color:#6C4DF6;box-shadow:0 0 0 4px rgba(108,77,246,.14)}
 .v5 .big-ic{display:inline-flex;align-items:center;justify-content:center;width:64px;height:64px;border-radius:20px;background:#FFF1CC}
 .v5 .big-ic svg{width:30px;height:30px;fill:none;stroke:#8A5A00;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
-.v5 .typed{font-size:14px;line-height:1.45;color:#6F6B86}
-.v5 .typed q{color:#3A3655;font-style:normal}
 
 @keyframes blink{50%{opacity:0}}
 .v5 .onlysm{display:none}
@@ -254,7 +252,6 @@
 .v5 .gpic{border-radius:14px}
 .v5 .gtag{display:none}
 .v5 .gtitle{font-size:16px}
-.v5 .typed{font-size:12.5px}
 .v5 .gplay{left:8px;bottom:8px;height:28px;padding:0 9px 0 4px;font-size:12px}
 .v5 .gplay i{width:20px;height:20px}
 .v5 .search{flex-direction:column;border-radius:20px}
