@@ -76,11 +76,11 @@ export async function saveSignup(signup: Signup): Promise<{ stored: boolean; dup
     try {
       await ensureTable(db);
       const insertRes = await db.query(
-        `INSERT INTO tubelight_waitlist (email, role, source)
-         VALUES ($1, $2, $3)
+        `INSERT INTO tubelight_waitlist (email, role, source, answers)
+         VALUES ($1, $2, $3, $4::jsonb)
          ON CONFLICT (email) DO NOTHING
          RETURNING id`,
-        [signup.email, signup.role || null, signup.source || "site"],
+        [signup.email, signup.role || null, signup.source || "site", JSON.stringify(signup.answers ?? {})],
       );
       const duplicate = (insertRes.rowCount ?? 0) === 0;
       const countRes = await db.query<{ count: number }>(`SELECT COUNT(*)::int AS count FROM tubelight_waitlist`);
@@ -170,8 +170,11 @@ export async function getTotal(): Promise<number> {
 
 /* ---------- answers ---------- */
 
+/** Only the five questions (keys "0"-"4") count; other keys such as "searched" never move anyone up. */
+const QUESTION_KEYS = ["0", "1", "2", "3", "4"];
+
 function countAnswered(answers: Answers): number {
-  return Object.values(answers).filter((v) => (Array.isArray(v) ? v.length > 0 : typeof v === "string" && v.trim() !== "")).length;
+  return QUESTION_KEYS.map((k) => answers[k]).filter((v) => (Array.isArray(v) ? v.length > 0 : typeof v === "string" && v.trim() !== "")).length;
 }
 
 /** Boost is always recomputed from the stored answers, so repeats can't inflate it. */
@@ -288,7 +291,7 @@ export async function forwardSignup(signup: Signup): Promise<void> {
       fetch(webhook, {
         method: "POST",
         headers: { "content-type": "application/json" },
-        body: JSON.stringify(signup),
+        body: JSON.stringify({ ...signup, answers: undefined }),
       }).catch(() => undefined),
     );
   }

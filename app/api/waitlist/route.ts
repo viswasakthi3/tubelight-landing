@@ -51,11 +51,14 @@ export async function POST(request: Request) {
     );
   }
 
+  const topic = typeof body.topic === "string" ? body.topic.trim().slice(0, 120) : "";
+
   const signup: Signup = {
     email,
     role: typeof body.role === "string" && body.role.trim() ? body.role.trim().slice(0, 60) : undefined,
     source: typeof body.source === "string" && body.source.trim() ? body.source.trim().slice(0, 40) : "site",
     createdAt: new Date().toISOString(),
+    ...(topic ? { answers: { searched: topic } } : {}),
   };
 
   const result = await saveSignup(signup);

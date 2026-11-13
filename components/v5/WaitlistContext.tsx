@@ -4,7 +4,7 @@ import { createContext, useCallback, useContext, useEffect, useMemo, useRef, use
 import { track } from "@/lib/track";
 import { QS } from "./questions";
 
-export type Placement = "hero" | "final" | "dialog";
+export type Placement = "hero" | "final" | "dialog" | "miss";
 export type Step = null | "email" | "q" | "done";
 type Stats = { total: number; thisWeek: number; show: boolean };
 
@@ -34,6 +34,9 @@ export type WaitlistApi = {
   pick: (label: string) => void;
   nextQ: () => void;
   skipQ: () => void;
+  /** the topic of the latest no-match search on the page ("" when none) */
+  missTopic: string;
+  setMissTopic: (v: string) => void;
 };
 
 const Ctx = createContext<WaitlistApi | null>(null);
@@ -61,6 +64,8 @@ export function WaitlistProvider({ children }: { children: React.ReactNode }) {
   const [picked, setPickedState] = useState<string[]>([]);
   const [wish, setWishRaw] = useState("");
   const [answerErr, setAnswerErr] = useState("");
+  const [missTopic, setMissTopicState] = useState("");
+  const missRef = useRef("");
 
   const token = useRef("");
   const sentEmail = useRef("");
@@ -97,6 +102,10 @@ export function WaitlistProvider({ children }: { children: React.ReactNode }) {
     setEmailRaw(v);
     setErr("");
   }, []);
+  const setMissTopic = useCallback((v: string) => {
+    missRef.current = v;
+    setMissTopicState(v);
+  }, []);
   const setWish = useCallback((v: string) => setWishRaw(v.slice(0, 200)), []);
   const setPicked = useCallback((p: string[]) => {
     pickedRef.current = p;
@@ -132,10 +141,11 @@ export function WaitlistProvider({ children }: { children: React.ReactNode }) {
       setSubmitting(true);
       setErr("");
       try {
+        const searched = missRef.current.trim().slice(0, 120);
         const res = await fetch("/api/waitlist", {
           method: "POST",
           headers: { "content-type": "application/json" },
-          body: JSON.stringify({ email: v, source: "site" }),
+          body: JSON.stringify(searched ? { email: v, source: "site", topic: searched } : { email: v, source: "site" }),
         });
         const j = await res.json().catch(() => ({}));
         if (!res.ok || !j.ok) {
@@ -155,8 +165,10 @@ export function WaitlistProvider({ children }: { children: React.ReactNode }) {
         setPicked([]);
         setQiBoth(0);
         setAnswerErr("");
+        if (searched) setWishRaw(searched);
         setModal("q");
         track("waitlist_submit", { placement, duplicate: !!j.duplicate });
+        if (placement === "miss") track("topic_search_signup");
       } catch {
         setErr("Couldn’t reach the server. Check your connection and try again.");
       } finally {
@@ -255,8 +267,8 @@ export function WaitlistProvider({ children }: { children: React.ReactNode }) {
   }, [advance]);
 
   const value = useMemo<WaitlistApi>(
-    () => ({ email, setEmail, err, submitting, sent, submit, position, shown, delta, moved, stats, modal, openModal, closeModal, qi, picked, wish, setWish, answerErr, pick, nextQ, skipQ }),
-    [email, setEmail, err, submitting, sent, submit, position, shown, delta, moved, stats, modal, openModal, closeModal, qi, picked, wish, setWish, answerErr, pick, nextQ, skipQ],
+    () => ({ email, setEmail, err, submitting, sent, submit, position, shown, delta, moved, stats, modal, openModal, closeModal, qi, picked, wish, setWish, answerErr, pick, nextQ, skipQ, missTopic, setMissTopic }),
+    [email, setEmail, err, submitting, sent, submit, position, shown, delta, moved, stats, modal, openModal, closeModal, qi, picked, wish, setWish, answerErr, pick, nextQ, skipQ, missTopic, setMissTopic],
   );
 
   return <Ctx.Provider value={value}>{children}</Ctx.Provider>;

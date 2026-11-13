@@ -58,8 +58,8 @@ export function Features() {
                 <span>Supermassive black hole</span>
               </div>
             </div>
-            <h3>Just type a topic</h3>
-            <p>Nothing to select? Type it and get the same kind of explanation.</p>
+            <h3>Type it or paste it</h3>
+            <p>Nothing to select? Type a topic or paste a paragraph and get the same kind of explanation.</p>
           </div>
 
           <div className="tile s2" style={{ background: "#FFF4D6" }}>

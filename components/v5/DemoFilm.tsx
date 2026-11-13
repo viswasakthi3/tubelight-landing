@@ -62,7 +62,7 @@ export function DemoFilm() {
         <div className="steps">
           {[
             ["#FFF1CC", "#8A5A00", "1", "Select any text", "In a PDF, a website, Word or Notion — wherever you can select text."],
-            ["#EFEAFF", "#4B33B8", "2", "Press Alt + E", "One shortcut. No new tab, nothing to type."],
+            ["#EFEAFF", "#4B33B8", "2", "Press Alt + E", "One shortcut, no new tab. Nothing selected? Type a topic instead."],
             ["#E1F6EC", "#146B44", "3", "Watch and listen", "Pictures and a voice explain it, right beside your page. Ask a follow-up if you need to."],
           ].map(([bg, fg, n, h, p]) => (
             <div key={n} style={{ display: "flex", flexDirection: "column", gap: 12 }}>

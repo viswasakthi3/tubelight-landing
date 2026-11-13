@@ -10,16 +10,20 @@ import { useWaitlist } from "./WaitlistContext";
 const HERO = [
   { slug: "rocket", label: "Rockets", color: "#FF6F4F", app: "Rockets.pdf", kicker: "Physics · Chapter 4", title: "How rockets fly",
     lead: "A rocket carries everything it needs to burn, because there is no air in space.",
-    sel: "Liquid fuel and liquid oxygen are pumped into the combustion chamber, where they burn and rush out through the nozzle.", tail: "The hot gas going down pushes the rocket up." },
+    sel: "Liquid fuel and liquid oxygen are pumped into the combustion chamber, where they burn and rush out through the nozzle.", tail: "The hot gas going down pushes the rocket up.",
+    typed: "how rocket engine works" },
   { slug: "headaches", label: "Headaches", color: "#22B573", app: "Health article", kicker: "Wellbeing", title: "Small habits, better weeks",
     lead: "Keep a bottle of water on your desk and take a short walk after lunch.",
-    sel: "Why do headaches happen if the brain itself can’t feel pain?", tail: "The answer is in the layers around it." },
+    sel: "Why do headaches happen if the brain itself can’t feel pain?", tail: "The answer is in the layers around it.",
+    typed: "why headaches happen" },
   { slug: "dna", label: "DNA", color: "#3B8EF0", app: "Biology notes.docx", kicker: "Biology · Unit 3", title: "Genetics",
     lead: "Every living cell carries a full set of instructions for life.",
-    sel: "DNA is built from nucleotides that pair up and twist into a double helix.", tail: "Its base pairs spell out the genetic code." },
+    sel: "DNA is built from nucleotides that pair up and twist into a double helix.", tail: "Its base pairs spell out the genetic code.",
+    typed: "teach me about dna and its fasinating details" },
 ];
 
 type Mode = "idle" | "playing" | "done";
+type Way = "select" | "type";
 
 const CHECK = <path d="m5 12 5 5 9-10" />;
 
@@ -29,6 +33,8 @@ export function Hero() {
   const proof = useProof();
   const [topic, setTopic] = useState(0);
   const [mode, setMode] = useState<Mode>("idle");
+  const [way, setWay] = useState<Way>("select");
+  const [tn, setTn] = useState(0);
   const [vt, setVt] = useState(0);
   const [pressed, setPressed] = useState(false);
   const [coarse, setCoarse] = useState(false);
@@ -44,6 +50,9 @@ export function Hero() {
   const modeRef = useRef<Mode>("idle");
   const timers = useRef<{ a1?: ReturnType<typeof setTimeout>; p1?: ReturnType<typeof setTimeout> }>({});
   const topicRef = useRef(0);
+  const reduceRef = useRef(false);
+  const tyRef = useRef<ReturnType<typeof setInterval> | undefined>(undefined);
+  const tnRef = useRef(0);
 
   const setModeBoth = (m: Mode) => {
     modeRef.current = m;
@@ -98,6 +107,7 @@ export function Hero() {
     } catch {
       /* ignore */
     }
+    reduceRef.current = reduce;
     if (!reduce) {
       t.a1 = setTimeout(() => {
         if (!touched.current) go(false);
@@ -107,8 +117,47 @@ export function Hero() {
       off();
       clearTimeout(t.a1);
       clearTimeout(t.p1);
+      clearInterval(tyRef.current);
     };
   }, [go]);
+
+  // "Type or paste": the real typed topic types itself in, then waits for Enter.
+  const typeTopic = useCallback((idx: number) => {
+    clearInterval(tyRef.current);
+    const full = HERO[idx].typed;
+    if (reduceRef.current) {
+      tnRef.current = full.length;
+      setTn(full.length);
+      return;
+    }
+    tnRef.current = 0;
+    setTn(0);
+    tyRef.current = setInterval(() => {
+      const n = tnRef.current + 1;
+      tnRef.current = n;
+      setTn(n);
+      if (n >= full.length) clearInterval(tyRef.current);
+    }, 45);
+  }, []);
+
+  const switchWay = (m: Way) => {
+    if (m === way) return;
+    clearTimeout(timers.current.a1);
+    clearInterval(tyRef.current);
+    touched.current = true;
+    try {
+      hv.current?.pause();
+    } catch {
+      /* ignore */
+    }
+    setWay(m);
+    setModeBoth("idle");
+    setVt(0);
+    tnRef.current = 0;
+    setTn(0);
+    track("mode_switch", { mode: m });
+    if (m === "type") typeTopic(topicRef.current);
+  };
 
   const pickTopic = (i: number) => {
     clearTimeout(timers.current.a1);
@@ -122,11 +171,15 @@ export function Hero() {
     setTopic(i);
     setModeBoth("idle");
     setVt(0);
+    if (way === "type") typeTopic(i);
   };
 
+  const ask = way === "type";
   const tp = HERO[topic];
   const v = videos[tp.slug];
   const idle = mode === "idle";
+  const typedFull = tp.typed;
+  const typedDone = tn >= typedFull.length;
   const playing = mode === "playing" && !paused;
   const done = mode === "done";
   const dur = v?.shortDuration || v?.duration || 0;
@@ -184,7 +237,7 @@ export function Hero() {
             </span>
           </h1>
           <p className="rise d2" style={{ margin: 0, maxWidth: 430, fontSize: "clamp(18px, 1.5vw, 20px)", lineHeight: 1.6, color: "#57536E", textWrap: "pretty" }}>
-            Select any text on your Windows PC and press <span className="kbd">Alt</span> + <span className="kbd">E</span>. Tubelight explains it with pictures and a voice, right beside what you’re reading.
+            Select any text and press <span className="kbd">Alt</span> + <span className="kbd">E</span>, or just type a topic. Tubelight explains it with pictures and a voice.
           </p>
           <div className="rise d3" style={{ width: "100%", display: "flex", flexDirection: "column", gap: 14, marginTop: 2 }}>
             {!w.sent ? <SignupForm id="em-hero" placement="hero" label="Join the waitlist" /> : <Joined />}
@@ -193,6 +246,7 @@ export function Hero() {
               <span><svg viewBox="0 0 24 24" aria-hidden="true">{CHECK}</svg>Windows 10 &amp; 11</span>
               <span><svg viewBox="0 0 24 24" aria-hidden="true">{CHECK}</svg>Invites in line order</span>
             </p>
+            <p className="onlysm micro">Tubelight runs on Windows PCs. Join from your phone and your invite comes by email, so you can open it on your PC.</p>
             <div className="proof">
               <span className="live" aria-hidden="true" />
               <span>
@@ -215,29 +269,62 @@ export function Hero() {
           id="demo"
           className="rise d4"
           onKeyDown={(e) => {
-            if (e.altKey && (e.code === "KeyE" || e.key === "e" || e.key === "E")) {
+            if (!ask && e.altKey && (e.code === "KeyE" || e.key === "e" || e.key === "E")) {
+              e.preventDefault();
+              go(true);
+            }
+            if (ask && e.key === "Enter" && e.target instanceof HTMLElement && e.target.tagName !== "BUTTON") {
               e.preventDefault();
               go(true);
             }
           }}
         >
+          <div className="modes">
+            <div className="modeseg" role="group" aria-label="How do you want to ask?">
+              <button type="button" className={"mode" + (ask ? "" : " on")} aria-pressed={!ask} onClick={() => switchWay("select")}>
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h10M4 12h16M4 17h7" /><path d="M15 15l5 5" /></svg>
+                Select text
+              </button>
+              <button type="button" className={"mode" + (ask ? " on" : "")} aria-pressed={ask} onClick={() => switchWay("type")}>
+                <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7" /><path d="m20 20-3.5-3.5" /></svg>
+                Type or paste
+              </button>
+            </div>
+          </div>
           <div className={"desk" + (idle ? "" : " split")}>
             <div className="win wdoc">
               <div className="wbar">
                 <span style={{ display: "flex", alignItems: "center", gap: 9, minWidth: 0 }}>
-                  <span aria-hidden="true" style={{ width: 12, height: 12, borderRadius: 4, flex: "none", background: tp.color }} />
-                  <span style={{ whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{tp.app}</span>
+                  <span aria-hidden="true" style={{ width: 12, height: 12, borderRadius: 4, flex: "none", background: ask ? "#6C4DF6" : tp.color }} />
+                  <span style={{ whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{ask ? "Tubelight" : tp.app}</span>
                 </span>
                 <span aria-hidden="true" style={{ display: "flex", gap: 14, color: "#A29DB5", fontSize: 12, fontWeight: 500, flex: "none" }}>— ▢ ✕</span>
               </div>
+              {ask ? (
+                <div className="askwrap">
+                  <p className="disp" style={{ margin: 0, fontSize: 21, lineHeight: 1.2, fontWeight: 600, letterSpacing: "-0.02em", color: "#221E3F" }}>What do you want to understand?</p>
+                  <div className="askbox">
+                    <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7" /><path d="m20 20-3.5-3.5" /></svg>
+                    <span>
+                      <span>{typedFull.slice(0, tn)}</span>
+                      <span className="caret" aria-hidden="true" />
+                    </span>
+                  </div>
+                  <p className="hint">
+                    <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="8" y="3" width="8" height="4" rx="1" /><path d="M8 5H6a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2" /></svg>
+                    You can paste a whole paragraph too.
+                  </p>
+                </div>
+              ) : (
               <div className="wbody">
                 <p style={{ margin: 0, fontSize: 12, fontWeight: 600, letterSpacing: "0.12em", textTransform: "uppercase", color: "#6F6B86" }}>{tp.kicker}</p>
                 <p className="disp" style={{ margin: 0, fontSize: 21, lineHeight: 1.2, fontWeight: 600, letterSpacing: "-0.02em", color: "#221E3F" }}>{tp.title}</p>
-                <p style={{ margin: 0 }}>{tp.lead}</p>
+                <p className="wlead" style={{ margin: 0 }}>{tp.lead}</p>
                 <p style={{ margin: 0 }}>
                   <span className="selx">{tp.sel}</span> {tp.tail}
                 </p>
               </div>
+              )}
             </div>
 
             <div className="win wpan" ref={panel}>
@@ -290,7 +377,7 @@ export function Hero() {
                       </button>
                     ) : null}
                   </div>
-                  <p className="caps" aria-live="polite">{idle ? "Press Alt + E to explain the highlighted text." : cueAt(cues, vt) || " "}</p>
+                  <p className="caps" aria-live="polite">{idle ? (ask ? (typedDone ? "Press Enter to explain it." : " ") : "Press Alt + E to explain the highlighted text.") : cueAt(cues, vt) || " "}</p>
                   <div className="prog">
                     <span className={"wave" + (playing && !muted ? " live" : "")} aria-hidden="true"><span /><span /><span /><span /></span>
                     <div className="track"><div className="fill" style={{ width: pct + "%" }} /></div>
@@ -304,12 +391,19 @@ export function Hero() {
           </div>
 
           <div className="keyrow">
-            <button type="button" className={"keybtn" + (idle ? " ready" : "") + (pressed ? " pressed" : "")} onClick={() => go(true)} aria-label="Press Alt plus E to explain the highlighted text">
-              <span className="key">Alt</span>
-              <span aria-hidden="true" style={{ color: "#A29DB5", fontSize: 18 }}>+</span>
-              <span className="key">E</span>
-              <span style={{ marginLeft: 6 }}>{idle ? (coarse ? "Tap to explain the highlighted text" : "Explain the highlighted text") : "Explain it again"}</span>
-            </button>
+            {ask ? (
+              <button type="button" className={"keybtn" + (idle && typedDone ? " ready" : "") + (pressed ? " pressed" : "")} onClick={() => go(true)} aria-label="Press Enter to explain the typed topic">
+                <span className="key">Enter</span>
+                <span style={{ marginLeft: 6 }}>{idle ? (coarse ? "Tap to explain my topic" : "Explain my topic") : "Explain it again"}</span>
+              </button>
+            ) : (
+              <button type="button" className={"keybtn" + (idle ? " ready" : "") + (pressed ? " pressed" : "")} onClick={() => go(true)} aria-label="Press Alt plus E to explain the highlighted text">
+                <span className="key">Alt</span>
+                <span aria-hidden="true" style={{ color: "#A29DB5", fontSize: 18 }}>+</span>
+                <span className="key">E</span>
+                <span style={{ marginLeft: 6 }}>{idle ? (coarse ? "Tap to explain the highlighted text" : "Explain the highlighted text") : "Explain it again"}</span>
+              </button>
+            )}
           </div>
           <div className="tchips">
             <span style={{ fontSize: 14.5, color: "#6F6B86", marginRight: 2 }}>Try another:</span>
@@ -320,7 +414,7 @@ export function Hero() {
               </button>
             ))}
           </div>
-          <p className="real">Real Tubelight explanations of these topics, in its own voice. Making one takes about 10–30 seconds; here it plays straight away. The page is a sample.</p>
+          <p className="real">Real Tubelight explanations in its own voice, made from exactly the topics shown in “Type or paste”. Making one takes about 10–30 seconds; here it plays straight away. The page in “Select text” is a sample.</p>
         </div>
       </div>
     </section>

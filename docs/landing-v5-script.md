@@ -116,3 +116,36 @@ Why: see `docs/landing-v5-review.md`. These strings replace the earlier ones eve
 | 17 | Under the final CTA form and the dialog email form (new) | — | We’ll email you when your invite is ready. Nothing else. |
 | 18 | Dialog email step lede | Invites go out every week, in order. It takes ten seconds. | We invite people in batches, in line order. It takes ten seconds. |
 | 19 | Dialog questions intro | Tell us how you’ll use Tubelight. Every answer moves you up the line — we invite the people it’ll help most first. | Tell us how you’ll use Tubelight. Every answer moves you up the line, so you’re invited sooner. |
+
+## 6. Revision v5.2 (13 Nov 2026) — "you don't have to select anything", topic search, mobile
+
+**Problem (owner):** the page only shows Alt + E, so people think they must select text. In fact they can also type a topic or paste text.
+**Visitor question:** "What if the thing I want to understand isn't on my screen?"
+**Takeaway:** You can select text, type a topic, or paste a paragraph. All three give the same picture-and-voice explanation.
+**Evidence:** every gallery video was made from a casually typed topic (real inputs from the saved library: "how rocket engine works", "why headaches happen", "Ocean currents", "life cycle of a polar bear", "how lic policy works", "how does modern tv work so good and high in quality"). So showing the typed input is real proof (I07, I09, I04).
+**Rejected:** a fake "generating your video…" screen that asks for an email. Nothing would be generated; the book forbids invented work and fake progress (I37, I27). It stays a follow-up only if a real web-generation endpoint is built.
+
+### Hero
+- **Body (new):** Select any text and press Alt + E, or just type a topic. Tubelight explains it with pictures and a voice.
+- **Mode switch above the demo** (two segments, keyboard-operable, `aria-pressed`): **Select text** · **Type or paste**.
+  - *Select text:* as before (sample page, highlighted sentence, Alt + E).
+  - *Type or paste:* the left window becomes Tubelight's box: label "What do you want to understand?", the real typed topic types itself in, an **Explain** button, and a hint "You can paste a whole paragraph too." The key button shows **Enter** with "Explain my topic". The video is the same real output, made from exactly that typed topic.
+- Reduced motion: the topic appears at once, no typing animation.
+
+### Curious about anything? (gallery) — search first
+- **Search box above the grid.** Visible label: "What do you want to understand?" Placeholder cycles through example topics (static if reduced motion). Button: **Explain it**.
+- Typing filters the real examples by title and typed topic: "2 explanations match".
+- **Submit with a match:** the best match plays in the lightbox.
+- **Submit with no match (honest):** a status card: “Tubelight hasn’t explained “{topic}” on this page yet. In the app it makes one in about 10–30 seconds. Join the waitlist and it can be the first thing you try.” + email form. The topic is saved with the signup (it pre-fills question 5) so we learn what people want.
+- **Each card shows its real input:** `You typed: “how lic policy works”`.
+
+### Feature tile
+- "Just type a topic" becomes **"Type it or paste it"**: "Nothing to select? Type a topic or paste a paragraph and get the same kind of explanation."
+
+### Mobile (I32, D2, D7)
+- Same order of meaning: purpose → how (with the mode switch) → the action → the demo → proof.
+- **Desktop-only continuation (D7),** shown only on phones under the hero form: "Tubelight runs on Windows PCs. Join from your phone and your invite comes by email, so you can open it on your PC."
+- **Demo recomposed, not shrunk:** the sample page keeps only its title and highlighted sentence; the Tubelight panel is full width; captions stay under the video; the key button says "Tap to explain" (select mode) or "Tap Explain" (type mode).
+- **Gallery:** search box and button stack full width; cards in two compact columns (poster, length, title; the "You typed" line stays because it carries the meaning).
+- **Lightbox:** full width, captions under the video, close button reachable at the top.
+- Targets ≥ 44 px; no horizontal scroll at 360–430 px; the sticky top bar keeps "Join the waitlist" reachable (no extra sticky bottom bar covering content, D3).
