@@ -73,9 +73,9 @@ export function Features() {
 
           <div className="tile s2" style={{ background: "#FFF4D6" }}>
             <div className="tv" aria-hidden="true" style={{ flexDirection: "column", alignItems: "stretch", gap: 8, padding: "0 18px" }}>
-              <div style={rowStyle}><span>Fast</span><span style={{ color: "#8A5A00" }}>about 15 s</span></div>
-              <div style={rowStyle}><span>Balanced</span><span style={{ color: "#8A5A00" }}>about 20 s</span></div>
-              <div style={{ ...rowStyle, background: "#FFC94A", color: "#3D2800" }}><span>Rich visuals</span><span>about 30 s</span></div>
+              <div style={rowStyle}><span>Fast</span><span style={{ color: "#8A5A00" }}>about 11 s</span></div>
+              <div style={rowStyle}><span>Balanced</span><span style={{ color: "#8A5A00" }}>under 20 s</span></div>
+              <div style={{ ...rowStyle, background: "#FFC94A", color: "#3D2800" }}><span>Rich visuals</span><span>up to 30 s</span></div>
             </div>
             <h3>Quick or deep</h3>
             <p>Get the gist fast, or a fuller story with more pictures.</p>
