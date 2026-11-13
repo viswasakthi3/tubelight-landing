@@ -73,5 +73,68 @@
       "end": 79.56,
       "text": "That is how modern screens turn simple electronic signals into breathtaking realism."
     }
-  ]
+  ],
+  "sheets": [
+    {
+      "index": 0,
+      "title": "Old Backlight vs Individual Pixels",
+      "src": "/videos/tv/p0.webp",
+      "thumb": "/videos/tv/p0-s.webp",
+      "start": 0,
+      "end": 37.848
+    },
+    {
+      "index": 1,
+      "title": "Achieving True Black",
+      "src": "/videos/tv/p1.webp",
+      "thumb": "/videos/tv/p1-s.webp",
+      "start": 37.848,
+      "end": 79.56
+    }
+  ],
+  "beats": [
+    {
+      "start": 0,
+      "end": 12.216,
+      "sheet": 0,
+      "say": "Ever wonder why a modern TV screen makes colors look so rich and night scenes so deeply dark? That is self-lit pixel technology: every single dot on the screen creates its own light."
+    },
+    {
+      "start": 12.216,
+      "end": 23.664,
+      "sheet": 0,
+      "say": "See that large white panel shining from behind? Older screens use one giant backlight trying to push light through color filters, which is why dark scenes always look washed out and gray."
+    },
+    {
+      "start": 23.664,
+      "end": 37.848,
+      "sheet": 0,
+      "say": "Now look at the right side with millions of tiny dots. Modern televisions replace that giant backlight with millions of tiny self-lit dots called pixels, giving each microscopic area its own volume knob for light."
+    },
+    {
+      "start": 37.848,
+      "end": 46.392,
+      "sheet": 1,
+      "say": "See the bright moon glowing on the screen? When the TV shows a bright object, those specific pixels crank up their brightness to maximum intensity."
+    },
+    {
+      "start": 46.392,
+      "end": 55.608,
+      "sheet": 1,
+      "say": "Look at this zoomed inset of the moon pixels. Each of these active pixels pumps out intense light to make highlights pop with vivid clarity."
+    },
+    {
+      "start": 55.608,
+      "end": 65.472,
+      "sheet": 1,
+      "say": "Now look at the dark space inset below. To show the night sky, those pixels simply shut off completely, drawing zero power and producing absolute true black."
+    },
+    {
+      "start": 65.472,
+      "end": 79.56,
+      "sheet": 1,
+      "say": "Because every tiny pixel controls its own light and turns completely off for darkness, you get true infinite contrast. That is how modern screens turn simple electronic signals into breathtaking realism."
+    }
+  ],
+  "typed": "how does modern tv worsk so good and high in quality"
 }

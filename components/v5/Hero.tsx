@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import { track } from "@/lib/track";
-import { useVideos } from "./Providers";
+import { usePlayer, useVideos } from "./Providers";
 import { Joined, SignupForm, useProof } from "./SignupForm";
 import { cueAt, mmss, pauseOthers, registerPauser } from "./media";
 import { useWaitlist } from "./WaitlistContext";
@@ -30,6 +30,7 @@ const CHECK = <path d="m5 12 5 5 9-10" />;
 export function Hero() {
   const videos = useVideos();
   const w = useWaitlist();
+  const player = usePlayer();
   const proof = useProof();
   const [topic, setTopic] = useState(0);
   const [mode, setMode] = useState<Mode>("idle");
@@ -48,7 +49,8 @@ export function Hero() {
   const panel = useRef<HTMLDivElement | null>(null);
   const touched = useRef(false);
   const modeRef = useRef<Mode>("idle");
-  const timers = useRef<{ a1?: ReturnType<typeof setTimeout>; p1?: ReturnType<typeof setTimeout> }>({});
+  const timers = useRef<{ a1?: ReturnType<typeof setTimeout>; p1?: ReturnType<typeof setTimeout>; ae?: ReturnType<typeof setTimeout> }>({});
+  const wayRef = useRef<Way>("select");
   const topicRef = useRef(0);
   const reduceRef = useRef(false);
   const tyRef = useRef<ReturnType<typeof setInterval> | undefined>(undefined);
@@ -62,6 +64,7 @@ export function Hero() {
   const go = useCallback((byUser: boolean) => {
     clearTimeout(timers.current.a1);
     clearTimeout(timers.current.p1);
+    clearTimeout(timers.current.ae);
     pauseOthers("hero");
     if (byUser) touched.current = true;
     setPressed(true);
@@ -117,32 +120,47 @@ export function Hero() {
       off();
       clearTimeout(t.a1);
       clearTimeout(t.p1);
+      clearTimeout(t.ae);
       clearInterval(tyRef.current);
     };
   }, [go]);
 
-  // "Type or paste": the real typed topic types itself in, then waits for Enter.
-  const typeTopic = useCallback((idx: number) => {
-    clearInterval(tyRef.current);
-    const full = HERO[idx].typed;
-    if (reduceRef.current) {
-      tnRef.current = full.length;
-      setTn(full.length);
-      return;
-    }
-    tnRef.current = 0;
-    setTn(0);
-    tyRef.current = setInterval(() => {
-      const n = tnRef.current + 1;
-      tnRef.current = n;
-      setTn(n);
-      if (n >= full.length) clearInterval(tyRef.current);
-    }, 45);
-  }, []);
+  // "Type or paste": the real typed topic types itself in, then Enter is pressed for the visitor.
+  const typeTopic = useCallback(
+    (idx: number) => {
+      clearInterval(tyRef.current);
+      clearTimeout(timers.current.ae);
+      const full = HERO[idx].typed;
+      const pressEnter = () => {
+        timers.current.ae = setTimeout(() => {
+          if (wayRef.current === "type" && modeRef.current === "idle") go(true);
+        }, 650);
+      };
+      if (reduceRef.current) {
+        tnRef.current = full.length;
+        setTn(full.length);
+        pressEnter();
+        return;
+      }
+      tnRef.current = 0;
+      setTn(0);
+      tyRef.current = setInterval(() => {
+        const n = tnRef.current + 1;
+        tnRef.current = n;
+        setTn(n);
+        if (n >= full.length) {
+          clearInterval(tyRef.current);
+          pressEnter();
+        }
+      }, 45);
+    },
+    [go],
+  );
 
   const switchWay = (m: Way) => {
     if (m === way) return;
     clearTimeout(timers.current.a1);
+    clearTimeout(timers.current.ae);
     clearInterval(tyRef.current);
     touched.current = true;
     try {
@@ -150,6 +168,7 @@ export function Hero() {
     } catch {
       /* ignore */
     }
+    wayRef.current = m;
     setWay(m);
     setModeBoth("idle");
     setVt(0);
@@ -161,6 +180,8 @@ export function Hero() {
 
   const pickTopic = (i: number) => {
     clearTimeout(timers.current.a1);
+    clearTimeout(timers.current.ae);
+    clearInterval(tyRef.current);
     touched.current = true;
     try {
       hv.current?.pause();
@@ -182,8 +203,8 @@ export function Hero() {
   const typedDone = tn >= typedFull.length;
   const playing = mode === "playing" && !paused;
   const done = mode === "done";
-  const dur = v?.shortDuration || v?.duration || 0;
-  const cues = v?.shortCues || v?.cues;
+  const dur = v?.duration || 0;
+  const cues = v?.cues;
   const pct = dur ? Math.min(100, Math.round((vt / dur) * 1000) / 10) : 0;
 
   const togglePlay = () => {
@@ -255,12 +276,38 @@ export function Hero() {
               </span>
               {proof.week ? <span className="week">+{proof.week} this week</span> : null}
             </div>
-            <a href="#how" className="linkbtn" style={{ alignSelf: "flex-start", marginTop: 2 }}>
-              <svg viewBox="0 0 24 24" aria-hidden="true" style={{ width: 18, height: 18, fill: "#4B33B8" }}>
-                <path d="M7 4.5v15l12.5-7.5z" />
-              </svg>
-              Watch the demo (1:21)
-            </a>
+            <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", gap: "2px 22px", marginTop: 2 }}>
+              <a href="#how" className="linkbtn">
+                <svg viewBox="0 0 24 24" aria-hidden="true" style={{ width: 18, height: 18, fill: "#4B33B8" }}>
+                  <path d="M7 4.5v15l12.5-7.5z" />
+                </svg>
+                Watch the demo (1:21)
+              </a>
+              <a
+                href="#examples"
+                className="linkbtn"
+                onClick={(e) => {
+                  e.preventDefault();
+                  try {
+                    document.getElementById("examples")?.scrollIntoView({ behavior: "smooth", block: "start" });
+                  } catch {
+                    /* ignore */
+                  }
+                  setTimeout(() => {
+                    try {
+                      document.getElementById("topic-q")?.focus({ preventScroll: true });
+                    } catch {
+                      /* ignore */
+                    }
+                  }, 500);
+                }}
+              >
+                <svg viewBox="0 0 24 24" aria-hidden="true" style={{ width: 18, height: 18, fill: "none", stroke: "#4B33B8", strokeWidth: 2.2, strokeLinecap: "round" }}>
+                  <path d="M11 18a7 7 0 1 0 0-14 7 7 0 0 0 0 14zM20 20l-3.5-3.5" />
+                </svg>
+                Try it with your own topic
+              </a>
+            </div>
           </div>
         </div>
 
@@ -344,6 +391,23 @@ export function Hero() {
                     <button type="button" className="ibtn" aria-label={paused ? "Play" : "Pause"} onClick={togglePlay}>
                       <svg viewBox="0 0 24 24"><path d={paused ? "M7 4.5v15l12.5-7.5z" : "M8 5v14M16 5v14"} /></svg>
                     </button>
+                    <button
+                      type="button"
+                      className="ibtn"
+                      aria-label="Open in the big player"
+                      title="Maximise"
+                      onClick={(e) => {
+                        let at = 0;
+                        try {
+                          at = hv.current?.currentTime ?? 0;
+                        } catch {
+                          /* ignore */
+                        }
+                        player.open(tp.slug, at, e.currentTarget);
+                      }}
+                    >
+                      <svg viewBox="0 0 24 24"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7" /></svg>
+                    </button>
                     <button type="button" className="ibtn" aria-pressed={!muted} aria-label={muted ? "Sound off — turn on" : "Sound on — turn off"} onClick={toggleSound}>
                       <svg viewBox="0 0 24 24">
                         <path d="M11 5 6 9H2v6h4l5 4z" />
@@ -356,7 +420,7 @@ export function Hero() {
                   <div className="pvid">
                     <video
                       ref={hv}
-                      src={v?.shortSrc || v?.src}
+                      src={v?.src}
                       poster={v?.poster}
                       playsInline
                       muted
@@ -377,7 +441,7 @@ export function Hero() {
                       </button>
                     ) : null}
                   </div>
-                  <p className="caps" aria-live="polite">{idle ? (ask ? (typedDone ? "Press Enter to explain it." : " ") : "Press Alt + E to explain the highlighted text.") : cueAt(cues, vt) || " "}</p>
+                  <p className="caps" aria-live="polite">{idle ? (ask ? (typedDone ? "Pressing Enter…" : " ") : "Press Alt + E to explain the highlighted text.") : cueAt(cues, vt) || " "}</p>
                   <div className="prog">
                     <span className={"wave" + (playing && !muted ? " live" : "")} aria-hidden="true"><span /><span /><span /><span /></span>
                     <div className="track"><div className="fill" style={{ width: pct + "%" }} /></div>
@@ -414,7 +478,7 @@ export function Hero() {
               </button>
             ))}
           </div>
-          <p className="real">Real Tubelight explanations in its own voice, made from exactly the topics shown in “Type or paste”. Making one takes about 10–30 seconds; here it plays straight away. The page in “Select text” is a sample.</p>
+          <p className="real">Real Tubelight explanations in its own voice, made from exactly the topics shown in “Type or paste”. Making one takes about 10–30 seconds; here it plays straight away. The page in “Select text” is a sample. Use <span aria-hidden="true">⤢</span> to watch it big.</p>
         </div>
       </div>
     </section>

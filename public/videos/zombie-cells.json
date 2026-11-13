@@ -1,0 +1,124 @@
+{
+  "slug": "zombie-cells",
+  "title": "Why Zombie Cells Make Us Age",
+  "duration": 59.136,
+  "cues": [
+    {
+      "start": 0,
+      "end": 7.039,
+      "text": "Inside your body, billions of cells do something strange — they stop dividing, but refuse to die."
+    },
+    {
+      "start": 7.039,
+      "end": 12.336,
+      "text": "That's a senescent cell: a damaged worker that turns into a toxic zombie."
+    },
+    {
+      "start": 12.336,
+      "end": 14.499,
+      "text": "See the bright cell splitting into two?"
+    },
+    {
+      "start": 14.499,
+      "end": 20.544,
+      "text": "Normally, our cells divide constantly to heal and maintain our organs, copying their DNA with high precision."
+    },
+    {
+      "start": 20.544,
+      "end": 25.48,
+      "text": "Now look at the amber cell on the right. When DNA gets heavily damaged by stress or time,"
+    },
+    {
+      "start": 25.48,
+      "end": 31.248,
+      "text": "the cell triggers an alarm and locks its machinery, entering senescence to prevent passing on mutations."
+    },
+    {
+      "start": 31.248,
+      "end": 36.676,
+      "text": "See the swollen amber cell in the center? Instead of dying and letting the body sweep it away,"
+    },
+    {
+      "start": 36.676,
+      "end": 40.776,
+      "text": "it stays alive like a zombie, pumping out a chemical cloud called SASP."
+    },
+    {
+      "start": 40.776,
+      "end": 43.768,
+      "text": "Watch those purple clouds drift to the healthy cells."
+    },
+    {
+      "start": 43.768,
+      "end": 49.752,
+      "text": "These chemicals inflame surrounding tissue, degrading collagen and turning healthy neighbors sluggish too."
+    },
+    {
+      "start": 49.752,
+      "end": 55.902,
+      "text": "By refusing to divide, senescent cells protect us from cancer in youth, but accumulate to cause aging in later life."
+    },
+    {
+      "start": 55.902,
+      "end": 59.136,
+      "text": "Clearing them out is how science plans to keep tissues young."
+    }
+  ],
+  "sheets": [
+    {
+      "index": 0,
+      "title": "The Permanent Pause",
+      "src": "/videos/zombie-cells/p0.webp",
+      "thumb": "/videos/zombie-cells/p0-s.webp",
+      "start": 0,
+      "end": 31.248
+    },
+    {
+      "index": 1,
+      "title": "The Zombie Secretion",
+      "src": "/videos/zombie-cells/p1.webp",
+      "thumb": "/videos/zombie-cells/p1-s.webp",
+      "start": 31.248,
+      "end": 59.136
+    }
+  ],
+  "beats": [
+    {
+      "start": 0,
+      "end": 12.336,
+      "sheet": 0,
+      "say": "Inside your body, billions of cells do something strange — they stop dividing, but refuse to die. That's a senescent cell: a damaged worker that turns into a toxic zombie."
+    },
+    {
+      "start": 12.336,
+      "end": 20.544,
+      "sheet": 0,
+      "say": "See the bright cell splitting into two? Normally, our cells divide constantly to heal and maintain our organs, copying their DNA with high precision."
+    },
+    {
+      "start": 20.544,
+      "end": 31.248,
+      "sheet": 0,
+      "say": "Now look at the amber cell on the right. When DNA gets heavily damaged by stress or time, the cell triggers an alarm and locks its machinery, entering senescence to prevent passing on mutations."
+    },
+    {
+      "start": 31.248,
+      "end": 40.776,
+      "sheet": 1,
+      "say": "See the swollen amber cell in the center? Instead of dying and letting the body sweep it away, it stays alive like a zombie, pumping out a chemical cloud called SASP."
+    },
+    {
+      "start": 40.776,
+      "end": 49.752,
+      "sheet": 1,
+      "say": "Watch those purple clouds drift to the healthy cells. These chemicals inflame surrounding tissue, degrading collagen and turning healthy neighbors sluggish too."
+    },
+    {
+      "start": 49.752,
+      "end": 59.136,
+      "sheet": 1,
+      "say": "By refusing to divide, senescent cells protect us from cancer in youth, but accumulate to cause aging in later life. Clearing them out is how science plans to keep tissues young."
+    }
+  ],
+  "typed": "senescent cell"
+}

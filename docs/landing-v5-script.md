@@ -149,3 +149,51 @@ Why: see `docs/landing-v5-review.md`. These strings replace the earlier ones eve
 - **Gallery:** search box and button stack full width; cards in two compact columns (poster, length, title; the "You typed" line stays because it carries the meaning).
 - **Lightbox:** full width, captions under the video, close button reachable at the top.
 - Targets ≥ 44 px; no horizontal scroll at 360–430 px; the sticky top bar keeps "Join the waitlist" reachable (no extra sticky bottom bar covering content, D3).
+
+## 7. Revision v5.3 (13 Nov 2026) — real player, live preview, app search
+
+Owner asks: maximise button; hero shows all pictures; search icon; a better play button; type mode presses Enter itself; app-style player with the pictures in a rail on the right; the app's search; typing a new topic really makes a video, asks for the email to watch it, then offers "get ahead"; new videos (medical and other wow topics) for the features section; gallery topics and hero topics stay.
+
+### Book check of the new flow
+| Decision | Book card | How we keep it honest |
+|---|---|---|
+| A visitor can make a real video on the page | I21 (a genuinely useful lower-commitment route), I28 (interaction when "will it work on *my* topic?" is the question) | It is a real Fast run on our backend, not a mock. |
+| Email needed to watch it | I25, I20 (state the commitment before the click) | Said **before** they press: "Free preview · about 20 seconds · you’ll need your email to watch it." The form says it also joins the waitlist. |
+| Progress while it is made | I37 (no invented work) | Stages come from the real stream: writing the story → drawing picture k of N → recording the voice → ready. No fake percentage. |
+| Limits | I24, I13 | "1 free preview a day." Clear states for limit reached, busy, error with retry. |
+| Topic leaves the device | I18 | "Your topic is sent to our servers to make the video." |
+| AI can be wrong | I38 | Under every preview: "Made just now by AI. If something looks off, ask a follow-up in the app." |
+| Get ahead | I27 | Offered after they have watched, never before the video. |
+| Speed of the page | I36 | Player and preview code load only when opened. |
+
+### Hero
+- Videos play in full (all pictures show), not the 3-beat cut.
+- **Maximise** button in the Tubelight panel bar opens the same video in the big player at the same moment.
+- "Type or paste": the topic types itself, then the Enter key presses itself (a short visible press) and the video plays. The visitor clicked the switch, so sound is on.
+- Second link under the form: **Try your own topic** (jumps to the search and focuses it), beside "Watch the demo (1:21)".
+
+### The player (gallery, features, saved tile, hero maximise, live preview)
+- Mirrors the desktop app: head line = big title + run time + "Made by Tubelight"; stage = the picture/video with two-line captions on it (white on 75 % black); **slide rail on the right** (≥ 1100 px; a horizontal strip below on smaller screens): numbered thumbnails, the current one ringed in brand purple with a small speaking wave, click = jump to that picture.
+- Transport under the stage: play/pause · slide k / N with prev/next · time · sound · CC · **maximise** (full screen), last on the right — same order as the app.
+- Keys: Space play/pause, ←/→ slide, C captions, F full screen, Esc close.
+
+### Gallery cards
+- Same six topics. New play mark: a 56 px frosted white circle with a purple triangle, centred, grows slightly on hover; the length moves to a small dark chip in the top-right corner.
+
+### Search (same behaviour as the app’s home box)
+- Box: search icon · placeholder "Search a topic or paste text… e.g. how memory works" · button with a search icon **Explain it**.
+- As you type, a suggestion list (like the app): first any of our ready-made videos that match ("Watch · 0:58"), then Wikipedia title suggestions with their one-line description, then the last row **Make a video about “{typed}”** with the hint "Free preview · about 20 s · email needed to watch". ↑/↓ move, Tab fills, Enter picks, Esc closes. Footer: "Suggestions from Wikipedia. Your video is made fresh for your topic."
+- The cards below no longer filter (the six examples stay as they are).
+
+### Live preview flow
+1. Pick a suggestion or press Explain it with no ready-made match → the player opens in **making** mode: title "Making your video…", the rail shows dashed placeholders that fill as pictures arrive, stage shows the real stage text.
+2. Over the stage, the email card: "Your video is being made. Enter your email to watch it." + field + **Watch my video** + "This also puts you on the Tubelight waitlist. We’ll only email you about your invite."
+3. Email in + video ready → it plays. Email in first → "Almost ready…" with the real stage.
+4. When it ends: "Want an earlier invite? Tell us how you’ll use Tubelight." → the questions dialog (topic pre-filled in question 5).
+5. States: limit reached ("You’ve used today’s free preview — your topic is saved with your spot"), busy ("Our picture makers are busy — try again in a minute"), error (retry), and stream cut (keeps what arrived, offers retry).
+
+### Features section
+- New pictures from other real videos (medical first): kidneys (Explain anything), zombie cells (See it. Hear it.), and the saved tile shows neurons, appendix, supernova, dark matter. Each one plays in the player when clicked.
+
+### FAQ (new)
+- **Can I try it before I’m invited?** Yes. Type a topic in the search box and Tubelight makes a free preview video right on this page — one a day. You’ll need your email to watch it, which also puts you on the waitlist.

@@ -59,6 +59,75 @@
       "text": "And that is why headaches are often your body's alarm system, reacting to stress, tension, or dehydration."
     }
   ],
+  "sheets": [
+    {
+      "index": 0,
+      "title": "The Brain Has No Pain Receptors",
+      "src": "/videos/headaches/p0.webp",
+      "thumb": "/videos/headaches/p0-s.webp",
+      "start": 0,
+      "end": 26.256
+    },
+    {
+      "index": 1,
+      "title": "How Blood Vessels and Nerves Create Pain",
+      "src": "/videos/headaches/p1.webp",
+      "thumb": "/videos/headaches/p1-s.webp",
+      "start": 26.256,
+      "end": 57.288
+    }
+  ],
+  "beats": [
+    {
+      "start": 0,
+      "end": 4.824,
+      "sheet": 0,
+      "say": "See the blue brain tissue here? When you feel a splitting headache, it feels like your actual brain is hurting."
+    },
+    {
+      "start": 4.824,
+      "end": 10.992,
+      "sheet": 0,
+      "say": "But the brain itself has no pain receptors at all. Surgeons can even operate on it while patients are awake."
+    },
+    {
+      "start": 10.992,
+      "end": 20.64,
+      "sheet": 0,
+      "say": "Now notice the red layers wrapped tightly around it. The pain actually comes from the sensitive tissues, muscles, and blood vessels surrounding your brain and skull."
+    },
+    {
+      "start": 20.64,
+      "end": 26.256,
+      "sheet": 0,
+      "say": "When triggers like stress, dehydration, or lack of sleep hit, these structures react."
+    },
+    {
+      "start": 26.256,
+      "end": 34.704,
+      "sheet": 1,
+      "say": "Look at the left panel as the blood vessel widens. Triggers cause the blood vessels in your head to swell or spasm, changing pressure inside."
+    },
+    {
+      "start": 34.704,
+      "end": 42.048,
+      "sheet": 1,
+      "say": "This expansion irritates the nearby trigeminal nerve, the main pain pathway for the head and face."
+    },
+    {
+      "start": 42.048,
+      "end": 50.304,
+      "sheet": 1,
+      "say": "Now follow those bright sparks up to the right. The nerve fires distress signals rushing up to your brainstem, translating pressure into throbbing pain."
+    },
+    {
+      "start": 50.304,
+      "end": 57.288,
+      "sheet": 1,
+      "say": "And that is why headaches are often your body's alarm system, reacting to stress, tension, or dehydration."
+    }
+  ],
+  "typed": "why headaches happen",
   "shortDuration": 20.64,
   "shortCues": [
     {

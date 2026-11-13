@@ -1,0 +1,160 @@
+{
+  "slug": "dark-matter",
+  "title": "Why Galaxies Stay Together",
+  "duration": 73.896,
+  "cues": [
+    {
+      "start": 0,
+      "end": 7.848,
+      "text": "A galaxy is a massive collection of stars, gas, and dust, all held together by the gravity of everything we can see."
+    },
+    {
+      "start": 7.848,
+      "end": 11.961,
+      "text": "If you calculate the gravity based only on that visible light,"
+    },
+    {
+      "start": 11.961,
+      "end": 16.272,
+      "text": "outer stars should move slowly, or they would fly off into space."
+    },
+    {
+      "start": 16.272,
+      "end": 23.136,
+      "text": "But we see the opposite; those outer stars are whipping around the center at speeds that should tear the galaxy apart."
+    },
+    {
+      "start": 23.136,
+      "end": 28,
+      "text": "We think galaxies are embedded in a massive, spherical halo of dark matter,"
+    },
+    {
+      "start": 28,
+      "end": 31.632,
+      "text": "an invisible substance that doesn't interact with light."
+    },
+    {
+      "start": 31.632,
+      "end": 33.858,
+      "text": "Even though we can't see it,"
+    },
+    {
+      "start": 33.858,
+      "end": 41.568,
+      "text": "this halo contains far more mass than all the stars combined, creating a deep gravitational well."
+    },
+    {
+      "start": 41.568,
+      "end": 49.752,
+      "text": "This immense hidden weight provides the extra gravitational force needed to keep those fast outer stars tethered to the galaxy."
+    },
+    {
+      "start": 49.752,
+      "end": 52.679,
+      "text": "Just as the Sun's gravity keeps Earth in orbit,"
+    },
+    {
+      "start": 52.679,
+      "end": 57.6,
+      "text": "dark matter acts as an invisible anchor, holding the entire structure together."
+    },
+    {
+      "start": 57.6,
+      "end": 59.182,
+      "text": "Without this hidden mass,"
+    },
+    {
+      "start": 59.182,
+      "end": 65.448,
+      "text": "our galaxy would simply drift apart; dark matter is the silent glue that makes the galaxy possible."
+    },
+    {
+      "start": 65.448,
+      "end": 73.896,
+      "text": "It is this combined gravity of visible stars and the dark matter halo that keeps the outermost stars on their track."
+    }
+  ],
+  "sheets": [
+    {
+      "index": 0,
+      "title": "The Speed Problem",
+      "src": "/videos/dark-matter/p0.webp",
+      "thumb": "/videos/dark-matter/p0-s.webp",
+      "start": 0,
+      "end": 23.136
+    },
+    {
+      "index": 1,
+      "title": "The Dark Matter Halo",
+      "src": "/videos/dark-matter/p1.webp",
+      "thumb": "/videos/dark-matter/p1-s.webp",
+      "start": 23.136,
+      "end": 49.752
+    },
+    {
+      "index": 2,
+      "title": "The Invisible Anchor",
+      "src": "/videos/dark-matter/p2.webp",
+      "thumb": "/videos/dark-matter/p2-s.webp",
+      "start": 49.752,
+      "end": 73.896
+    }
+  ],
+  "beats": [
+    {
+      "start": 0,
+      "end": 7.848,
+      "sheet": 0,
+      "say": "A galaxy is a massive collection of stars, gas, and dust, all held together by the gravity of everything we can see."
+    },
+    {
+      "start": 7.848,
+      "end": 16.272,
+      "sheet": 0,
+      "say": "If you calculate the gravity based only on that visible light, outer stars should move slowly, or they would fly off into space."
+    },
+    {
+      "start": 16.272,
+      "end": 23.136,
+      "sheet": 0,
+      "say": "But we see the opposite; those outer stars are whipping around the center at speeds that should tear the galaxy apart."
+    },
+    {
+      "start": 23.136,
+      "end": 31.632,
+      "sheet": 1,
+      "say": "We think galaxies are embedded in a massive, spherical halo of dark matter, an invisible substance that doesn't interact with light."
+    },
+    {
+      "start": 31.632,
+      "end": 41.568,
+      "sheet": 1,
+      "say": "Even though we can't see it, this halo contains far more mass than all the stars combined, creating a deep gravitational well."
+    },
+    {
+      "start": 41.568,
+      "end": 49.752,
+      "sheet": 1,
+      "say": "This immense hidden weight provides the extra gravitational force needed to keep those fast outer stars tethered to the galaxy."
+    },
+    {
+      "start": 49.752,
+      "end": 57.6,
+      "sheet": 2,
+      "say": "Just as the Sun's gravity keeps Earth in orbit, dark matter acts as an invisible anchor, holding the entire structure together."
+    },
+    {
+      "start": 57.6,
+      "end": 65.448,
+      "sheet": 2,
+      "say": "Without this hidden mass, our galaxy would simply drift apart; dark matter is the silent glue that makes the galaxy possible."
+    },
+    {
+      "start": 65.448,
+      "end": 73.896,
+      "sheet": 2,
+      "say": "It is this combined gravity of visible stars and the dark matter halo that keeps the outermost stars on their track."
+    }
+  ],
+  "typed": "The **dark matter** acts like an invisible anchor for the galaxy. While the Sun's gravity keeps planets in orbit around "
+}

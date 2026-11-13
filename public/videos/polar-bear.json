@@ -58,5 +58,82 @@
       "end": 51.216,
       "text": "When winter returns, she digs a new snow den, and the remarkable Arctic life cycle begins all over again."
     }
-  ]
+  ],
+  "sheets": [
+    {
+      "index": 0,
+      "title": "Birth in the Snow Den",
+      "src": "/videos/polar-bear/p0.webp",
+      "thumb": "/videos/polar-bear/p0-s.webp",
+      "start": 0,
+      "end": 14.04
+    },
+    {
+      "index": 1,
+      "title": "Learning on the Sea Ice",
+      "src": "/videos/polar-bear/p1.webp",
+      "thumb": "/videos/polar-bear/p1-s.webp",
+      "start": 14.04,
+      "end": 33.936
+    },
+    {
+      "index": 2,
+      "title": "Adulthood and Maternity",
+      "src": "/videos/polar-bear/p2.webp",
+      "thumb": "/videos/polar-bear/p2-s.webp",
+      "start": 33.936,
+      "end": 51.216
+    }
+  ],
+  "beats": [
+    {
+      "start": 0,
+      "end": 7.296,
+      "sheet": 0,
+      "say": "Deep inside a snow drift in the dead of winter, a mother polar bear gives birth to tiny, blind cubs no bigger than a guinea pig."
+    },
+    {
+      "start": 7.296,
+      "end": 14.04,
+      "sheet": 0,
+      "say": "The snow den acts as a cozy blanket, keeping the family safe from freezing Arctic winds while the cub nurses and grows strong."
+    },
+    {
+      "start": 14.04,
+      "end": 19.704,
+      "sheet": 1,
+      "say": "By spring, the family breaks out of the den and travels onto the vast sea ice, which is the bear's true home."
+    },
+    {
+      "start": 19.704,
+      "end": 26.928,
+      "sheet": 1,
+      "say": "For over two years, the cub stays by its mother's side, learning the difficult art of hunting ringed seals for fat and energy."
+    },
+    {
+      "start": 26.928,
+      "end": 33.936,
+      "sheet": 1,
+      "say": "Once old enough to hunt on its own, the young bear leaves its mother to live a solitary life across the frozen ocean."
+    },
+    {
+      "start": 33.936,
+      "end": 40.104,
+      "sheet": 2,
+      "say": "Adult polar bears spend most of their lives alone, traveling hundreds of miles across the ice to hunt."
+    },
+    {
+      "start": 40.104,
+      "end": 45.24,
+      "sheet": 2,
+      "say": "In the spring, adults meet to mate, and the female prepares for the long months ahead."
+    },
+    {
+      "start": 45.24,
+      "end": 51.216,
+      "sheet": 2,
+      "say": "When winter returns, she digs a new snow den, and the remarkable Arctic life cycle begins all over again."
+    }
+  ],
+  "typed": "life cycle of a polar bear"
 }

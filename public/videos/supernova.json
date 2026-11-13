@@ -1,0 +1,181 @@
+{
+  "slug": "supernova",
+  "title": "Stellar Endings: Supernovae and Black Holes",
+  "duration": 77.16,
+  "cues": [
+    {
+      "start": 0,
+      "end": 5.759,
+      "text": "Massive stars end when their core turns to iron, which consumes energy instead of releasing it."
+    },
+    {
+      "start": 5.759,
+      "end": 10.488,
+      "text": "With no outward pressure left, gravity causes a sudden, catastrophic collapse."
+    },
+    {
+      "start": 10.488,
+      "end": 13.84,
+      "text": "The infalling material bounces off the dense core,"
+    },
+    {
+      "start": 13.84,
+      "end": 18.936,
+      "text": "sending a powerful shockwave that blasts the star's outer layers into space."
+    },
+    {
+      "start": 18.936,
+      "end": 22.772,
+      "text": "In binary systems, a white dwarf can steal gas from a neighbor,"
+    },
+    {
+      "start": 22.772,
+      "end": 26.304,
+      "text": "slowly gaining mass until it hits the Chandrasekhar limit."
+    },
+    {
+      "start": 26.304,
+      "end": 30.231,
+      "text": "Once that limit is reached, the pressure triggers a runaway nuclear reaction,"
+    },
+    {
+      "start": 30.231,
+      "end": 33.24,
+      "text": "causing the entire star to detonate as a Type Ia supernova."
+    },
+    {
+      "start": 33.24,
+      "end": 41.064,
+      "text": "After a massive star explodes, a dense core remnant is left behind. If this core is heavy enough, it cannot stabilize."
+    },
+    {
+      "start": 41.064,
+      "end": 43.98,
+      "text": "Gravity crushes this core into a singularity,"
+    },
+    {
+      "start": 43.98,
+      "end": 49.488,
+      "text": "a point of infinite density where all the star's mass is packed into almost no space."
+    },
+    {
+      "start": 49.488,
+      "end": 52.168,
+      "text": "The event horizon forms around this point,"
+    },
+    {
+      "start": 52.168,
+      "end": 57.912,
+      "text": "creating a boundary of no return where gravity is so strong that even light cannot escape."
+    },
+    {
+      "start": 57.912,
+      "end": 63.648,
+      "text": "Both supernova types and black hole formation are triggered by the star running out of nuclear fuel."
+    },
+    {
+      "start": 63.648,
+      "end": 70.464,
+      "text": "A supernova is the violent expulsion of a star's outer layers, driven by either core collapse or runaway fusion."
+    },
+    {
+      "start": 70.464,
+      "end": 75.702,
+      "text": "A black hole forms only when the remaining core is so massive that gravity crushes it completely,"
+    },
+    {
+      "start": 75.702,
+      "end": 77.16,
+      "text": "trapping everything inside."
+    }
+  ],
+  "sheets": [
+    {
+      "index": 0,
+      "title": "Supernova Types",
+      "src": "/videos/supernova/p0.webp",
+      "thumb": "/videos/supernova/p0-s.webp",
+      "start": 0,
+      "end": 33.24
+    },
+    {
+      "index": 1,
+      "title": "Black Hole Birth",
+      "src": "/videos/supernova/p1.webp",
+      "thumb": "/videos/supernova/p1-s.webp",
+      "start": 33.24,
+      "end": 57.912
+    },
+    {
+      "index": 2,
+      "title": "Summary of Triggers",
+      "src": "/videos/supernova/p2.webp",
+      "thumb": "/videos/supernova/p2-s.webp",
+      "start": 57.912,
+      "end": 77.16
+    }
+  ],
+  "beats": [
+    {
+      "start": 0,
+      "end": 10.488,
+      "sheet": 0,
+      "say": "Massive stars end when their core turns to iron, which consumes energy instead of releasing it. With no outward pressure left, gravity causes a sudden, catastrophic collapse."
+    },
+    {
+      "start": 10.488,
+      "end": 18.936,
+      "sheet": 0,
+      "say": "The infalling material bounces off the dense core, sending a powerful shockwave that blasts the star's outer layers into space."
+    },
+    {
+      "start": 18.936,
+      "end": 26.304,
+      "sheet": 0,
+      "say": "In binary systems, a white dwarf can steal gas from a neighbor, slowly gaining mass until it hits the Chandrasekhar limit."
+    },
+    {
+      "start": 26.304,
+      "end": 33.24,
+      "sheet": 0,
+      "say": "Once that limit is reached, the pressure triggers a runaway nuclear reaction, causing the entire star to detonate as a Type Ia supernova."
+    },
+    {
+      "start": 33.24,
+      "end": 41.064,
+      "sheet": 1,
+      "say": "After a massive star explodes, a dense core remnant is left behind. If this core is heavy enough, it cannot stabilize."
+    },
+    {
+      "start": 41.064,
+      "end": 49.488,
+      "sheet": 1,
+      "say": "Gravity crushes this core into a singularity, a point of infinite density where all the star's mass is packed into almost no space."
+    },
+    {
+      "start": 49.488,
+      "end": 57.912,
+      "sheet": 1,
+      "say": "The event horizon forms around this point, creating a boundary of no return where gravity is so strong that even light cannot escape."
+    },
+    {
+      "start": 57.912,
+      "end": 63.648,
+      "sheet": 2,
+      "say": "Both supernova types and black hole formation are triggered by the star running out of nuclear fuel."
+    },
+    {
+      "start": 63.648,
+      "end": 70.464,
+      "sheet": 2,
+      "say": "A supernova is the violent expulsion of a star's outer layers, driven by either core collapse or runaway fusion."
+    },
+    {
+      "start": 70.464,
+      "end": 77.16,
+      "sheet": 2,
+      "say": "A black hole forms only when the remaining core is so massive that gravity crushes it completely, trapping everything inside."
+    }
+  ],
+  "typed": "The dramatic events of a **supernova** explosion and the formation of a **black hole** are both consequences of a star e"
+}

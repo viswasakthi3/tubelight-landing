@@ -1,0 +1,165 @@
+{
+  "slug": "kidneys",
+  "title": "How Your Kidneys Filter Blood",
+  "duration": 70.872,
+  "cues": [
+    {
+      "start": 0,
+      "end": 3.386,
+      "text": "Your kidneys are like a recycling plant that never stops."
+    },
+    {
+      "start": 3.386,
+      "end": 9.624,
+      "text": "The renal artery acts as the main delivery road, bringing raw, unfiltered blood directly from your heart."
+    },
+    {
+      "start": 9.624,
+      "end": 14.096,
+      "text": "Inside the kidney, over a million tiny machines called nephrons get to work."
+    },
+    {
+      "start": 14.096,
+      "end": 19.392,
+      "text": "Each one acts like a precise sieve, sorting what the body needs from what it must discard."
+    },
+    {
+      "start": 19.392,
+      "end": 20.816,
+      "text": "As blood flows through,"
+    },
+    {
+      "start": 20.816,
+      "end": 27.936,
+      "text": "the nephron filters out waste but carefully reabsorbs water and nutrients, sending them back into your bloodstream."
+    },
+    {
+      "start": 27.936,
+      "end": 32.696,
+      "text": "Once the good stuff is reclaimed, the remaining waste and excess water become urine."
+    },
+    {
+      "start": 32.696,
+      "end": 35.472,
+      "text": "This liquid collects at the base of each nephron."
+    },
+    {
+      "start": 35.472,
+      "end": 41.376,
+      "text": "The ureter acts as a dedicated pipe, carrying this waste liquid away from the kidney to be stored for later disposal."
+    },
+    {
+      "start": 41.376,
+      "end": 48.312,
+      "text": "This constant flow ensures waste is moved efficiently out of your filtering plant and toward your storage tank."
+    },
+    {
+      "start": 48.312,
+      "end": 53.537,
+      "text": "The urine travels down to your bladder, which acts as a temporary storage tank."
+    },
+    {
+      "start": 53.537,
+      "end": 57.24,
+      "text": "It holds the waste until your body is ready to expel it."
+    },
+    {
+      "start": 57.24,
+      "end": 63.384,
+      "text": "When the tank is full, you feel the urge to go, and the waste is finally cleared from your body."
+    },
+    {
+      "start": 63.384,
+      "end": 65.803,
+      "text": "By constantly filtering and storing waste,"
+    },
+    {
+      "start": 65.803,
+      "end": 70.872,
+      "text": "your kidneys ensure that only clean, balanced blood keeps circulating through your body."
+    }
+  ],
+  "sheets": [
+    {
+      "index": 0,
+      "title": "Delivery and Sorting",
+      "src": "/videos/kidneys/p0.webp",
+      "thumb": "/videos/kidneys/p0-s.webp",
+      "start": 0,
+      "end": 27.936
+    },
+    {
+      "index": 1,
+      "title": "Collection and Transport",
+      "src": "/videos/kidneys/p1.webp",
+      "thumb": "/videos/kidneys/p1-s.webp",
+      "start": 27.936,
+      "end": 48.312
+    },
+    {
+      "index": 2,
+      "title": "Storage and Disposal",
+      "src": "/videos/kidneys/p2.webp",
+      "thumb": "/videos/kidneys/p2-s.webp",
+      "start": 48.312,
+      "end": 70.872
+    }
+  ],
+  "beats": [
+    {
+      "start": 0,
+      "end": 9.624,
+      "sheet": 0,
+      "say": "Your kidneys are like a recycling plant that never stops. The renal artery acts as the main delivery road, bringing raw, unfiltered blood directly from your heart."
+    },
+    {
+      "start": 9.624,
+      "end": 19.392,
+      "sheet": 0,
+      "say": "Inside the kidney, over a million tiny machines called nephrons get to work. Each one acts like a precise sieve, sorting what the body needs from what it must discard."
+    },
+    {
+      "start": 19.392,
+      "end": 27.936,
+      "sheet": 0,
+      "say": "As blood flows through, the nephron filters out waste but carefully reabsorbs water and nutrients, sending them back into your bloodstream."
+    },
+    {
+      "start": 27.936,
+      "end": 35.472,
+      "sheet": 1,
+      "say": "Once the good stuff is reclaimed, the remaining waste and excess water become urine. This liquid collects at the base of each nephron."
+    },
+    {
+      "start": 35.472,
+      "end": 41.376,
+      "sheet": 1,
+      "say": "The ureter acts as a dedicated pipe, carrying this waste liquid away from the kidney to be stored for later disposal."
+    },
+    {
+      "start": 41.376,
+      "end": 48.312,
+      "sheet": 1,
+      "say": "This constant flow ensures waste is moved efficiently out of your filtering plant and toward your storage tank."
+    },
+    {
+      "start": 48.312,
+      "end": 57.24,
+      "sheet": 2,
+      "say": "The urine travels down to your bladder, which acts as a temporary storage tank. It holds the waste until your body is ready to expel it."
+    },
+    {
+      "start": 57.24,
+      "end": 63.384,
+      "sheet": 2,
+      "say": "When the tank is full, you feel the urge to go, and the waste is finally cleared from your body."
+    },
+    {
+      "start": 63.384,
+      "end": 70.872,
+      "sheet": 2,
+      "say": "By constantly filtering and storing waste, your kidneys ensure that only clean, balanced blood keeps circulating through your body."
+    }
+  ],
+  "typed": "Imagine your kidneys are like a super-efficient recycling and waste disposal plant for your body. Here's how the filteri"
+}

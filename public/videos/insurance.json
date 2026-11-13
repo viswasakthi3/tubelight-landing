@@ -63,5 +63,62 @@
       "end": 56.232,
       "text": "life insurance transforms steady contributions into a guaranteed financial cushion. You can now spot how shared risk protects families everywhere."
     }
-  ]
+  ],
+  "sheets": [
+    {
+      "index": 0,
+      "title": "Paying Premiums and Pooling",
+      "src": "/videos/insurance/p0.webp",
+      "thumb": "/videos/insurance/p0-s.webp",
+      "start": 0,
+      "end": 27.984
+    },
+    {
+      "index": 1,
+      "title": "The Death Benefit Payout",
+      "src": "/videos/insurance/p1.webp",
+      "thumb": "/videos/insurance/p1-s.webp",
+      "start": 27.984,
+      "end": 56.232
+    }
+  ],
+  "beats": [
+    {
+      "start": 0,
+      "end": 10.704,
+      "sheet": 0,
+      "say": "What happens to the money you pay into life insurance year after year? That is a life insurance policy at work, turning small regular contributions into a secure family safety net."
+    },
+    {
+      "start": 10.704,
+      "end": 18.528,
+      "sheet": 0,
+      "say": "See Dev paying his monthly premium? Every month, Dev pays a regular fee called a premium to his insurance provider to keep his coverage active."
+    },
+    {
+      "start": 18.528,
+      "end": 27.984,
+      "sheet": 0,
+      "say": "Now look at the large shared pool on the right. The company collects these payments from thousands of people, gathering them into one large shared pool of money."
+    },
+    {
+      "start": 27.984,
+      "end": 35.16,
+      "sheet": 1,
+      "say": "See the arrow leaving the pool? When a policyholder passes away, a valid claim triggers a payout from that shared accumulation."
+    },
+    {
+      "start": 35.16,
+      "end": 45.144,
+      "sheet": 1,
+      "say": "Now look at the family receiving the funds. The company disburses a large tax-free lump sum known as a death benefit to support the beneficiaries financially."
+    },
+    {
+      "start": 45.144,
+      "end": 56.232,
+      "sheet": 1,
+      "say": "By pooling regular payments together, life insurance transforms steady contributions into a guaranteed financial cushion. You can now spot how shared risk protects families everywhere."
+    }
+  ],
+  "typed": "how lic policy works"
 }

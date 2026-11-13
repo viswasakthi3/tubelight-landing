@@ -4,7 +4,7 @@ import { createContext, useCallback, useContext, useEffect, useMemo, useRef, use
 import { track } from "@/lib/track";
 import { QS } from "./questions";
 
-export type Placement = "hero" | "final" | "dialog" | "miss";
+export type Placement = "hero" | "final" | "dialog" | "preview";
 export type Step = null | "email" | "q" | "done";
 type Stats = { total: number; thisWeek: number; show: boolean };
 
@@ -14,7 +14,11 @@ export type WaitlistApi = {
   err: string;
   submitting: boolean;
   sent: boolean;
-  submit: (placement: Placement) => Promise<void>;
+  /**
+   * Join the waitlist. `topic` is saved with the spot (the live preview sends the visitor's topic);
+   * `quiet` skips the questions dialog, which the preview gate does not want. Resolves true when joined.
+   */
+  submit: (placement: Placement, opts?: { topic?: string; quiet?: boolean }) => Promise<boolean>;
   /** real place in line from the server, or null when unknown */
   position: number | null;
   /** animated number shown in the dialog */
@@ -34,9 +38,6 @@ export type WaitlistApi = {
   pick: (label: string) => void;
   nextQ: () => void;
   skipQ: () => void;
-  /** the topic of the latest no-match search on the page ("" when none) */
-  missTopic: string;
-  setMissTopic: (v: string) => void;
 };
 
 const Ctx = createContext<WaitlistApi | null>(null);
@@ -64,8 +65,6 @@ export function WaitlistProvider({ children }: { children: React.ReactNode }) {
   const [picked, setPickedState] = useState<string[]>([]);
   const [wish, setWishRaw] = useState("");
   const [answerErr, setAnswerErr] = useState("");
-  const [missTopic, setMissTopicState] = useState("");
-  const missRef = useRef("");
 
   const token = useRef("");
   const sentEmail = useRef("");
@@ -102,10 +101,6 @@ export function WaitlistProvider({ children }: { children: React.ReactNode }) {
     setEmailRaw(v);
     setErr("");
   }, []);
-  const setMissTopic = useCallback((v: string) => {
-    missRef.current = v;
-    setMissTopicState(v);
-  }, []);
   const setWish = useCallback((v: string) => setWishRaw(v.slice(0, 200)), []);
   const setPicked = useCallback((p: string[]) => {
     pickedRef.current = p;
@@ -132,16 +127,16 @@ export function WaitlistProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   const submit = useCallback(
-    async (placement: Placement) => {
+    async (placement: Placement, opts?: { topic?: string; quiet?: boolean }): Promise<boolean> => {
       const v = email.trim();
       if (!EMAIL_RE.test(v)) {
         setErr("That email doesn’t look quite right — mind checking it?");
-        return;
+        return false;
       }
       setSubmitting(true);
       setErr("");
       try {
-        const searched = missRef.current.trim().slice(0, 120);
+        const searched = (opts?.topic ?? "").trim().slice(0, 120);
         const res = await fetch("/api/waitlist", {
           method: "POST",
           headers: { "content-type": "application/json" },
@@ -150,7 +145,7 @@ export function WaitlistProvider({ children }: { children: React.ReactNode }) {
         const j = await res.json().catch(() => ({}));
         if (!res.ok || !j.ok) {
           setErr(typeof j.error === "string" ? j.error : "Something went wrong. Please try again in a moment.");
-          return;
+          return false;
         }
         token.current = typeof j.token === "string" ? j.token : "";
         sentEmail.current = v.toLowerCase();
@@ -166,11 +161,12 @@ export function WaitlistProvider({ children }: { children: React.ReactNode }) {
         setQiBoth(0);
         setAnswerErr("");
         if (searched) setWishRaw(searched);
-        setModal("q");
+        if (!opts?.quiet) setModal("q");
         track("waitlist_submit", { placement, duplicate: !!j.duplicate });
-        if (placement === "miss") track("topic_search_signup");
+        return true;
       } catch {
         setErr("Couldn’t reach the server. Check your connection and try again.");
+        return false;
       } finally {
         setSubmitting(false);
       }
@@ -267,8 +263,8 @@ export function WaitlistProvider({ children }: { children: React.ReactNode }) {
   }, [advance]);
 
   const value = useMemo<WaitlistApi>(
-    () => ({ email, setEmail, err, submitting, sent, submit, position, shown, delta, moved, stats, modal, openModal, closeModal, qi, picked, wish, setWish, answerErr, pick, nextQ, skipQ, missTopic, setMissTopic }),
-    [email, setEmail, err, submitting, sent, submit, position, shown, delta, moved, stats, modal, openModal, closeModal, qi, picked, wish, setWish, answerErr, pick, nextQ, skipQ, missTopic, setMissTopic],
+    () => ({ email, setEmail, err, submitting, sent, submit, position, shown, delta, moved, stats, modal, openModal, closeModal, qi, picked, wish, setWish, answerErr, pick, nextQ, skipQ }),
+    [email, setEmail, err, submitting, sent, submit, position, shown, delta, moved, stats, modal, openModal, closeModal, qi, picked, wish, setWish, answerErr, pick, nextQ, skipQ],
   );
 
   return <Ctx.Provider value={value}>{children}</Ctx.Provider>;

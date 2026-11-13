@@ -1,14 +1,19 @@
 "use client";
 
-import { useLightbox, useVideos } from "./Providers";
+import { SAVED } from "./catalog";
+import { usePlayer, useVideos } from "./Providers";
 
-const SAVED = ["dna", "polar-bear", "ocean", "insurance"];
+const PLAY_MARK = (
+  <span className="gpm" aria-hidden="true">
+    <svg viewBox="0 0 24 24"><path d="M8 5.5v13l10.5-6.5z" /></svg>
+  </span>
+);
 
 const rowStyle: React.CSSProperties = { display: "flex", justifyContent: "space-between", alignItems: "center", height: 40, padding: "0 14px", borderRadius: 12, background: "#FFFFFF", fontSize: 14.5, fontWeight: 600 };
 
 export function Features() {
   const videos = useVideos();
-  const lb = useLightbox();
+  const player = usePlayer();
   return (
     <section id="features" className="sec" style={{ paddingTop: 0, scrollMarginTop: 76 }}>
       <div className="wrapx">
@@ -18,7 +23,7 @@ export function Features() {
         </div>
         <div className="bento">
           <div className="tile s4" style={{ background: "#F1ECFF" }}>
-            <div className="tv" aria-hidden="true" style={{ background: "#FFFFFF", gap: 16, padding: "0 22px", justifyContent: "space-between" }}>
+            <div className="tv" style={{ background: "#FFFFFF", gap: 16, padding: "0 22px", justifyContent: "space-between" }}>
               <span style={{ flex: 1, maxWidth: 220, fontSize: 14, lineHeight: 1.6, color: "#3A3655" }}>
                 …where they <span className="selx">burn and rush out through the nozzle.</span>
               </span>
@@ -27,17 +32,21 @@ export function Features() {
                 <span style={{ color: "#A29DB5" }}>+</span>
                 <span className="key" style={{ minWidth: 44, height: 44, fontSize: 15 }}>E</span>
               </span>
-              <img className="hide-sm" src={videos.rocket?.thumb ?? "/videos/rocket-thumb.webp"} alt="" loading="lazy" style={{ display: "block", width: 200, height: 112, objectFit: "cover", borderRadius: 12, flex: "none" }} />
+              <button type="button" className="tvplay hide-sm" onClick={() => player.open("kidneys", 0)} aria-label="Play: How your kidneys filter blood" style={{ width: 200, height: 112, flex: "none" }}>
+                <img src={videos.kidneys?.sheets[0]?.thumb ?? "/videos/kidneys/p0-s.webp"} alt="" loading="lazy" />
+                {PLAY_MARK}
+              </button>
             </div>
             <h3>Explain anything you select</h3>
             <p>Select text and press Alt + E. A short explanation with pictures and a voice opens beside your page.</p>
           </div>
 
           <div className="tile s2" style={{ background: "#FFFFFF", boxShadow: "0 0 0 1px #ECE7F3" }}>
-            <div className="tv" aria-hidden="true" style={{ alignItems: "stretch", justifyContent: "stretch" }}>
-              <img src={videos.ocean?.thumb ?? "/videos/ocean-thumb.webp"} alt="" loading="lazy" style={{ display: "block", width: "100%", height: "100%", objectFit: "cover" }} />
+            <button type="button" className="tv tvplay" onClick={() => player.open("zombie-cells", 0)} aria-label="Play: Why zombie cells make us age" style={{ width: "100%", borderRadius: 18 }}>
+              <img src={videos["zombie-cells"]?.sheets[1]?.src ?? "/videos/zombie-cells/p1.webp"} alt="" loading="lazy" />
+              {PLAY_MARK}
               <span style={{ position: "absolute", left: 10, right: 10, bottom: 10, padding: "8px 10px", borderRadius: 10, background: "rgba(255,255,255,0.94)", color: "#221E3F", fontSize: 13, fontWeight: 500, textAlign: "center" }}>Captions follow the voice.</span>
-            </div>
+            </button>
             <h3>See it. Hear it.</h3>
             <p>Every answer is pictures, a voice and captions.</p>
           </div>
@@ -102,11 +111,9 @@ export function Features() {
                 const v = videos[k];
                 if (!v) return null;
                 return (
-                  <button key={k} type="button" className="sthumb" onClick={() => lb.open(k)} aria-label={`Replay saved explanation: ${v.title}`}>
+                  <button key={k} type="button" className="sthumb" onClick={() => player.open(k, 0)} aria-label={`Play saved explanation: ${v.title}`}>
                     <img src={v.thumb} alt="" loading="lazy" />
-                    <span className="gplay" aria-hidden="true">
-                      <i><svg viewBox="0 0 24 24"><path d="M7 4.5v15l12.5-7.5z" /></svg></i>
-                    </span>
+                    {PLAY_MARK}
                   </button>
                 );
               })}

@@ -9,11 +9,19 @@ export function SignupForm({
   placement,
   label,
   style,
+  topic,
+  quiet,
+  onJoined,
 }: {
   id: string;
   placement: Placement;
   label: string;
   style?: React.CSSProperties;
+  /** saved with the spot (the live preview passes the visitor's topic) */
+  topic?: string;
+  /** skip the questions dialog after joining */
+  quiet?: boolean;
+  onJoined?: () => void;
 }) {
   const w = useWaitlist();
   return (
@@ -23,7 +31,9 @@ export function SignupForm({
         style={style}
         onSubmit={(e) => {
           e.preventDefault();
-          void w.submit(placement);
+          void w.submit(placement, { topic, quiet }).then((ok) => {
+            if (ok) onJoined?.();
+          });
         }}
       >
         <label htmlFor={id} className="sr">

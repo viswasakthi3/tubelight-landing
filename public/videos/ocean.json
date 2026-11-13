@@ -73,5 +73,68 @@
       "end": 73.848,
       "text": "You can now trace how heat and rotation shape the climate of every coastline on Earth."
     }
-  ]
+  ],
+  "sheets": [
+    {
+      "index": 0,
+      "title": "The Global Loop",
+      "src": "/videos/ocean/p0.webp",
+      "thumb": "/videos/ocean/p0-s.webp",
+      "start": 0,
+      "end": 43.68
+    },
+    {
+      "index": 1,
+      "title": "Steered by Spin",
+      "src": "/videos/ocean/p1.webp",
+      "thumb": "/videos/ocean/p1-s.webp",
+      "start": 43.68,
+      "end": 73.848
+    }
+  ],
+  "beats": [
+    {
+      "start": 0,
+      "end": 16.704,
+      "sheet": 0,
+      "say": "The ocean looks still from the shore, but a massive planetary engine is constantly driving water around the globe. That is the ocean conveyor belt: temperature and Earth's spin driving rivers through the sea."
+    },
+    {
+      "start": 16.704,
+      "end": 24.48,
+      "sheet": 0,
+      "say": "See the red water rising at the equator? Intense sunlight heats the water near the equator, making it expand and rise toward the surface."
+    },
+    {
+      "start": 24.48,
+      "end": 35.424,
+      "sheet": 0,
+      "say": "Now look at the right where the water plunges. As warm water reaches the freezing poles, it chills, becomes dense, and plunges straight down to the ocean floor."
+    },
+    {
+      "start": 35.424,
+      "end": 43.68,
+      "sheet": 0,
+      "say": "Follow that deep blue current along the bottom. This cold, heavy water creeps all the way back along the ocean floor to replace the water that rose."
+    },
+    {
+      "start": 43.68,
+      "end": 49.968,
+      "sheet": 1,
+      "say": "See the straight path on the left? If the Earth stood still, water would flow in straight lines from the poles to the equator."
+    },
+    {
+      "start": 49.968,
+      "end": 61.704,
+      "sheet": 1,
+      "say": "Now look at the right side as rotation bends it. But because the Earth spins beneath the water, the path curves sideways—a deflection known as the Coriolis effect."
+    },
+    {
+      "start": 61.704,
+      "end": 73.848,
+      "sheet": 1,
+      "say": "Warm water rises at the equator and sinks at the poles, creating a continuous planetary loop. You can now trace how heat and rotation shape the climate of every coastline on Earth."
+    }
+  ],
+  "typed": "Ocean currents"
 }

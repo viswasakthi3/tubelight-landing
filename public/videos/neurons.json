@@ -1,0 +1,175 @@
+{
+  "slug": "neurons",
+  "title": "How Neurons Build Memories",
+  "duration": 87.672,
+  "cues": [
+    {
+      "start": 0,
+      "end": 4.571,
+      "text": "See the dark gap between these two brain cells? When you experience something new,"
+    },
+    {
+      "start": 4.571,
+      "end": 10.536,
+      "text": "electrical signals race down your neurons until they reach this tiny microscopic bridge called the synapse."
+    },
+    {
+      "start": 10.536,
+      "end": 15.113,
+      "text": "The first neuron spits out chemical messengers called neurotransmitters,"
+    },
+    {
+      "start": 15.113,
+      "end": 18.864,
+      "text": "which cross the gap to knock on the receiving cell's doors."
+    },
+    {
+      "start": 18.864,
+      "end": 21.785,
+      "text": "Notice these closed protein channels waiting below."
+    },
+    {
+      "start": 21.785,
+      "end": 28.2,
+      "text": "Normally, these receptors only let a trickle of ions through, keeping the neural connection quiet and temporary."
+    },
+    {
+      "start": 28.2,
+      "end": 30.104,
+      "text": "Look at the rapid flashes on the left."
+    },
+    {
+      "start": 30.104,
+      "end": 36.216,
+      "text": "But if signals fire over and over in rapid succession, the electrical voltage of the receiving cell spikes sharply upward."
+    },
+    {
+      "start": 36.216,
+      "end": 44.4,
+      "text": "That voltage shift creates a magnetic repulsion, popping out a magnesium ion that was plugging the receptor like a cork."
+    },
+    {
+      "start": 44.4,
+      "end": 47.358,
+      "text": "Now watch the bright yellow calcium pour inside."
+    },
+    {
+      "start": 47.358,
+      "end": 54.384,
+      "text": "With the plug gone, a heavy flood of calcium ions rushes into the cell, acting as a powerful molecular alarm bell."
+    },
+    {
+      "start": 54.384,
+      "end": 61.085,
+      "text": "See those internal storage vesicles fusing with the membrane? That calcium flood triggers an internal factory reset,"
+    },
+    {
+      "start": 61.085,
+      "end": 66.168,
+      "text": "ordering the cell to drag extra receptors out of storage and plug them into the surface."
+    },
+    {
+      "start": 66.168,
+      "end": 69.776,
+      "text": "This physical upgrade is called long-term potentiation,"
+    },
+    {
+      "start": 69.776,
+      "end": 75.024,
+      "text": "permanently lowering the electrical threshold required to activate this pathway."
+    },
+    {
+      "start": 75.024,
+      "end": 78.71,
+      "text": "Now look how easily signals cross this reinforced pathway."
+    },
+    {
+      "start": 78.71,
+      "end": 87.672,
+      "text": "This is how experiences physically rewire your brain—not by saving a file, but by permanently beefing up the connections where memories live."
+    }
+  ],
+  "sheets": [
+    {
+      "index": 0,
+      "title": "The Quiet Synapse",
+      "src": "/videos/neurons/p0.webp",
+      "thumb": "/videos/neurons/p0-s.webp",
+      "start": 0,
+      "end": 28.2
+    },
+    {
+      "index": 1,
+      "title": "Opening the Floodgates",
+      "src": "/videos/neurons/p1.webp",
+      "thumb": "/videos/neurons/p1-s.webp",
+      "start": 28.2,
+      "end": 54.384
+    },
+    {
+      "index": 2,
+      "title": "Upgrading the Synapse",
+      "src": "/videos/neurons/p2.webp",
+      "thumb": "/videos/neurons/p2-s.webp",
+      "start": 54.384,
+      "end": 87.672
+    }
+  ],
+  "beats": [
+    {
+      "start": 0,
+      "end": 10.536,
+      "sheet": 0,
+      "say": "See the dark gap between these two brain cells? When you experience something new, electrical signals race down your neurons until they reach this tiny microscopic bridge called the synapse."
+    },
+    {
+      "start": 10.536,
+      "end": 18.864,
+      "sheet": 0,
+      "say": "The first neuron spits out chemical messengers called neurotransmitters, which cross the gap to knock on the receiving cell's doors."
+    },
+    {
+      "start": 18.864,
+      "end": 28.2,
+      "sheet": 0,
+      "say": "Notice these closed protein channels waiting below. Normally, these receptors only let a trickle of ions through, keeping the neural connection quiet and temporary."
+    },
+    {
+      "start": 28.2,
+      "end": 36.216,
+      "sheet": 1,
+      "say": "Look at the rapid flashes on the left. But if signals fire over and over in rapid succession, the electrical voltage of the receiving cell spikes sharply upward."
+    },
+    {
+      "start": 36.216,
+      "end": 44.4,
+      "sheet": 1,
+      "say": "That voltage shift creates a magnetic repulsion, popping out a magnesium ion that was plugging the receptor like a cork."
+    },
+    {
+      "start": 44.4,
+      "end": 54.384,
+      "sheet": 1,
+      "say": "Now watch the bright yellow calcium pour inside. With the plug gone, a heavy flood of calcium ions rushes into the cell, acting as a powerful molecular alarm bell."
+    },
+    {
+      "start": 54.384,
+      "end": 66.168,
+      "sheet": 2,
+      "say": "See those internal storage vesicles fusing with the membrane? That calcium flood triggers an internal factory reset, ordering the cell to drag extra receptors out of storage and plug them into the surface."
+    },
+    {
+      "start": 66.168,
+      "end": 75.024,
+      "sheet": 2,
+      "say": "This physical upgrade is called long-term potentiation, permanently lowering the electrical threshold required to activate this pathway."
+    },
+    {
+      "start": 75.024,
+      "end": 87.672,
+      "sheet": 2,
+      "say": "Now look how easily signals cross this reinforced pathway. This is how experiences physically rewire your brain—not by saving a file, but by permanently beefing up the connections where memories live."
+    }
+  ],
+  "typed": "explain something complex and intersting in neurophyscology"
+}

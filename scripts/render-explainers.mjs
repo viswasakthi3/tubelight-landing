@@ -15,6 +15,12 @@ const ITEMS = [
   { slug: 'polar-bear', id: 'instant_1790147204991_2x0in' },
   { slug: 'insurance', id: 'instant_1790855218442_9j46h' },
   { slug: 'tv', id: 'instant_1791435496164_i7i5k' },
+  { slug: 'neurons', id: 'instant_1790349841826_yx3j3' },
+  { slug: 'zombie-cells', id: 'instant_1790386734228_2lr2h' },
+  { slug: 'kidneys', id: 'instant_1788991015305_8ccuf' },
+  { slug: 'appendix', id: 'instant_1791435756172_bsm0c' },
+  { slug: 'supernova', id: 'instant_1787465899552_puv9h' },
+  { slug: 'dark-matter', id: 'instant_1789981977671_aosyc' },
 ];
 const only = process.argv.slice(2);
 const index = JSON.parse(fs.readFileSync(`${LIB}/index.json`, 'utf8')).entries;
@@ -75,7 +81,7 @@ function render(slug, id, count, suffix, title) {
   });
   fs.writeFileSync(path.join(OUT, `${slug}${suffix}.vtt`),
     'WEBVTT\n\n' + cues.map((c, i) => `${i + 1}\n${ts(c.start)} --> ${ts(c.end)}\n${c.text}\n`).join('\n'));
-  return { total, cues, out };
+  return { total, cues, out, durs, beats, meta };
 }
 
 fs.mkdirSync(OUT, { recursive: true });
@@ -84,6 +90,25 @@ for (const it of ITEMS) {
   const title = index[it.id]?.title || it.slug;
   const full = render(it.slug, it.id, null, '', title);
   const json = { slug: it.slug, title, duration: r3(full.total), cues: full.cues };
+  {
+    const sd = path.join(OUT, it.slug); fs.mkdirSync(sd, { recursive: true });
+    const idir = `${LIB}/items/${it.id}`;
+    const sheets = [], beatsOut = []; let t = 0;
+    full.beats.forEach((b, i) => {
+      const start = r3(t), end = r3(t + full.durs[i]); t += full.durs[i];
+      beatsOut.push({ start, end, sheet: b.sheet, say: (b.say || '').replace(/\s+/g, ' ').trim() });
+      let sh = sheets.find((x) => x.index === b.sheet);
+      if (sh) sh.end = end;
+      else {
+        const N = b.sheet;
+        run('ffmpeg', ['-y', '-v', 'error', '-i', `${idir}/image-${N}.png`, '-vf', 'scale=1280:-2', '-c:v', 'libwebp', '-quality', '80', path.join(sd, `p${N}.webp`)]);
+        run('ffmpeg', ['-y', '-v', 'error', '-i', `${idir}/image-${N}.png`, '-vf', 'scale=400:-2', '-c:v', 'libwebp', '-quality', '76', path.join(sd, `p${N}-s.webp`)]);
+        sheets.push({ index: N, title: full.meta.sheets?.[N]?.title || '', src: `/videos/${it.slug}/p${N}.webp`, thumb: `/videos/${it.slug}/p${N}-s.webp`, start, end });
+      }
+    });
+    json.sheets = sheets; json.beats = beatsOut;
+    json.typed = String(full.meta.source || '').replace(/\s+/g, ' ').trim().slice(0, 120);
+  }
   if (it.short) {
     const s = render(it.slug, it.id, 3, '-short', title);
     json.shortDuration = r3(s.total); json.shortCues = s.cues;

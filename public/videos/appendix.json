@@ -1,0 +1,124 @@
+{
+  "slug": "appendix",
+  "title": "Why We Have an Appendix",
+  "duration": 62.424,
+  "cues": [
+    {
+      "start": 0,
+      "end": 4.064,
+      "text": "Most people think the appendix is a totally useless left-over part."
+    },
+    {
+      "start": 4.064,
+      "end": 8.856,
+      "text": "But that little pouch actually plays a vital hidden role in your immune health."
+    },
+    {
+      "start": 8.856,
+      "end": 14.42,
+      "text": "See that small tube tucked at the base of the large intestine?"
+    },
+    {
+      "start": 14.42,
+      "end": 23.304,
+      "text": "That is your appendix, a narrow finger-like pouch tucked away from the main rush of digesting food."
+    },
+    {
+      "start": 23.304,
+      "end": 27.056,
+      "text": "Now look closely at the zoomed inset on the right."
+    },
+    {
+      "start": 27.056,
+      "end": 34.56,
+      "text": "Inside its walls, away from the fast food stream, it keeps a thriving safe house of your microbiome."
+    },
+    {
+      "start": 34.56,
+      "end": 38.47,
+      "text": "Look at the left panel showing the gut after a severe stomach bug."
+    },
+    {
+      "start": 38.47,
+      "end": 44.808,
+      "text": "When an infection sweeps through your digestive system, it often flushes out most of your helpful microbes."
+    },
+    {
+      "start": 44.808,
+      "end": 46.964,
+      "text": "Now look across to the right panel."
+    },
+    {
+      "start": 46.964,
+      "end": 53.616,
+      "text": "Safe inside its narrow pouch, the stored bacteria survive, pouring out to quickly restock and heal your gut."
+    },
+    {
+      "start": 53.616,
+      "end": 55.786,
+      "text": "Your appendix is far from useless."
+    },
+    {
+      "start": 55.786,
+      "end": 62.424,
+      "text": "By acting as a shielded shelter for helpful microbes, it ensures your gut can always recover and thrive."
+    }
+  ],
+  "sheets": [
+    {
+      "index": 0,
+      "title": "The Gut and the Pouch",
+      "src": "/videos/appendix/p0.webp",
+      "thumb": "/videos/appendix/p0-s.webp",
+      "start": 0,
+      "end": 34.56
+    },
+    {
+      "index": 1,
+      "title": "Restocking After Illness",
+      "src": "/videos/appendix/p1.webp",
+      "thumb": "/videos/appendix/p1-s.webp",
+      "start": 34.56,
+      "end": 62.424
+    }
+  ],
+  "beats": [
+    {
+      "start": 0,
+      "end": 8.856,
+      "sheet": 0,
+      "say": "Most people think the appendix is a totally useless left-over part. But that little pouch actually plays a vital hidden role in your immune health."
+    },
+    {
+      "start": 8.856,
+      "end": 23.304,
+      "sheet": 0,
+      "say": "See that small tube tucked at the base of the large intestine? That is your appendix, a narrow finger-like pouch tucked away from the main rush of digesting food."
+    },
+    {
+      "start": 23.304,
+      "end": 34.56,
+      "sheet": 0,
+      "say": "Now look closely at the zoomed inset on the right. Inside its walls, away from the fast food stream, it keeps a thriving safe house of your microbiome."
+    },
+    {
+      "start": 34.56,
+      "end": 44.808,
+      "sheet": 1,
+      "say": "Look at the left panel showing the gut after a severe stomach bug. When an infection sweeps through your digestive system, it often flushes out most of your helpful microbes."
+    },
+    {
+      "start": 44.808,
+      "end": 53.616,
+      "sheet": 1,
+      "say": "Now look across to the right panel. Safe inside its narrow pouch, the stored bacteria survive, pouring out to quickly restock and heal your gut."
+    },
+    {
+      "start": 53.616,
+      "end": 62.424,
+      "sheet": 1,
+      "say": "Your appendix is far from useless. By acting as a shielded shelter for helpful microbes, it ensures your gut can always recover and thrive."
+    }
+  ],
+  "typed": "tell me about appendix"
+}
