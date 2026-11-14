@@ -9,6 +9,7 @@ export type Step = null | "email" | "q" | "done";
 type Stats = { total: number; thisWeek: number; show: boolean };
 
 export type WaitlistApi = {
+  referralUrl: string;
   email: string;
   setEmail: (v: string) => void;
   err: string;
@@ -57,6 +58,7 @@ export function WaitlistProvider({ children }: { children: React.ReactNode }) {
   const [email, setEmailRaw] = useState("");
   const [err, setErr] = useState("");
   const [submitting, setSubmitting] = useState(false);
+  const [referralUrl, setReferralUrl] = useState("");
   const [sent, setSent] = useState(false);
   const [position, setPosition] = useState<number | null>(null);
   const [shown, setShown] = useState(0);
@@ -89,13 +91,13 @@ export function WaitlistProvider({ children }: { children: React.ReactNode }) {
     };
   }, []);
 
-  // Real numbers only: the page shows the count when the server says it is big enough.
+  // Keep the signup response if an older stats request finishes later.
   useEffect(() => {
     let live = true;
     fetch("/api/waitlist/stats")
       .then((r) => (r.ok ? r.json() : null))
       .then((j) => {
-        if (live && j && typeof j.total === "number") setStats({ total: j.total, thisWeek: Number(j.thisWeek) || 0, show: !!j.show });
+        if (live && j && typeof j.total === "number") setStats((current) => current ?? ({ total: j.total, thisWeek: Number(j.thisWeek) || 0, show: !!j.show }));
       })
       .catch(() => undefined);
     return () => {
@@ -161,7 +163,7 @@ export function WaitlistProvider({ children }: { children: React.ReactNode }) {
         const res = await fetch("/api/waitlist", {
           method: "POST",
           headers: { "content-type": "application/json" },
-          body: JSON.stringify(searched ? { email: v, source: "site", topic: searched } : { email: v, source: "site" }),
+          body: JSON.stringify({ email: v, source: "site", topic: searched, ref: new URLSearchParams(location.search).get("ref") }),
         });
         const j = await res.json().catch(() => ({}));
         if (!res.ok || !j.ok) {
@@ -177,6 +179,14 @@ export function WaitlistProvider({ children }: { children: React.ReactNode }) {
         setShown(pos ?? 0);
         setMoved(0);
         setDelta(0);
+        if (typeof j.referralCode === "string") {
+          const url = new URL("/", location.origin);
+          url.searchParams.set("ref", j.referralCode);
+          setReferralUrl(url.href);
+        }
+        if (typeof j.total === "number") {
+          setStats((prev) => ({ total: j.total, thisWeek: prev?.thisWeek ?? 0, show: j.total > 0 }));
+        }
         setSent(true);
         setPicked([]);
         setQiBoth(0);
@@ -194,6 +204,28 @@ export function WaitlistProvider({ children }: { children: React.ReactNode }) {
     },
     [email, setPicked, setQiBoth, clearTexts],
   );
+
+  // A friend may have joined while the inviter was sharing in another tab.
+  useEffect(() => {
+    if (!sent) return;
+    const refresh = async () => {
+      try {
+        const res = await fetch("/api/waitlist/position", {
+          method: "POST",
+          headers: { "content-type": "application/json" },
+          body: JSON.stringify({ email: sentEmail.current, token: token.current }),
+        });
+        if (!res.ok) return;
+        const data = await res.json();
+        if (typeof data.position === "number") {
+          setPosition(data.position);
+          tickTo(data.position);
+        }
+      } catch { /* Keep the last confirmed position. */ }
+    };
+    window.addEventListener("focus", refresh);
+    return () => window.removeEventListener("focus", refresh);
+  }, [sent, tickTo]);
 
   const openModal = useCallback(() => {
     setErr("");
@@ -300,8 +332,8 @@ export function WaitlistProvider({ children }: { children: React.ReactNode }) {
   }, [advance]);
 
   const value = useMemo<WaitlistApi>(
-    () => ({ email, setEmail, err, submitting, sent, submit, position, shown, delta, moved, stats, modal, openModal, closeModal, qi, picked, otherText, setOtherText, aboutText, setAboutText, answerErr, pick, nextQ, skipQ }),
-    [email, setEmail, err, submitting, sent, submit, position, shown, delta, moved, stats, modal, openModal, closeModal, qi, picked, otherText, setOtherText, aboutText, setAboutText, answerErr, pick, nextQ, skipQ],
+    () => ({ referralUrl, email, setEmail, err, submitting, sent, submit, position, shown, delta, moved, stats, modal, openModal, closeModal, qi, picked, otherText, setOtherText, aboutText, setAboutText, answerErr, pick, nextQ, skipQ }),
+    [referralUrl, email, setEmail, err, submitting, sent, submit, position, shown, delta, moved, stats, modal, openModal, closeModal, qi, picked, otherText, setOtherText, aboutText, setAboutText, answerErr, pick, nextQ, skipQ],
   );
 
   return <Ctx.Provider value={value}>{children}</Ctx.Provider>;

@@ -89,3 +89,7 @@ public/
 Screenshots were cropped from the Time2Understand store assets. To regenerate them,
 re-crop from `D:/projects/time2understand/windows_store_assets` — the arrow overlay
 in the topic-explorer shot is painted out before cropping.
+
+### Local topic previews
+
+When `T2U_API_URL` points to localhost, run `npm run dev:preview` alongside `npm run dev` to generate videos for custom topics. This uses the backend checkout at `../time2understand/t2u_backend` (override with `T2U_BACKEND_DIR`), its installed dependencies and provider credentials, and the landing project's `WEB_EXPLAIN_SECRET`. Saved topic searches play directly from the bundled videos.

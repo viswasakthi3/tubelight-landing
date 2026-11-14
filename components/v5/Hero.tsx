@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { track } from "@/lib/track";
 import { usePlayer, useVideos } from "./Providers";
+import { matchedVideo } from "./catalog";
 import { Joined, SignupForm, useProof } from "./SignupForm";
 import { cueAt, mmss, pauseOthers, registerPauser } from "./media";
 import { Pointer } from "./Pointer";
@@ -258,6 +259,8 @@ export function Hero() {
       } else go(true);
       return;
     }
+    const saved = matchedVideo(q, videos);
+    if (saved) return player.open(saved, 0, goBtn.current);
     player.live(q.slice(0, 200), goBtn.current);
   };
 
@@ -582,12 +585,25 @@ export function Hero() {
                         src={v?.src}
                         poster={v?.poster}
                         playsInline
-                        muted
+                        muted={muted}
                         preload="metadata"
+                        onLoadedData={(e) => {
+                          if (modeRef.current === "playing" && e.currentTarget.paused) {
+                            e.currentTarget.play().catch(() => setPaused(true));
+                          }
+                        }}
                         onTimeUpdate={(e) => setVt(e.currentTarget.currentTime)}
                         onEnded={() => {
-                          setModeBoth("done");
-                          setPaused(true);
+                          if (reduceRef.current) {
+                            setModeBoth("done");
+                            setPaused(true);
+                            return;
+                          }
+                          const next = (topicRef.current + 1) % HERO.length;
+                          topicRef.current = next;
+                          setTopic(next);
+                          setHq(HERO[next].typed);
+                          setVt(0);
                         }}
                         onPlay={() => setPaused(false)}
                         onPause={() => setPaused(true)}

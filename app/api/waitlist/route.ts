@@ -61,8 +61,9 @@ export async function POST(request: Request) {
     ...(topic ? { answers: { searched: topic } } : {}),
   };
 
-  const result = await saveSignup(signup);
-  await forwardSignup(signup);
+  const ref = typeof body.ref === "string" && /^[0-9a-f]{8}(?:-[0-9a-f]{4}){3}-[0-9a-f]{12}$/i.test(body.ref) ? body.ref : null;
+  const result = await saveSignup(signup, ref);
+  if (!result.duplicate) await forwardSignup(signup);
 
   const position = await getPosition(email);
 
@@ -72,6 +73,7 @@ export async function POST(request: Request) {
     message: result.duplicate ? "You're already on the list — invite is on its way." : "You're on the list.",
     position,
     total: result.total,
+    referralCode: result.referralCode,
     token: signToken(email),
   });
 }

@@ -14,6 +14,7 @@ export const GALLERY: GalleryItem[] = [
 
 /* other ready-made videos that search can find (they play from the features section) */
 export const MORE: { slug: string; kw: string }[] = [
+  { slug: "dna", kw: "dna genetics nucleotide nucleotides double helix genetic code" },
   { slug: "kidneys", kw: "kidney kidneys blood filter urine nephron bladder body medical" },
   { slug: "zombie-cells", kw: "zombie senescent cell cells ageing aging inflammation medical" },
   { slug: "neurons", kw: "neuron neurons memory memories brain synapse learning" },
@@ -31,7 +32,7 @@ export function words(t: string): string[] {
     .toLowerCase()
     .replace(/[^a-z0-9\s]/g, " ")
     .split(/\s+/)
-    .filter((w) => w.length > 2 && !STOP[w]);
+    .filter((w) => (w.length > 2 || w === "tv") && !STOP[w]);
 }
 
 export type Match = { slug: string; score: number };
@@ -54,4 +55,9 @@ export function findMatches(query: string, videos: VideoMap): Match[] {
     })
     .filter((x) => x.score > 0)
     .sort((a, b) => b.score - a.score);
+}
+
+export function matchedVideo(query: string, videos: VideoMap): string | undefined {
+  const best = findMatches(query, videos)[0];
+  return best && best.score === words(query).length ? best.slug : undefined;
 }

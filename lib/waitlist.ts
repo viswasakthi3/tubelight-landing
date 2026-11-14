@@ -1,4 +1,5 @@
 import { promises as fs } from "node:fs";
+import { randomUUID } from "node:crypto";
 import path from "node:path";
 import { Pool } from "pg";
 import { SPOTS_PER_ANSWER } from "./waitlist-shared";
@@ -15,6 +16,8 @@ export type Signup = {
   createdAt: string;
   answers?: Answers;
   boost?: number;
+  referralCode?: string;
+  referrals?: number;
 };
 
 const FILE = path.join(process.cwd(), "data", "waitlist.json");
@@ -52,8 +55,11 @@ async function ensureTable(db: Pool): Promise<void> {
   await db.query(
     `ALTER TABLE tubelight_waitlist
        ADD COLUMN IF NOT EXISTS answers JSONB NOT NULL DEFAULT '{}'::jsonb,
-       ADD COLUMN IF NOT EXISTS boost INT NOT NULL DEFAULT 0`,
+       ADD COLUMN IF NOT EXISTS boost INT NOT NULL DEFAULT 0,
+       ADD COLUMN IF NOT EXISTS referral_code UUID,
+       ADD COLUMN IF NOT EXISTS referrals INT NOT NULL DEFAULT 0`,
   );
+  await db.query("CREATE UNIQUE INDEX IF NOT EXISTS idx_waitlist_referral ON tubelight_waitlist(referral_code)");
   tableInitialized = true;
 }
 
@@ -64,43 +70,83 @@ async function readAll(): Promise<Signup[]> {
   try {
     const raw = await fs.readFile(FILE, "utf8");
     const parsed = JSON.parse(raw);
-    return Array.isArray(parsed) ? (parsed as Signup[]) : [];
-  } catch {
-    return [];
+    if (!Array.isArray(parsed)) throw new Error("Invalid waitlist file");
+    return parsed as Signup[];
+  } catch (error) {
+    if ((error as NodeJS.ErrnoException).code === "ENOENT") return [];
+    throw error;
   }
 }
 
-export async function saveSignup(signup: Signup): Promise<{ stored: boolean; duplicate: boolean; total: number }> {
+let fileQueue: Promise<unknown> = Promise.resolve();
+function fileMutation<T>(work: () => Promise<T>): Promise<T> {
+  const pending = fileQueue.then(work);
+  fileQueue = pending.catch(() => undefined);
+  return pending;
+}
+
+async function writeAll(all: Signup[]) {
+  await fs.mkdir(path.dirname(FILE), { recursive: true });
+  const temp = FILE + "." + randomUUID();
+  await fs.writeFile(temp, JSON.stringify(all, null, 2), "utf8");
+  await fs.rename(temp, FILE);
+}
+
+export async function saveSignup(signup: Signup, ref: string | null = null) {
+  const code = randomUUID();
   const db = getPool();
   if (db) {
+    await ensureTable(db);
+    const client = await db.connect();
     try {
-      await ensureTable(db);
-      const insertRes = await db.query(
-        `INSERT INTO tubelight_waitlist (email, role, source, answers)
-         VALUES ($1, $2, $3, $4::jsonb)
-         ON CONFLICT (email) DO NOTHING
-         RETURNING id`,
-        [signup.email, signup.role || null, signup.source || "site", JSON.stringify(signup.answers ?? {})],
+      await client.query("BEGIN");
+      const inserted = await client.query(
+        `INSERT INTO tubelight_waitlist (email, role, source, answers, referral_code)
+         VALUES ($1, $2, $3, $4::jsonb, $5) ON CONFLICT (email) DO NOTHING RETURNING id`,
+        [signup.email, signup.role ?? null, signup.source, JSON.stringify(signup.answers ?? {}), code],
       );
-      const duplicate = (insertRes.rowCount ?? 0) === 0;
-      const countRes = await db.query<{ count: number }>(`SELECT COUNT(*)::int AS count FROM tubelight_waitlist`);
-      const total = countRes.rows[0]?.count ?? 0;
-      return { stored: true, duplicate, total };
-    } catch (err) {
-      console.error("[waitlist] Database query error, falling back to local file:", err);
+      const duplicate = !inserted.rowCount;
+      let referralCode: string = code;
+      if (duplicate) {
+        const existing = await client.query(
+          "UPDATE tubelight_waitlist SET referral_code = COALESCE(referral_code, $2) WHERE email = $1 RETURNING referral_code",
+          [signup.email, code],
+        );
+        referralCode = existing.rows[0].referral_code;
+      } else if (ref) {
+        await client.query(
+          "UPDATE tubelight_waitlist SET referrals = referrals + 1, boost = boost + $1 WHERE referral_code = $2 AND email <> $3",
+          [SPOTS_PER_ANSWER, ref, signup.email],
+        );
+      }
+      const count = await client.query("SELECT COUNT(*)::int AS total FROM tubelight_waitlist");
+      await client.query("COMMIT");
+      statsCache = null;
+      return { duplicate, total: Number(count.rows[0].total), referralCode };
+    } catch (error) {
+      await client.query("ROLLBACK");
+      throw error;
+    } finally {
+      client.release();
     }
   }
-
-  try {
+  return fileMutation(async () => {
     const all = await readAll();
-    const duplicate = all.some((s) => s.email === signup.email);
-    if (!duplicate) all.push(signup);
-    await fs.mkdir(path.dirname(FILE), { recursive: true });
-    await fs.writeFile(FILE, JSON.stringify(all, null, 2), "utf8");
-    return { stored: true, duplicate, total: all.length };
-  } catch {
-    return { stored: false, duplicate: false, total: 0 };
-  }
+    const existing = all.find((s) => s.email === signup.email);
+    const member = existing ?? signup;
+    member.referralCode ??= code;
+    if (!existing) {
+      const inviter = ref && all.find((s) => s.referralCode === ref);
+      if (inviter) {
+        inviter.referrals = (inviter.referrals ?? 0) + 1;
+        inviter.boost = (inviter.boost ?? 0) + SPOTS_PER_ANSWER;
+      }
+      all.push(member);
+    }
+    await writeAll(all);
+    statsCache = null;
+    return { duplicate: !!existing, total: all.length, referralCode: member.referralCode };
+  });
 }
 
 /* ---------- ranking: boost DESC, created_at ASC, id ASC ---------- */
@@ -108,20 +154,11 @@ export async function saveSignup(signup: Signup): Promise<{ stored: boolean; dup
 type Queryable = Pick<Pool, "query">;
 
 async function pgPosition(q: Queryable, email: string): Promise<number | null> {
-  const me = await q.query<{ id: number; boost: number; created_at: Date }>(
-    `SELECT id, boost, created_at FROM tubelight_waitlist WHERE email = $1`,
-    [email],
-  );
-  const row = me.rows[0];
-  if (!row) return null;
-  const ahead = await q.query<{ n: number }>(
-    `SELECT COUNT(*)::int AS n FROM tubelight_waitlist
-      WHERE boost > $1
-         OR (boost = $1 AND created_at < $2)
-         OR (boost = $1 AND created_at = $2 AND id < $3)`,
-    [row.boost, row.created_at, row.id],
-  );
-  return 1 + (ahead.rows[0]?.n ?? 0);
+  const result = await q.query<{ position: number }>(
+    `SELECT 1 + (SELECT COUNT(*)::int FROM tubelight_waitlist other
+       WHERE (-other.boost, other.created_at, other.id) < (-me.boost, me.created_at, me.id)) AS position
+     FROM tubelight_waitlist me WHERE me.email = $1`, [email]);
+  return result.rows[0]?.position ?? null;
 }
 
 function fileRanked(all: Signup[]): { s: Signup; i: number }[] {
@@ -144,12 +181,8 @@ function filePosition(all: Signup[], email: string): number | null {
 export async function getPosition(email: string): Promise<number | null> {
   const db = getPool();
   if (db) {
-    try {
-      await ensureTable(db);
-      return await pgPosition(db, email);
-    } catch (err) {
-      console.error("[waitlist] getPosition database error, using local file:", err);
-    }
+    await ensureTable(db);
+    return await pgPosition(db, email);
   }
   return filePosition(await readAll(), email);
 }
@@ -157,13 +190,9 @@ export async function getPosition(email: string): Promise<number | null> {
 export async function getTotal(): Promise<number> {
   const db = getPool();
   if (db) {
-    try {
-      await ensureTable(db);
-      const r = await db.query<{ n: number }>(`SELECT COUNT(*)::int AS n FROM tubelight_waitlist`);
-      return r.rows[0]?.n ?? 0;
-    } catch (err) {
-      console.error("[waitlist] getTotal database error, using local file:", err);
-    }
+    await ensureTable(db);
+    const r = await db.query<{ n: number }>(`SELECT COUNT(*)::int AS n FROM tubelight_waitlist`);
+    return r.rows[0]?.n ?? 0;
   }
   return (await readAll()).length;
 }
@@ -194,61 +223,54 @@ export async function saveAnswer(email: string, question: number, answer: Answer
   const key = String(question);
   const db = getPool();
   if (db) {
+    await ensureTable(db);
+    const client = await db.connect();
     try {
-      await ensureTable(db);
-      const client = await db.connect();
-      try {
-        await client.query("BEGIN");
-        const cur = await client.query<{ answers: Answers; boost: number }>(
-          `SELECT answers, boost FROM tubelight_waitlist WHERE email = $1 FOR UPDATE`,
-          [email],
-        );
-        if (!cur.rows[0]) {
-          await client.query("ROLLBACK");
-          return null;
-        }
-        const previousPosition = (await pgPosition(client, email)) ?? 1;
-        if (answer === null) {
-          await client.query("COMMIT");
-          return { position: previousPosition, previousPosition, boost: cur.rows[0].boost };
-        }
-        const answers: Answers = { ...(cur.rows[0].answers ?? {}), [key]: answer };
-        const boost = boostFor(answers);
-        await client.query(
-          `UPDATE tubelight_waitlist
-              SET answers = $2::jsonb, boost = $3, role = COALESCE($4, role)
-            WHERE email = $1`,
-          [email, JSON.stringify(answers), boost, question === 0 ? roleFrom(answers) : null],
-        );
-        const position = (await pgPosition(client, email)) ?? previousPosition;
-        await client.query("COMMIT");
-        return { position, previousPosition, boost };
-      } catch (err) {
-        await client.query("ROLLBACK").catch(() => undefined);
-        throw err;
-      } finally {
-        client.release();
+      await client.query("BEGIN");
+      const cur = await client.query<{ answers: Answers; boost: number; referrals: number }>(
+        `SELECT answers, boost, referrals FROM tubelight_waitlist WHERE email = $1 FOR UPDATE`,
+        [email],
+      );
+      if (!cur.rows[0]) {
+        await client.query("ROLLBACK");
+        return null;
       }
+      const previousPosition = (await pgPosition(client, email)) ?? 1;
+      if (answer === null) {
+        await client.query("COMMIT");
+        return { position: previousPosition, previousPosition, boost: cur.rows[0].boost };
+      }
+      const answers: Answers = { ...(cur.rows[0].answers ?? {}), [key]: answer };
+      const boost = boostFor(answers) + cur.rows[0].referrals * SPOTS_PER_ANSWER;
+      await client.query(
+        `UPDATE tubelight_waitlist
+            SET answers = $2::jsonb, boost = $3, role = COALESCE($4, role)
+          WHERE email = $1`,
+        [email, JSON.stringify(answers), boost, question === 0 ? roleFrom(answers) : null],
+      );
+      const position = (await pgPosition(client, email)) ?? previousPosition;
+      await client.query("COMMIT");
+      return { position, previousPosition, boost };
     } catch (err) {
-      console.error("[waitlist] saveAnswer database error, falling back to local file:", err);
+      await client.query("ROLLBACK").catch(() => undefined);
+      throw err;
+    } finally {
+      client.release();
     }
   }
 
-  const all = await readAll();
-  const me = all.find((s) => s.email === email);
-  if (!me) return null;
-  const previousPosition = filePosition(all, email) ?? 1;
-  if (answer === null) return { position: previousPosition, previousPosition, boost: me.boost ?? 0 };
-  me.answers = { ...(me.answers ?? {}), [key]: answer };
-  me.boost = boostFor(me.answers);
-  if (question === 0) me.role = roleFrom(me.answers) ?? me.role;
-  try {
-    await fs.mkdir(path.dirname(FILE), { recursive: true });
-    await fs.writeFile(FILE, JSON.stringify(all, null, 2), "utf8");
-  } catch {
-    return null;
-  }
-  return { position: filePosition(all, email) ?? previousPosition, previousPosition, boost: me.boost };
+  return fileMutation(async () => {
+    const all = await readAll();
+    const me = all.find((s) => s.email === email);
+    if (!me) return null;
+    const previousPosition = filePosition(all, email) ?? 1;
+    if (answer === null) return { position: previousPosition, previousPosition, boost: me.boost ?? 0 };
+    me.answers = { ...(me.answers ?? {}), [key]: answer };
+    me.boost = boostFor(me.answers) + (me.referrals ?? 0) * SPOTS_PER_ANSWER;
+    if (question === 0) me.role = roleFrom(me.answers) ?? me.role;
+    await writeAll(all);
+    return { position: filePosition(all, email) ?? previousPosition, previousPosition, boost: me.boost };
+  });
 }
 
 /* ---------- public stats (cached 60 s) ---------- */
@@ -261,17 +283,13 @@ export async function getStats(): Promise<WaitlistStats> {
   let value: WaitlistStats | null = null;
   const db = getPool();
   if (db) {
-    try {
-      await ensureTable(db);
-      const r = await db.query<{ total: number; week: number }>(
-        `SELECT COUNT(*)::int AS total,
-                COUNT(*) FILTER (WHERE created_at > NOW() - INTERVAL '7 days')::int AS week
-           FROM tubelight_waitlist`,
-      );
-      value = { total: r.rows[0]?.total ?? 0, thisWeek: r.rows[0]?.week ?? 0 };
-    } catch (err) {
-      console.error("[waitlist] getStats database error, using local file:", err);
-    }
+    await ensureTable(db);
+    const r = await db.query<{ total: number; week: number }>(
+      `SELECT COUNT(*)::int AS total,
+              COUNT(*) FILTER (WHERE created_at > NOW() - INTERVAL '7 days')::int AS week
+         FROM tubelight_waitlist`,
+    );
+    value = { total: r.rows[0]?.total ?? 0, thisWeek: r.rows[0]?.week ?? 0 };
   }
   if (!value) {
     const all = await readAll();

@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import { track } from "@/lib/track";
-import { findMatches, words } from "./catalog";
+import { findMatches, matchedVideo } from "./catalog";
 import { mmss } from "./media";
 import { usePlayer, useVideos } from "./Providers";
 
@@ -239,11 +239,11 @@ export function TopicSearch() {
     }
     const t = q.trim();
     if (t.length < 2) return;
-    const m = findMatches(t, videos);
-    const matched = m.length > 0 && m[0].score >= Math.max(1, words(t).length);
+    const slug = matchedVideo(t, videos);
+    const matched = !!slug;
     track("topic_search", { matched });
     setOpen(false);
-    if (matched) player.open(m[0].slug, 0, btn.current);
+    if (slug) player.open(slug, 0, btn.current);
     else player.live(t.slice(0, 200), btn.current);
   };
 
@@ -297,10 +297,8 @@ export function TopicSearch() {
               role="option"
               aria-selected={i === active}
               className={"sg " + it.kind + (i === active ? " on" : "")}
-              onMouseDown={(e) => {
-                e.preventDefault();
-                pick(it);
-              }}
+              onMouseDown={(e) => e.preventDefault()}
+              onClick={() => pick(it)}
             >
               <span className="sg-ic" aria-hidden="true">
                 <svg viewBox="0 0 24 24"><path d={it.icon} /></svg>

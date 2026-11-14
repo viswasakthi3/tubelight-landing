@@ -3,7 +3,7 @@
 import { useEffect, useRef, type KeyboardEvent } from "react";
 import { fmt, trapTab } from "./media";
 import { OTHER, QS } from "./questions";
-import { Proof, SignupForm } from "./SignupForm";
+import { InviteFriends, Proof, SignupForm } from "./SignupForm";
 import { useWaitlist } from "./WaitlistContext";
 
 const X = (
@@ -92,7 +92,7 @@ export function WaitlistDialog() {
             ) : null}
             <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
               <p className="disp" style={{ margin: 0, fontSize: 21, fontWeight: 600, letterSpacing: "-0.02em" }}>Want an earlier invite?</p>
-              <p style={{ margin: 0, color: "#57536E" }}>Tell us how you’ll use Tubelight. Every answer moves you up the line, so you’re invited sooner.</p>
+              <p style={{ margin: 0, color: "#57536E" }}>Tell us how you’ll use Tubelight. Each answer adds to your invite priority.</p>
             </div>
             <div className="segs">
               {QS.map((_, i) => (
@@ -155,6 +155,7 @@ export function WaitlistDialog() {
                 </button>
               ) : null}
             </div>
+            <InviteFriends />
           </div>
         ) : null}
 
@@ -174,6 +175,7 @@ export function WaitlistDialog() {
             <p style={{ margin: 0, color: "#57536E" }}>
               We’ll email <strong style={{ color: "#221E3F", fontWeight: 600, overflowWrap: "anywhere" }}>{emailShown}</strong> as soon as your invite is ready.
             </p>
+            <InviteFriends />
             <div style={{ width: "100%", display: "flex", flexDirection: "column", gap: 10, padding: 20, borderRadius: 20, background: "#F6F3FB" }}>
               <p style={{ margin: 0, fontSize: 13, fontWeight: 600, letterSpacing: "0.12em", textTransform: "uppercase", color: "#6F6B86" }}>While you wait</p>
               <p style={{ margin: 0, color: "#221E3F" }}>

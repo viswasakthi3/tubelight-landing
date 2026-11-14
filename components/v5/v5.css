@@ -507,3 +507,7 @@
 .v5 #demo{order:3;margin-top:4px}
 .v5 .hero-act{order:4;margin-top:8px}
 }
+
+.v5 .invite-box{display:grid;justify-items:start;gap:8px;width:100%;padding:16px 18px;border-radius:16px;background:#F4F0FF;color:#221E3F}
+.v5 .invite-box p{margin:0;color:#57536E;font-size:15px}
+.v5 .invite-box label,.v5 .invite-box input{display:block;width:100%;min-width:0}
