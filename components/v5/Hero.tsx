@@ -385,7 +385,7 @@ export function Hero() {
       />
       <div className="wrapx wide hero-grid" style={{ position: "relative" }}>
         {/* left: the promise and the action */}
-        <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-start", gap: 24 }}>
+        <div className="hero-copy" style={{ display: "flex", flexDirection: "column", alignItems: "flex-start", gap: 24 }}>
           <h1 className="disp rise d1" style={{ margin: 0, fontSize: "clamp(46px, 5.2vw, 74px)", lineHeight: 1.02, letterSpacing: "-0.045em", fontWeight: 600, color: "#221E3F" }}>
             Understand anything in{" "}
             <span className="uline">
@@ -398,7 +398,7 @@ export function Hero() {
           <p className="rise d2" style={{ margin: 0, maxWidth: 430, fontSize: "clamp(18px, 1.5vw, 20px)", lineHeight: 1.6, color: "#57536E", textWrap: "pretty" }}>
             Search a topic, or select any text and press <span className="kbd">Alt</span> + <span className="kbd">E</span>. Tubelight explains it with pictures and a voice in under 15 seconds.
           </p>
-          <div className="rise d3" style={{ width: "100%", display: "flex", flexDirection: "column", gap: 14, marginTop: 2 }}>
+          <div className="rise d3 hero-act" style={{ width: "100%", display: "flex", flexDirection: "column", gap: 14, marginTop: 2 }}>
             {!w.sent ? <SignupForm id="em-hero" placement="hero" label="Join the waitlist" /> : <Joined />}
             <p className="conds">
               <span><svg viewBox="0 0 24 24" aria-hidden="true">{CHECK}</svg>Free to try</span>
