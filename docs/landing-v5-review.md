@@ -63,3 +63,39 @@ Also fixed: "Seconds — usually under 20" → "About 10–30 seconds to make" (
 2. End-to-end waitlist task on a phone and a PC, including a typo email and a duplicate signup.
 3. Watch `hero_video_play` (autoplay vs `sound: true`) against `waitlist_submit` per visitor — a play is not understanding (I39).
 4. Once traffic allows: hero headline "Understand anything in seconds." vs a concrete version ("Select any text. Press Alt + E. See it explained.") with equal facts.
+
+## v5.4 review (14 Nov 2026)
+
+Same tools (F1 rubric, E3, D11 tests), run on the built page at 1440 px and 375 px. Self-review, so the ceiling is still 2.
+
+### F1
+
+| Dimension | v5.3 | v5.4 | Evidence / remaining weakness |
+|---|---|---|---|
+| Immediate product clarity | 2 | 2 | Body now leads with "Search a topic" and the hero opens on a working search box that plays a real result. Not 5-second tested (F2). |
+| Audience relevance | 2 | 2 | The new questions collect real recent episodes (where, what, what they did, how often) — the first time we gather C2 evidence instead of guessing. |
+| Value proposition | 2 | 2 | Comparison table unchanged; timing row now "Under 15 seconds on Fast, up to 30 on Rich". |
+| Product demonstration | 2 | 2 | Search mode shows input (topic pill) and output (video + slide rail) together (I10); the app's pointer cues each beat (I11). DNA has no pointer data, so none is drawn rather than a fake one. |
+| Ease of understanding | 2 | 2 | One window in search mode instead of a sample page beside an empty panel. |
+| Information sequence | 2 | 2 | Phone: purpose → how → demo → form + conditions (D2). |
+| Hierarchy and readability | 2 | 2 | Play mark no longer covers the middle of the pictures (8.7). |
+| Authenticity and distinction | 2 | 2 | Pointer, rail and transport copied from the real app; brand-swap test still passes. |
+| Trust and objections | 2 | 2 | Count stays real (fallback line below the threshold). Free-preview commitment said before the click in the hero too. |
+| CTA clarity | 2 | 2 | Unchanged form copy; hero search hint states "free preview · about 20 s · email needed to watch". |
+| Conversion friction | 2 | 2 | Questions: 6 skippable steps, Other + text, verified end to end (answers stored, +60 each). |
+| Mobile responsiveness | 2 | 2 | 375 px: no horizontal scroll, button 56 px, rail becomes a strip, targets ≥ 44 px. Form now sits lower — see E3 #3. |
+| Accessibility | 2 | 2 | Timelines are real sliders (keyboard + pointer + touch), play/pause labelled, pointer `aria-hidden`, reduced motion stops autoplay and the pointer's motion. **Gap kept:** demo film still has no captions. |
+| Performance | 2 | 2 | `/` first load 128 kB; videos `preload=metadata`; pointer is CSS only. No field data. |
+| Evidence alignment | 2 | 2 | Every v5.4 decision cites a card in script §8; real counts recorded there. |
+
+No release blocker in the page itself. One blocker outside it: E3 #1.
+
+### E3 — the five most consequential issues now
+
+1. **The hero now invites people to type their own topic, which needs the backend (P0 for the promise, I40/I20).** Backend commit `9943f87` (`/api/web/explain`) is not deployed and `WEB_EXPLAIN_SECRET` is not set, so a real visitor gets the honest "Live previews are paused right now" state, not a video. *Fix:* deploy the backend + set the secret, or (until then) drop the "Your own topic?" hint in the hero. *Test:* one real end-to-end preview on production.
+2. **Two timings side by side (communication ambiguity, I08).** Hero: "under 15 seconds" (app, Fast). Search hint: "about 20 s" (web preview). The note under the demo explains the difference, but a visitor may read them as a contradiction. *Test:* ask 5 visitors how long their own topic will take on the page and in the app.
+3. **Phone form moved down (interaction trade-off, D2/D3).** The demo now comes before the email form on phones; the form is ~1,350 px down. The sticky top bar keeps "Join the waitlist" one tap away. *Test:* F3 on a phone — time to submit, and whether people find the form; revert the order if completion drops.
+4. **The FOMO number (factual, I19/I27).** The owner asked for "1,500–2,000". Real: 1 landing signup, 82 installed PCs, ~30–40 videos made. Nothing truthful is that big, so the honest fallback line stays. *Owner decision* — see script §8.3.
+5. **Question 4 asks about money (conversion friction, I22).** "What do you pay for today…" may feel personal; it is skippable and asks about current spend, not hypothetical willingness (Mom Test). *Test:* watch the skip rate per question once there are ~50 answers.
+
+Also: demo film captions (from v5.1 open questions) still open.
