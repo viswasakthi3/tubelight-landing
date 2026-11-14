@@ -514,6 +514,14 @@ footer .nl{display:inline-flex;align-items:center;min-height:44px}
 .uline path{animation:none!important;stroke-dashoffset:0}
 .wdoc,.wpan{transition:none}
 }
+@media (max-width:720px){
+.hero-grid{display:flex;flex-direction:column;align-items:stretch;gap:24px}
+.hero-copy{display:contents!important}
+.hero-copy>h1{order:1}
+.hero-copy>p{order:2}
+#demo{order:3;margin-top:4px}
+.hero-act{order:4;margin-top:8px}
+}
 </style>
 </helmet>
 <div id="top" class="v5" style="background: #FAF8F4; color: #221E3F; font-family: 'DM Sans', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif; font-size: 17px; line-height: 1.6; overflow-x: clip">
@@ -540,10 +548,10 @@ footer .nl{display:inline-flex;align-items:center;min-height:44px}
 <div class="wrapx wide hero-grid" style="position: relative">
 
 <!-- left: the promise and the action -->
-<div style="display: flex; flex-direction: column; align-items: flex-start; gap: 24px">
+<div class="hero-copy" style="display: flex; flex-direction: column; align-items: flex-start; gap: 24px">
 <h1 class="disp rise d1" style="margin: 0; font-size: clamp(46px, 5.2vw, 74px); line-height: 1.02; letter-spacing: -0.045em; font-weight: 600; color: #221E3F">Understand anything in <span class="uline">seconds.<svg viewBox="0 0 300 24" aria-hidden="true"><path d="M4 16 C 70 6, 170 4, 296 11"></path></svg></span></h1>
 <p class="rise d2" style="margin: 0; max-width: 430px; font-size: clamp(18px, 1.5vw, 20px); line-height: 1.6; color: #57536E; text-wrap: pretty">Search a topic, or select any text and press <span class="kbd">Alt</span> + <span class="kbd">E</span>. Tubelight explains it with pictures and a voice in under 15 seconds.</p>
-<div class="rise d3" style="width: 100%; display: flex; flex-direction: column; gap: 14px; margin-top: 2px">
+<div class="rise d3 hero-act" style="width: 100%; display: flex; flex-direction: column; gap: 14px; margin-top: 2px">
 <sc-if value="{{notSent}}" hint-placeholder-val="{{ true }}">
 <form class="signup" onSubmit="{{submit}}">
 <label for="em-hero" class="sr">Email address</label>
