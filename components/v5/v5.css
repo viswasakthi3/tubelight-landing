@@ -347,10 +347,6 @@
 .v5 .pl-cc b{display:inline;padding:.1em .4em;background:rgba(8,8,8,.75);color:#FFFFFF;font-weight:400;box-decoration-break:clone;-webkit-box-decoration-break:clone}
 .v5 .demo-tag{position:absolute;left:10px;top:10px;padding:5px 11px;border-radius:999px;background:rgba(15,23,42,.74);color:#FFFFFF;font-size:12px;font-weight:600}
 .v5 .pl-bar{padding:2px 14px 6px;border-top:1px solid #EEF0F4}
-.v5 .pl-seek{position:relative;display:block;width:100%;height:16px;padding:0;border:0;background:transparent;cursor:pointer}
-.v5 .pl-seek i{position:absolute;left:0;right:0;top:5px;height:5px;border-radius:99px;background:#E7E5F0}
-.v5 .pl-seek b{position:absolute;left:0;top:5px;height:5px;border-radius:99px;background:linear-gradient(90deg,#6C4DF6,#8E75FF)}
-.v5 .pl-seek:hover i,.v5 .pl-seek:hover b{top:4px;height:7px}
 .v5 .pl-ctrl{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap}
 .v5 .pl-grp{display:flex;align-items:center;gap:2px}
 .v5 .pb{display:inline-flex;align-items:center;justify-content:center;gap:6px;min-width:40px;height:40px;padding:0 8px;border-radius:10px;border:0;background:transparent;color:#334155;cursor:pointer;font:600 13.5px var(--font-dm),ui-sans-serif,sans-serif}
@@ -361,7 +357,7 @@
 .v5 .pb.cc{font:800 12px var(--font-dm),sans-serif;letter-spacing:.04em}
 .v5 .pb.cc span{display:inline-flex;align-items:center;justify-content:center;min-width:28px;height:20px;border-radius:5px;border:1.8px solid currentColor}
 .v5 .pb.cc.on{color:#4B33B8}
-.v5 .pb:focus-visible,.v5 .pl-card:focus-visible,.v5 .pl-x:focus-visible,.v5 .pl-seek:focus-visible{outline:2px solid #6C4DF6;outline-offset:2px}
+.v5 .pb:focus-visible,.v5 .pl-card:focus-visible,.v5 .pl-x:focus-visible{outline:2px solid #6C4DF6;outline-offset:2px}
 .v5 .pl-tm{font-size:13px;color:#475569;font-variant-numeric:tabular-nums;padding:0 8px;white-space:nowrap}
 .v5 .pl-sn{font-size:13px;font-weight:600;color:#475569;font-variant-numeric:tabular-nums;min-width:40px;text-align:center}
 .v5 .pl-rail{display:flex;flex-direction:column;min-height:0;border:1px solid #E2E8F0;border-radius:16px;background:#FFFFFF;overflow:hidden}
@@ -425,3 +421,21 @@
 @media (max-width:720px){
 .v5 .pb .hide-xs{display:none}
 }
+
+/* ===== v5.4 ===== */
+/* 8.1 seekable timeline: 6 px track in a 24 px hit area, 14 px knob on hover / focus / drag */
+.v5 .seek{position:relative;flex:1;min-width:0;height:24px;cursor:pointer;touch-action:none;user-select:none;-webkit-user-select:none;border-radius:6px;-webkit-tap-highlight-color:transparent}
+.v5 .seek:focus-visible{outline:2px solid #6C4DF6;outline-offset:2px}
+.v5 .seek-track{position:absolute;left:0;right:0;top:9px;height:6px;border-radius:99px;background:#ECE7F6;overflow:hidden}
+.v5 .seek-fill{display:block;height:100%;border-radius:99px;background:#6C4DF6;transition:width .25s linear}
+.v5 .seek.drag .seek-fill{transition:none}
+.v5 .seek.pl .seek-track{background:#E7E5F0}
+.v5 .seek.pl .seek-fill{background:linear-gradient(90deg,#6C4DF6,#8E75FF)}
+.v5 .seek-knob{position:absolute;top:5px;width:14px;height:14px;margin-left:-7px;border-radius:50%;background:#FFFFFF;box-shadow:0 0 0 2px #6C4DF6,0 2px 6px rgba(34,30,63,.3);opacity:0;transform:scale(.6);pointer-events:none;transition:opacity .15s,transform .15s,left .25s linear}
+.v5 .seek.drag .seek-knob{transition:opacity .15s,transform .15s}
+.v5 .seek:hover .seek-knob,.v5 .seek:focus-visible .seek-knob,.v5 .seek.drag .seek-knob{opacity:1;transform:none}
+.v5 .pp{flex:none;display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;padding:0;border-radius:50%;border:0;background:#FFFFFF;color:#6C4DF6;cursor:pointer;box-shadow:0 0 0 1.5px #D9D0FB,0 4px 10px -4px rgba(108,77,246,.35);transition:background .2s,box-shadow .2s}
+.v5 .pp:hover{background:#F6F3FF;box-shadow:0 0 0 1.5px #6C4DF6}
+.v5 .pp:focus-visible{outline:2px solid #6C4DF6;outline-offset:2px}
+.v5 .pp svg{width:16px;height:16px;fill:currentColor}
+.v5 .ptime{flex:none;min-width:74px;text-align:right;font-size:12.5px;font-weight:500;color:#6F6B86;font-variant-numeric:tabular-nums}

@@ -5,6 +5,7 @@ import { track } from "@/lib/track";
 import { usePlayer, useVideos } from "./Providers";
 import { Joined, SignupForm, useProof } from "./SignupForm";
 import { cueAt, mmss, pauseOthers, registerPauser } from "./media";
+import { Seek } from "./Seek";
 import { useWaitlist } from "./WaitlistContext";
 
 const HERO = [
@@ -201,11 +202,9 @@ export function Hero() {
   const idle = mode === "idle";
   const typedFull = tp.typed;
   const typedDone = tn >= typedFull.length;
-  const playing = mode === "playing" && !paused;
   const done = mode === "done";
   const dur = v?.duration || 0;
   const cues = v?.cues;
-  const pct = dur ? Math.min(100, Math.round((vt / dur) * 1000) / 10) : 0;
 
   const togglePlay = () => {
     if (idle) {
@@ -219,6 +218,40 @@ export function Hero() {
         pauseOthers("hero");
         el.play().catch(() => {});
       } else el.pause();
+    } catch {
+      /* ignore */
+    }
+  };
+
+  // Seeking while idle or finished starts the video at that point (the visitor's press: sound on).
+  const heroSeek = (t: number, force?: boolean) => {
+    const el = hv.current;
+    const restart = modeRef.current !== "playing";
+    const x = Math.max(0, Math.min(t, restart ? Math.max(0, dur - 0.2) : dur));
+    if (restart) {
+      clearTimeout(timers.current.a1);
+      clearTimeout(timers.current.ae);
+      clearInterval(tyRef.current);
+      pauseOthers("hero");
+      touched.current = true;
+      setModeBoth("playing");
+      setMuted(false);
+    }
+    setVt(x);
+    if (!el) return;
+    try {
+      el.currentTime = x;
+      if (restart || (force && el.paused)) {
+        if (restart) el.muted = false;
+        const p = el.play();
+        if (p && p.catch) {
+          p.catch(() => {
+            el.muted = true;
+            setMuted(true);
+            el.play().catch(() => {});
+          });
+        }
+      }
     } catch {
       /* ignore */
     }
@@ -388,9 +421,6 @@ export function Hero() {
                         Replay
                       </button>
                     ) : null}
-                    <button type="button" className="ibtn" aria-label={paused ? "Play" : "Pause"} onClick={togglePlay}>
-                      <svg viewBox="0 0 24 24"><path d={paused ? "M7 4.5v15l12.5-7.5z" : "M8 5v14M16 5v14"} /></svg>
-                    </button>
                     <button
                       type="button"
                       className="ibtn"
@@ -443,11 +473,11 @@ export function Hero() {
                   </div>
                   <p className="caps" aria-live="polite">{idle ? (ask ? (typedDone ? "Pressing Enter…" : " ") : "Press Alt + E to explain the highlighted text.") : cueAt(cues, vt) || " "}</p>
                   <div className="prog">
-                    <span className={"wave" + (playing && !muted ? " live" : "")} aria-hidden="true"><span /><span /><span /><span /></span>
-                    <div className="track"><div className="fill" style={{ width: pct + "%" }} /></div>
-                    <span style={{ fontSize: 12.5, fontWeight: 500, color: "#6F6B86", minWidth: 74, textAlign: "right", fontVariantNumeric: "tabular-nums" }}>
-                      {mmss(vt)} / {mmss(dur)}
-                    </span>
+                    <button type="button" className="pp" aria-label={paused ? "Play" : "Pause"} onClick={togglePlay}>
+                      <svg viewBox="0 0 24 24" aria-hidden="true"><path d={paused ? "M7 4.5v15l12.5-7.5z" : "M8 5v14M16 5v14"} /></svg>
+                    </button>
+                    <Seek time={vt} duration={dur} onSeek={heroSeek} />
+                    <span className="ptime">{mmss(vt)} / {mmss(dur)}</span>
                   </div>
                 </div>
               </div>

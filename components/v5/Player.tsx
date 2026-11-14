@@ -14,6 +14,7 @@ import { track } from "@/lib/track";
 import type { VideoInfo, VideoMap } from "@/lib/video-paths";
 import { chunkAt, chunkSay, wrap2 } from "./captions";
 import { cueAt, mmss, registerPauser, trapTab } from "./media";
+import { Seek } from "./Seek";
 import { SignupForm } from "./SignupForm";
 import { useParts } from "./useParts";
 import { useWaitlist } from "./WaitlistContext";
@@ -122,8 +123,9 @@ type FrameProps = {
   /** a form or message fills the stage: give it room on a narrow screen */
   tall?: boolean;
   canSeek: boolean;
-  pct: number;
-  onSeek: (frac: number) => void;
+  time: number;
+  duration: number;
+  onSeek: (t: number) => void;
   playing: boolean;
   onToggle: () => void;
   onPrev: () => void;
@@ -214,20 +216,7 @@ function PlayerFrame(p: FrameProps) {
           <div className="pl-stage">
             <div className={"pl-frame" + (p.tall ? " tall" : "")}>{p.stage}</div>
             <div className="pl-bar">
-              <button
-                type="button"
-                className="pl-seek"
-                aria-label="Seek"
-                disabled={!p.canSeek}
-                onClick={(e) => {
-                  if (e.detail === 0) return; // a key press has no pointer position
-                  const r = e.currentTarget.getBoundingClientRect();
-                  p.onSeek(Math.min(1, Math.max(0, (e.clientX - r.left) / r.width)));
-                }}
-              >
-                <i />
-                <b style={{ width: p.pct + "%" }} />
-              </button>
+              <Seek tone="pl" time={p.time} duration={p.duration} disabled={!p.canSeek} onSeek={p.onSeek} />
               <div className="pl-ctrl">
                 <div className="pl-grp">
                   <button type="button" className="pb fillic" aria-label={label} disabled={!p.canSeek} onClick={p.onToggle}>
@@ -501,8 +490,9 @@ function VideoPlayer({ video, t0, onClose }: { video: VideoInfo; t0: number; onC
       stage={stage}
       tall={ended}
       canSeek
-      pct={dur ? Math.min(100, Math.round((t / dur) * 1000) / 10) : 0}
-      onSeek={(f) => seekTo(f * dur)}
+      time={t}
+      duration={dur}
+      onSeek={seekTo}
       playing={!paused}
       onToggle={toggle}
       onPrev={prev}
@@ -673,7 +663,6 @@ function LivePlayer({ topic, onClose }: { topic: string; onClose: () => void }) 
             body="Want an earlier invite? Tell us how you’ll use Tubelight — every answer moves you up the line."
             cta="Move up the line"
             onCta={() => {
-              w.setWish(topic.slice(0, 200));
               w.openModal();
               onClose();
             }}
@@ -730,8 +719,9 @@ function LivePlayer({ topic, onClose }: { topic: string; onClose: () => void }) 
       stage={stage}
       tall={tall}
       canSeek={enabled}
-      pct={enabled && total ? Math.min(100, Math.round((time / total) * 1000) / 10) : 0}
-      onSeek={(f) => parts.seek(f * total)}
+      time={time}
+      duration={enabled ? total : 0}
+      onSeek={(x) => parts.seek(x)}
       playing={parts.playing}
       onToggle={parts.toggle}
       onPrev={() => stepSheet(-1, true)}

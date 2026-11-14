@@ -33,7 +33,6 @@ export type WaitlistApi = {
   qi: number;
   picked: string[];
   /** @deprecated no free-text step any more; kept as a no-op so Player.tsx still compiles */
-  setWish: (v: string) => void;
   otherText: string;
   setOtherText: (v: string) => void;
   aboutText: string;
@@ -118,7 +117,6 @@ export function WaitlistProvider({ children }: { children: React.ReactNode }) {
     aboutRef.current = t;
     setAboutRaw(t);
   }, []);
-  const setWish = useCallback((_v: string) => undefined, []);
   const clearTexts = useCallback(() => {
     otherRef.current = "";
     aboutRef.current = "";
@@ -302,8 +300,8 @@ export function WaitlistProvider({ children }: { children: React.ReactNode }) {
   }, [advance]);
 
   const value = useMemo<WaitlistApi>(
-    () => ({ email, setEmail, err, submitting, sent, submit, position, shown, delta, moved, stats, modal, openModal, closeModal, qi, picked, setWish, otherText, setOtherText, aboutText, setAboutText, answerErr, pick, nextQ, skipQ }),
-    [email, setEmail, err, submitting, sent, submit, position, shown, delta, moved, stats, modal, openModal, closeModal, qi, picked, setWish, otherText, setOtherText, aboutText, setAboutText, answerErr, pick, nextQ, skipQ],
+    () => ({ email, setEmail, err, submitting, sent, submit, position, shown, delta, moved, stats, modal, openModal, closeModal, qi, picked, otherText, setOtherText, aboutText, setAboutText, answerErr, pick, nextQ, skipQ }),
+    [email, setEmail, err, submitting, sent, submit, position, shown, delta, moved, stats, modal, openModal, closeModal, qi, picked, otherText, setOtherText, aboutText, setAboutText, answerErr, pick, nextQ, skipQ],
   );
 
   return <Ctx.Provider value={value}>{children}</Ctx.Provider>;
