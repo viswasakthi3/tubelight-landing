@@ -14,6 +14,7 @@ import { track } from "@/lib/track";
 import type { VideoInfo, VideoMap } from "@/lib/video-paths";
 import { chunkAt, chunkSay, wrap2 } from "./captions";
 import { cueAt, mmss, registerPauser, trapTab } from "./media";
+import { Pointer } from "./Pointer";
 import { Seek } from "./Seek";
 import { SignupForm } from "./SignupForm";
 import { useParts } from "./useParts";
@@ -464,6 +465,7 @@ function VideoPlayer({ video, t0, onClose }: { video: VideoInfo; t0: number; onC
         }}
         aria-label={video.title}
       />
+      <Pointer video={vid} t={t} playing={!paused && !ended} beats={video.beats} sheets={video.sheets} />
       <Captions lines={lines} />
       {ended ? (
         <EndCard

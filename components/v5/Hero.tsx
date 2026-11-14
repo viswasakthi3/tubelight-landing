@@ -5,6 +5,7 @@ import { track } from "@/lib/track";
 import { usePlayer, useVideos } from "./Providers";
 import { Joined, SignupForm, useProof } from "./SignupForm";
 import { cueAt, mmss, pauseOthers, registerPauser } from "./media";
+import { Pointer } from "./Pointer";
 import { Seek } from "./Seek";
 import { useWaitlist } from "./WaitlistContext";
 
@@ -464,6 +465,7 @@ export function Hero() {
                       onPause={() => setPaused(true)}
                       aria-label={"Tubelight explanation: " + (v?.title ?? "")}
                     />
+                    <Pointer video={hv} t={vt} playing={mode === "playing" && !paused} beats={v?.beats} sheets={v?.sheets} />
                     {!idle && muted ? (
                       <button type="button" className="mutepill" onClick={toggleSound}>
                         <svg viewBox="0 0 24 24"><path d="M11 5 6 9H2v6h4l5 4z" /><path d="M16 9l5 6M21 9l-5 6" /></svg>

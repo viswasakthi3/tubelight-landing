@@ -1,9 +1,9 @@
 import { readFileSync } from "node:fs";
 import path from "node:path";
 
-import type { Sheet, VideoInfo, VideoMap } from "./video-paths";
+import type { Beat, Sheet, VideoInfo, VideoMap } from "./video-paths";
 
-export type { Cue, Sheet, VideoInfo, VideoMap } from "./video-paths";
+export type { Beat, Cue, Sheet, VideoInfo, VideoMap } from "./video-paths";
 export { DEMO } from "./video-paths";
 
 export const VIDEO_SLUGS = [
@@ -25,6 +25,23 @@ function readSheets(slug: string, raw: unknown): Sheet[] {
       thumb: sheet.thumb ?? `/videos/${slug}/p${index}-s.webp`,
       start: Number(sheet.start) || 0,
       end: Number(sheet.end) || 0,
+      walk: sheet.walk === true,
+      pw: typeof sheet.pw === "number" && sheet.pw > 0 ? sheet.pw : 1,
+    };
+  });
+}
+
+function readBeats(raw: unknown): Beat[] {
+  if (!Array.isArray(raw)) return [];
+  return raw.map((b) => {
+    const beat = (b ?? {}) as { start?: unknown; end?: unknown; sheet?: unknown; ptr?: { x?: unknown; y?: unknown } | null };
+    const x = Number(beat.ptr?.x);
+    const y = Number(beat.ptr?.y);
+    return {
+      start: Number(beat.start) || 0,
+      end: Number(beat.end) || 0,
+      sheet: Number(beat.sheet) || 0,
+      ptr: beat.ptr && Number.isFinite(x) && Number.isFinite(y) ? { x, y } : null,
     };
   });
 }
@@ -42,6 +59,7 @@ export function getVideos(): VideoMap {
         cues: j.cues ?? [],
         src: `/videos/${slug}.mp4`,
         sheets: readSheets(slug, j.sheets),
+        beats: readBeats(j.beats),
         poster: `/videos/${slug}-poster.jpg`,
         thumb: `/videos/${slug}-thumb.webp`,
       };
