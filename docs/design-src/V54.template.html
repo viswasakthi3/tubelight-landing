@@ -1,0 +1,1829 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Tubelight — v5.4</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500..700&amp;family=DM+Sans:opsz,wght@9..40,400..700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#FAF8F4}
+a{color:#4B33B8}a:hover{color:#221E3F}
+.v5 *{box-sizing:border-box}
+.sr{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+.disp{font-family:'Bricolage Grotesque',ui-sans-serif,system-ui,'Segoe UI',sans-serif}
+
+@keyframes rise{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+@keyframes draw{to{stroke-dashoffset:0}}
+@keyframes glow{0%,100%{box-shadow:0 4px 0 #D6950F,0 0 0 0 rgba(255,194,58,0)}50%{box-shadow:0 4px 0 #D6950F,0 0 0 9px rgba(255,194,58,.3)}}
+@keyframes wave{0%,100%{height:5px}50%{height:16px}}
+@keyframes pop{from{opacity:0;transform:translateY(14px) scale(.97)}to{opacity:1;transform:none}}
+@keyframes dim{from{opacity:0}to{opacity:1}}
+@keyframes up{0%{opacity:0;transform:translateY(8px)}20%{opacity:1;transform:none}80%{opacity:1}100%{opacity:0;transform:translateY(-6px)}}
+@keyframes ping{0%{transform:scale(.6);opacity:.7}100%{transform:scale(2.2);opacity:0}}
+.rise{animation:rise .9s cubic-bezier(.2,.7,.2,1) both}
+.d1{animation-delay:.05s}.d2{animation-delay:.15s}.d3{animation-delay:.3s}.d4{animation-delay:.45s}.d5{animation-delay:.6s}
+.fade{animation:rise .45s cubic-bezier(.2,.7,.2,1) both}
+
+.wrapx{max-width:1220px;margin:0 auto;padding:0 28px}
+.wrapx.wide{max-width:1380px}
+.topbar{position:sticky;top:0;z-index:40;background:rgba(250,248,244,.84);backdrop-filter:blur(14px) saturate(1.3);-webkit-backdrop-filter:blur(14px) saturate(1.3);border-bottom:1px solid rgba(34,30,63,.06)}
+.navlinks{display:flex}
+.nl{color:#57536E;text-decoration:none;font-size:15.5px;font-weight:500;transition:color .2s}
+.nl:hover{color:#221E3F}
+
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:50px;padding:0 24px;border-radius:999px;border:0;cursor:pointer;white-space:nowrap;text-decoration:none;background:#6C4DF6;color:#FFFFFF;font:600 16px 'DM Sans',ui-sans-serif,system-ui,sans-serif;box-shadow:inset 0 1px 0 rgba(255,255,255,.25),0 10px 24px -10px rgba(108,77,246,.7);transition:transform .2s,box-shadow .2s,background .2s}
+.btn:hover{color:#FFFFFF;background:#5B3CEB;transform:translateY(-1px)}
+.btn:disabled{background:#B9AEF0;box-shadow:none;cursor:default;transform:none}
+.btn.sm{min-height:44px;padding:0 18px;font-size:15px}
+.btn.ghost{background:#FFFFFF;color:#221E3F;box-shadow:0 1px 2px rgba(34,30,63,.06),0 0 0 1px #E6E1EF}
+.btn.ghost:hover{color:#221E3F;background:#FFFFFF;box-shadow:0 1px 2px rgba(34,30,63,.06),0 0 0 1px #6C4DF6}
+.linkbtn{display:inline-flex;align-items:center;gap:6px;min-height:44px;padding:0 4px;border:0;background:transparent;color:#4B33B8;font:600 15px 'DM Sans',ui-sans-serif,sans-serif;cursor:pointer;text-decoration:none}
+.linkbtn:hover{color:#221E3F}
+.btn:focus-visible,.linkbtn:focus-visible,.keybtn:focus-visible,.tchip:focus-visible,.qchip:focus-visible,.ibtn:focus-visible,.xbtn:focus-visible,summary:focus-visible,.nl:focus-visible,.gcard:focus-visible,.sthumb:focus-visible,.bigplay:focus-visible{outline:2px solid #6C4DF6;outline-offset:3px}
+.kbd{display:inline-flex;align-items:center;justify-content:center;min-width:30px;height:27px;padding:0 8px;border-radius:7px;background:#FFFFFF;border:1px solid #E1DCEB;border-bottom-width:3px;font:600 14px 'DM Sans',ui-sans-serif,sans-serif;color:#221E3F;vertical-align:1px}
+
+.signup{display:flex;gap:6px;padding:6px;border-radius:999px;background:#FFFFFF;width:100%;max-width:470px;box-shadow:0 0 0 1px #E6E1EF,0 18px 36px -22px rgba(34,30,63,.35);transition:box-shadow .2s}
+.signup:focus-within{box-shadow:0 0 0 2px #6C4DF6,0 0 0 6px rgba(108,77,246,.14),0 18px 36px -22px rgba(34,30,63,.35)}
+.email-in{flex:1;min-width:0;height:50px;padding:0 18px;border:0;outline:0;background:transparent;color:#221E3F;font:400 16.5px 'DM Sans',ui-sans-serif,system-ui,sans-serif}
+.email-in::placeholder{color:#716C88}
+.err{margin:0;font-size:14.5px;color:#B3261E}
+.micro{margin:0;font-size:14px;color:#6F6B86}
+.conds{margin:0;display:flex;flex-wrap:wrap;gap:4px 14px;font-size:14.5px;color:#57536E}
+.conds span{display:inline-flex;align-items:center;gap:6px}
+.conds svg{width:15px;height:15px;fill:none;stroke:#22B573;stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round}
+.proof{display:flex;align-items:center;flex-wrap:wrap;gap:8px 12px;font-size:15px;color:#57536E}
+.proof strong{color:#221E3F;font-weight:600}
+.avs{display:flex;flex:none}
+.av{display:inline-flex;align-items:flex-end;justify-content:center;width:30px;height:30px;border-radius:50%;border:2px solid #FAF8F4;margin-left:-9px;overflow:hidden}
+.av:first-child{margin-left:0}
+.av svg{width:22px;height:22px}
+.joined{display:flex;flex-wrap:wrap;align-items:center;gap:6px 14px;padding:12px 18px;border-radius:18px;background:#FFFFFF;box-shadow:0 0 0 1px #E6E1EF;font-size:16px;color:#221E3F}
+.okdot{display:inline-flex;align-items:center;justify-content:center;width:26px;height:26px;border-radius:50%;background:#22B573;flex:none}
+.okdot svg{width:15px;height:15px;fill:none;stroke:#FFFFFF;stroke-width:3;stroke-linecap:round;stroke-linejoin:round}
+.live{position:relative;display:inline-flex;width:9px;height:9px;flex:none}
+.live::before{content:'';position:absolute;inset:0;border-radius:50%;background:#22B573;animation:ping 1.8s ease-out infinite}
+.live::after{content:'';position:absolute;inset:0;border-radius:50%;background:#22B573}
+.week{display:inline-flex;align-items:center;min-height:26px;padding:0 10px;border-radius:999px;background:#FFF1CC;color:#7A4E00;font-size:13.5px;font-weight:600}
+
+/* hero */
+.hero-grid{display:grid;grid-template-columns:minmax(0,430px) minmax(0,1fr);gap:52px;align-items:center}
+.uline{position:relative;white-space:nowrap;color:#6C4DF6}
+.uline svg{position:absolute;left:-2%;bottom:-.2em;width:104%;height:auto;overflow:visible}
+.uline path{fill:none;stroke:#FFC23A;stroke-width:9;stroke-linecap:round;stroke-dasharray:330;stroke-dashoffset:330;animation:draw .9s cubic-bezier(.6,0,.2,1) .9s forwards}
+.desk{position:relative;display:flex;min-height:520px;padding:14px;border-radius:28px;overflow:hidden;background:radial-gradient(60% 70% at 12% 18%,#E7DFFF 0%,rgba(231,223,255,0) 62%),radial-gradient(55% 65% at 88% 12%,#FFE6B8 0%,rgba(255,230,184,0) 62%),radial-gradient(60% 70% at 72% 100%,#D6EAFF 0%,rgba(214,234,255,0) 62%),#F2EFF8;box-shadow:inset 0 0 0 1px rgba(34,30,63,.05)}
+.win{display:flex;flex-direction:column;min-width:0;overflow:hidden;background:#FFFFFF;border-radius:14px;box-shadow:0 1px 2px rgba(34,30,63,.08),0 18px 40px -18px rgba(34,30,63,.35)}
+.wdoc{flex:1 1 100%;transition:flex-basis .8s cubic-bezier(.7,0,.2,1)}
+.wpan{flex:0 0 0%;opacity:0;margin-left:0;transition:flex-basis .8s cubic-bezier(.7,0,.2,1),opacity .45s ease .25s,margin-left .8s cubic-bezier(.7,0,.2,1)}
+.desk.split .wdoc{flex-basis:33%}
+.desk.split .wpan{flex-basis:67%;opacity:1;margin-left:12px}
+.wpan-in{min-width:330px;height:100%;display:flex;flex-direction:column}
+.wbar{display:flex;align-items:center;justify-content:space-between;gap:10px;min-height:42px;padding:0 10px 0 14px;border-bottom:1px solid #F0ECF5;font-size:13.5px;font-weight:600;color:#3A3655}
+.wbody{flex:1;overflow:hidden;padding:18px 20px;display:flex;flex-direction:column;gap:10px;color:#3A3655;font-size:15px;line-height:1.7}
+.selx{background:#C9DEFF;color:#1B2A4A;border-radius:3px;padding:1px 0;box-decoration-break:clone;-webkit-box-decoration-break:clone}
+.pbody{flex:1;display:flex;flex-direction:column;gap:10px;padding:12px}
+.pvid{position:relative;aspect-ratio:16 / 9;border-radius:10px;overflow:hidden;background:#151229}
+.pvid video{display:block;width:100%;height:100%;object-fit:contain}
+.caps{min-height:48px;margin:0;font-size:15.5px;line-height:1.5;color:#221E3F;text-wrap:pretty}
+.prog{display:flex;align-items:center;gap:10px}
+.track{flex:1;height:5px;border-radius:99px;background:#ECE7F6;overflow:hidden}
+.fill{height:100%;border-radius:99px;background:#6C4DF6;transition:width .25s linear}
+.wave{display:inline-flex;align-items:center;gap:3px;height:18px;flex:none}
+.wave span{display:block;width:3px;height:5px;border-radius:2px;background:#6C4DF6;opacity:.35}
+.wave.live span{opacity:1;animation:wave .9s ease-in-out infinite}
+.wave.live span:nth-child(2){animation-delay:.15s}.wave.live span:nth-child(3){animation-delay:.3s}.wave.live span:nth-child(4){animation-delay:.45s}
+.ibtn{display:inline-flex;align-items:center;justify-content:center;gap:6px;min-width:40px;height:40px;padding:0 8px;border-radius:10px;border:0;background:transparent;color:#57536E;cursor:pointer;font:600 13px 'DM Sans',ui-sans-serif,sans-serif}
+.ibtn:hover{background:#F4F1FA;color:#221E3F}
+.ibtn svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.mutepill{position:absolute;left:10px;bottom:10px;display:inline-flex;align-items:center;gap:6px;min-height:34px;padding:0 12px;border-radius:999px;border:0;background:rgba(255,255,255,.94);color:#221E3F;cursor:pointer;font:600 13px 'DM Sans',ui-sans-serif,sans-serif;box-shadow:0 6px 16px -8px rgba(0,0,0,.5)}
+.mutepill svg{width:15px;height:15px;fill:none;stroke:currentColor;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+.keyrow{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:14px 18px;margin-top:22px}
+.keybtn{display:inline-flex;align-items:center;gap:10px;min-height:70px;padding:9px 22px 9px 10px;border-radius:22px;border:0;background:#FFFFFF;cursor:pointer;color:#221E3F;font:600 16.5px 'DM Sans',ui-sans-serif,sans-serif;box-shadow:0 0 0 1px #ECE7F3,0 18px 34px -18px rgba(34,30,63,.35);transition:transform .2s}
+.keybtn:hover{transform:translateY(-1px)}
+.key{display:inline-flex;align-items:center;justify-content:center;min-width:58px;height:50px;padding:0 14px;border-radius:12px;background:#FFC94A;border:1px solid #E3A51C;box-shadow:0 4px 0 #D6950F;font:700 17px 'DM Sans',ui-sans-serif,sans-serif;color:#3D2800;transition:transform .12s,box-shadow .12s}
+.keybtn.ready .key{animation:glow 1.6s ease-in-out infinite}
+.keybtn.pressed .key{transform:translateY(4px);box-shadow:0 0 0 #D6950F,0 0 24px rgba(255,194,58,.65);animation:none}
+.tchips{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:8px;margin-top:14px}
+.tchip{display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:0 16px;border-radius:999px;border:0;background:transparent;color:#57536E;cursor:pointer;font:500 15px 'DM Sans',ui-sans-serif,sans-serif;transition:background .2s,color .2s,box-shadow .2s}
+.tchip:hover{color:#221E3F;background:rgba(255,255,255,.7)}
+.tchip.on{background:#FFFFFF;color:#221E3F;box-shadow:0 0 0 1px #E6E1EF,0 8px 18px -12px rgba(34,30,63,.35)}
+.tdot{width:9px;height:9px;border-radius:50%;flex:none}
+.real{margin:10px 0 0;text-align:center;font-size:13.5px;color:#6F6B86}
+
+/* sections */
+.sec{position:relative;padding:clamp(88px,10vw,136px) 0}
+.head{max-width:660px;display:flex;flex-direction:column;gap:16px;margin-bottom:clamp(40px,5vw,60px)}
+.h2{margin:0;font-family:'Bricolage Grotesque',ui-sans-serif,system-ui,sans-serif;font-size:clamp(34px,4.2vw,54px);line-height:1.06;letter-spacing:-.035em;font-weight:600;color:#221E3F;text-wrap:balance}
+.lede{margin:0;font-size:clamp(17px,1.5vw,19px);line-height:1.65;color:#57536E;text-wrap:pretty}
+.film{position:relative;aspect-ratio:16 / 9;border-radius:30px;overflow:hidden;background:#151229;box-shadow:0 0 0 1px rgba(34,30,63,.05),0 50px 90px -50px rgba(108,77,246,.45)}
+.film video{display:block;width:100%;height:100%;object-fit:contain;background:#151229}
+.cover{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;border:0;padding:0;cursor:pointer;background:transparent}
+.cover img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.bigplay{position:relative;display:inline-flex;align-items:center;gap:12px;min-height:64px;padding:0 26px 0 12px;border-radius:999px;background:#FFFFFF;color:#221E3F;font:600 17px 'DM Sans',ui-sans-serif,sans-serif;box-shadow:0 22px 44px -16px rgba(0,0,0,.55);transition:transform .2s}
+.cover:hover .bigplay{transform:scale(1.04)}
+.bigplay i{display:inline-flex;align-items:center;justify-content:center;width:44px;height:44px;border-radius:50%;background:#6C4DF6}
+.bigplay svg{width:18px;height:18px;margin-left:3px;fill:#FFFFFF}
+.steps{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:28px;margin-top:44px}
+.stepn{display:inline-flex;align-items:center;justify-content:center;width:44px;height:44px;border-radius:14px;font:700 18px 'Bricolage Grotesque',ui-sans-serif,sans-serif}
+.cmp{border-radius:28px;overflow:hidden;background:#FFFFFF;box-shadow:0 0 0 1px #ECE7F3,0 30px 60px -40px rgba(34,30,63,.35)}
+.crow{display:grid;grid-template-columns:minmax(150px,.7fr) minmax(0,1fr) minmax(0,1fr);border-top:1px solid #F0ECF5}
+.crow:first-child{border-top:0}
+.crow > span{display:flex;align-items:flex-start;gap:12px;padding:22px 26px;font-size:16.5px;line-height:1.5}
+.ck{font-weight:600;color:#221E3F}
+.cold{color:#6F6B86}
+.cnew{background:#F6F3FF;color:#221E3F;font-weight:500}
+.chead > span{padding-top:26px;padding-bottom:20px;font-weight:600;font-size:15px;color:#221E3F}
+.ic{width:22px;height:22px;flex:none;margin-top:1px}
+
+/* gallery of real explanations */
+.gal{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:34px 22px}
+.typed{font-size:14px;line-height:1.45;color:#6F6B86}
+.typed q{color:#3A3655;font-style:normal}
+
+/* ways in + topic search */
+@keyframes blink{50%{opacity:0}}
+.onlysm{display:none}
+.modes{display:flex;justify-content:center;margin:0 0 14px}
+.modeseg{display:inline-flex;gap:4px;padding:4px;border-radius:999px;background:#FFFFFF;box-shadow:0 0 0 1px #E6E1EF,0 12px 26px -20px rgba(34,30,63,.4)}
+.mode{display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:0 18px;border-radius:999px;border:0;background:transparent;color:#57536E;cursor:pointer;font:600 15px 'DM Sans',ui-sans-serif,sans-serif;transition:background .2s,color .2s}
+.mode:hover{color:#221E3F}
+.mode.on{background:#221E3F;color:#FFFFFF}
+.mode svg{width:17px;height:17px;flex:none;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.mode:focus-visible{outline:2px solid #6C4DF6;outline-offset:3px}
+.askwrap{flex:1;display:flex;flex-direction:column;justify-content:center;gap:14px;padding:24px 22px}
+.askbox{display:flex;align-items:center;gap:10px;min-height:56px;padding:10px 16px;border-radius:16px;background:#FFFFFF;box-shadow:0 0 0 2px #6C4DF6,0 0 0 6px rgba(108,77,246,.12);font-size:16.5px;line-height:1.45;color:#221E3F}
+.askbox svg{width:19px;height:19px;flex:none;fill:none;stroke:#6C4DF6;stroke-width:2.2;stroke-linecap:round}
+.caret{display:inline-block;width:2px;height:19px;margin-left:1px;background:#221E3F;vertical-align:-4px;animation:blink 1s steps(1) infinite}
+.hint{margin:0;display:flex;align-items:center;gap:8px;font-size:14px;color:#6F6B86}
+.hint svg{width:16px;height:16px;flex:none;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.search{display:flex;align-items:center;gap:8px;max-width:780px;padding:8px;border-radius:999px;background:#FFFFFF;box-shadow:0 0 0 1px #E6E1EF,0 24px 44px -30px rgba(34,30,63,.45);transition:box-shadow .2s}
+.search:focus-within{box-shadow:0 0 0 2px #6C4DF6,0 0 0 6px rgba(108,77,246,.14),0 24px 44px -30px rgba(34,30,63,.45)}
+.search > svg{width:21px;height:21px;flex:none;margin-left:14px;fill:none;stroke:#6C4DF6;stroke-width:2.2;stroke-linecap:round}
+.search-in{flex:1;min-width:0;height:52px;padding:0 6px;border:0;outline:0;background:transparent;color:#221E3F;font:400 17px 'DM Sans',ui-sans-serif,system-ui,sans-serif}
+.search-in::placeholder{color:#7A7690}
+.smeta{margin:16px 0 30px;font-size:15px;color:#6F6B86}
+.miss{display:flex;flex-direction:column;align-items:flex-start;gap:14px;max-width:780px;margin:22px 0 0;padding:24px;border-radius:24px;background:#F4F0FF}
+.miss .signup{max-width:520px}
+.gcard{display:flex;flex-direction:column;gap:12px;padding:0;border:0;background:transparent;text-align:left;cursor:pointer;color:#221E3F;font:inherit;border-radius:20px}
+.gpic{position:relative;display:block;width:100%;aspect-ratio:16 / 9;border-radius:20px;overflow:hidden;background:#EEEAF6;box-shadow:0 0 0 1px rgba(34,30,63,.05),0 20px 40px -30px rgba(34,30,63,.5);transition:transform .3s}
+.gpic img{display:block;width:100%;height:100%;object-fit:cover;transition:transform .6s ease}
+.gcard:hover .gpic{transform:translateY(-3px)}
+.gcard:hover .gpic img{transform:scale(1.03)}
+.gplay{position:absolute;left:12px;bottom:12px;display:inline-flex;align-items:center;gap:7px;height:34px;padding:0 12px 0 5px;border-radius:999px;background:rgba(255,255,255,.88);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);color:#221E3F;font-size:13px;font-weight:600;font-variant-numeric:tabular-nums;box-shadow:0 6px 16px -10px rgba(0,0,0,.5);transition:background .2s}
+.gplay i{display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;border-radius:50%;background:#221E3F;transition:background .2s}
+.gplay svg{width:10px;height:10px;margin-left:2px;fill:#FFFFFF}
+.gcard:hover .gplay{background:#FFFFFF}
+.gcard:hover .gplay i{background:#6C4DF6}
+.gtag{display:inline-flex;align-items:center;align-self:flex-start;min-height:28px;padding:0 12px;border-radius:999px;font-size:13.5px;font-weight:600}
+.gtitle{font-family:'Bricolage Grotesque',ui-sans-serif,sans-serif;font-size:21px;font-weight:600;letter-spacing:-.015em;line-height:1.2}
+
+.bento{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:18px}
+.s4{grid-column:span 4}.s3{grid-column:span 3}.s2{grid-column:span 2}
+.tile{display:flex;flex-direction:column;gap:12px;padding:26px;border-radius:26px;transition:transform .25s,box-shadow .25s}
+.tile:hover{transform:translateY(-3px);box-shadow:0 24px 44px -30px rgba(34,30,63,.45)}
+.tile h3{margin:0;font-family:'Bricolage Grotesque',ui-sans-serif,sans-serif;font-size:23px;line-height:1.15;font-weight:600;letter-spacing:-.02em;color:#221E3F}
+.tile p{margin:0;color:#57536E;font-size:16px;line-height:1.6;text-wrap:pretty}
+.tv{height:170px;border-radius:18px;margin-bottom:8px;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center}
+.sgrid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;padding:14px;background:#F6F3FB;align-items:stretch;justify-content:stretch}
+.sthumb{position:relative;display:block;padding:0;border:0;border-radius:10px;overflow:hidden;cursor:pointer;background:#EEEAF6}
+.sthumb img{display:block;width:100%;height:100%;object-fit:cover}
+.sthumb .gplay{left:6px;bottom:6px;height:24px;padding:0 4px}
+.sthumb .gplay i{width:16px;height:16px}
+.sthumb .gplay svg{width:7px;height:7px}
+.who{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:36px}
+.whoi{display:inline-flex;align-items:center;justify-content:center;width:52px;height:52px;border-radius:16px}
+.whoi svg{width:26px;height:26px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.qa{border-top:1px solid #ECE7F3}
+.qa:last-child{border-bottom:1px solid #ECE7F3}
+.qa summary{list-style:none;cursor:pointer;display:flex;align-items:center;justify-content:space-between;gap:20px;min-height:44px;padding:24px 0;font:600 18.5px 'DM Sans',ui-sans-serif,sans-serif;color:#221E3F}
+.qa summary::-webkit-details-marker{display:none}
+.qa p{margin:0 0 26px;max-width:680px;color:#57536E;font-size:17px;line-height:1.7;text-wrap:pretty}
+.plus{position:relative;flex:none;width:28px;height:28px;border-radius:50%;background:#F1EDFA}
+.plus::before,.plus::after{content:'';position:absolute;left:8px;top:13px;width:12px;height:2px;border-radius:1px;background:#6C4DF6;transition:transform .25s}
+.plus::after{transform:rotate(90deg)}
+.qa[open] .plus::after{transform:rotate(0deg)}
+.cta{position:relative;overflow:hidden;border-radius:36px;padding:clamp(52px,8vw,96px) clamp(22px,5vw,64px);text-align:center;background:radial-gradient(50% 70% at 10% 10%,#E4DBFF 0%,rgba(228,219,255,0) 62%),radial-gradient(45% 60% at 92% 8%,#FFE2AE 0%,rgba(255,226,174,0) 62%),radial-gradient(55% 70% at 70% 100%,#D3E8FF 0%,rgba(211,232,255,0) 62%),#F6F3FB;box-shadow:inset 0 0 0 1px rgba(34,30,63,.05)}
+.xsell{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:28px;padding:clamp(24px,3.4vw,36px);border-radius:28px;background:radial-gradient(60% 90% at 100% 0%, rgba(214,234,255,.7), rgba(214,234,255,0) 60%), linear-gradient(120deg, #F4F0FF 0%, #FFF4E4 100%);box-shadow:inset 0 0 0 1px #E4DCFA}
+.getahead{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin:6px 0 0;width:100%;text-align:left}
+.ga{display:flex;gap:12px;align-items:flex-start;padding:16px;border-radius:18px;background:rgba(255,255,255,.75);font-size:15px;line-height:1.5;color:#3A3655}
+.ga b{display:inline-flex;align-items:center;justify-content:center;flex:none;width:28px;height:28px;border-radius:9px;background:#6C4DF6;color:#FFFFFF;font:700 14px 'DM Sans',sans-serif}
+
+/* overlays */
+.ovl{position:fixed;inset:0;z-index:100;display:flex;align-items:center;justify-content:center;padding:20px;background:rgba(34,30,63,.34);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);animation:dim .25s ease both}
+.ovl.dark{background:rgba(14,12,28,.78)}
+.dlg{position:relative;width:100%;max-width:560px;max-height:calc(100vh - 40px);overflow:auto;padding:34px 32px 30px;border-radius:30px;background:#FFFFFF;box-shadow:0 40px 90px -30px rgba(34,30,63,.55);animation:pop .4s cubic-bezier(.2,.9,.3,1.15) both;outline:none}
+.lbox{position:relative;width:100%;max-width:1040px;display:flex;flex-direction:column;gap:14px;animation:pop .35s cubic-bezier(.2,.9,.3,1.1) both;outline:none}
+.lbox video{display:block;width:100%;aspect-ratio:16 / 9;border-radius:20px;background:#000}
+.lcap{margin:0;min-height:56px;padding:0 4px;color:#FFFFFF;font-size:clamp(16px,1.6vw,19px);line-height:1.5;text-align:center;text-wrap:pretty}
+.lhead{display:flex;align-items:center;justify-content:space-between;gap:16px;color:#FFFFFF}
+.xbtn{position:absolute;top:14px;right:14px;display:inline-flex;align-items:center;justify-content:center;width:44px;height:44px;border-radius:50%;border:0;background:#F4F1FA;color:#57536E;cursor:pointer}
+.xbtn:hover{background:#ECE7F6;color:#221E3F}
+.xbtn svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2.2;stroke-linecap:round}
+.lhead .xbtn{position:static;flex:none;background:rgba(255,255,255,.14);color:#FFFFFF}
+.lhead .xbtn:hover{background:rgba(255,255,255,.24);color:#FFFFFF}
+.posbox{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:20px 22px;border-radius:22px;background:#F4F0FF}
+.posnum{margin:0;font-family:'Bricolage Grotesque',ui-sans-serif,sans-serif;font-size:46px;line-height:1;font-weight:700;letter-spacing:-.03em;color:#4B33B8;font-variant-numeric:tabular-nums}
+.delta{display:inline-flex;align-items:center;gap:6px;min-height:32px;padding:0 12px;border-radius:999px;background:#E1F6EC;color:#146B44;font-size:14px;font-weight:700;animation:up 1.4s ease both}
+.segs{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:6px}
+.seg{height:6px;border-radius:99px;background:#ECE7F6;transition:background .4s}
+.seg.on{background:#6C4DF6}
+.qchips{display:flex;flex-wrap:wrap;gap:8px}
+.qchip{display:inline-flex;align-items:center;gap:6px;min-height:46px;padding:0 18px;border-radius:999px;border:0;background:#F4F1FA;color:#221E3F;cursor:pointer;font:500 15.5px 'DM Sans',ui-sans-serif,sans-serif;transition:background .2s,color .2s,transform .15s}
+.qchip:hover{background:#ECE6FF}
+.qchip.on{background:#6C4DF6;color:#FFFFFF}
+.qtext{width:100%;min-height:96px;padding:14px 16px;border-radius:16px;border:1px solid #E1DCEB;background:#FFFFFF;color:#221E3F;font:400 16px 'DM Sans',ui-sans-serif,sans-serif;resize:vertical;outline:0}
+.qtext:focus{border-color:#6C4DF6;box-shadow:0 0 0 4px rgba(108,77,246,.14)}
+.big-ic{display:inline-flex;align-items:center;justify-content:center;width:64px;height:64px;border-radius:20px;background:#FFF1CC}
+.big-ic svg{width:30px;height:30px;fill:none;stroke:#8A5A00;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
+
+
+/* ===== v5.3: play mark ===== */
+.glen{position:absolute;right:10px;top:10px;padding:3px 9px;border-radius:999px;background:rgba(15,23,42,.68);color:#FFFFFF;font-size:12px;font-weight:600;font-variant-numeric:tabular-nums}
+.tvplay{position:relative;display:block;padding:0;border:0;border-radius:12px;overflow:hidden;cursor:pointer;background:#EEEAF6}
+.tvplay img{display:block;width:100%;height:100%;object-fit:cover}
+.tvplay:focus-visible{outline:2px solid #6C4DF6;outline-offset:3px}
+/* ===== v5.3: search like the app ===== */
+.sbox{position:relative;max-width:780px}
+.btn.go{background:linear-gradient(135deg,#7A5CFA,#5B8CFF);box-shadow:inset 0 1px 0 rgba(255,255,255,.25),0 10px 24px -10px rgba(91,140,255,.7)}
+.btn.go:hover{background:linear-gradient(135deg,#6C4DF6,#4C7DF5)}
+.btn svg{width:18px;height:18px;flex:none;fill:none;stroke:currentColor;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+.sugg{position:absolute;left:0;right:0;top:calc(100% + 8px);z-index:30;padding:6px;border-radius:20px;background:#FFFFFF;box-shadow:0 0 0 1px #E6E1EF,0 28px 60px -24px rgba(34,30,63,.45);animation:rise .2s ease both}
+.sg{display:flex;align-items:center;gap:12px;width:100%;min-height:52px;padding:8px 12px;border:0;border-radius:14px;background:transparent;text-align:left;cursor:pointer;font:inherit;color:#221E3F}
+.sg.on,.sg:hover{background:#F4F0FF}
+.sg-ic{flex:none;width:34px;height:34px;border-radius:10px;display:flex;align-items:center;justify-content:center;background:#F4F1FA;color:#6C4DF6}
+.sg-ic svg{width:17px;height:17px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.sg.watch .sg-ic{background:#221E3F;color:#FFFFFF}
+.sg.watch .sg-ic svg{fill:currentColor;stroke:none}
+.sg.make .sg-ic{background:linear-gradient(135deg,#7A5CFA,#5B8CFF);color:#FFFFFF}
+.sg-t{flex:1;min-width:0;display:flex;flex-direction:column;gap:1px}
+.sg-t b{font-weight:500;font-size:15.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sg-t b mark{background:none;color:#221E3F;font-weight:700}
+.sg-t small{font-size:13px;color:#6F6B86;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sg-badge{flex:none;font-size:12px;font-weight:600;color:#4B33B8;background:#EFEAFF;border-radius:999px;padding:3px 10px}
+.sugg-foot{margin:6px 10px 4px;font-size:12px;color:#7A7690}
+.sfine{margin:14px 0 30px;font-size:14.5px;color:#6F6B86}
+/* ===== v5.3: player (mirrors the desktop app) ===== */
+.ovl.dark.pl-ovl{padding:18px}
+.pl{position:relative;width:100%;max-width:1260px;max-height:calc(100vh - 36px);display:flex;flex-direction:column;gap:12px;padding:14px 16px 12px;border-radius:24px;background:#F7F6FB;box-shadow:0 40px 90px -30px rgba(0,0,0,.6);animation:pop .35s cubic-bezier(.2,.9,.3,1.1) both;outline:none;overflow:auto}
+.pl.max{max-width:none;width:100vw;height:100vh;max-height:none;border-radius:0}
+.pl-ovl.maxed{padding:0}
+.pl-head{display:flex;align-items:center;gap:12px;min-height:44px;padding:0 2px}
+.pl-title{min-width:0;font:700 20px/1.2 'DM Sans',ui-sans-serif,sans-serif;color:#0F172A;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pl-time{flex:none;font-size:13px;font-weight:500;color:#64748B;font-variant-numeric:tabular-nums}
+.pl-made{margin-left:auto;display:inline-flex;align-items:center;gap:6px;font-size:12.5px;font-weight:500;color:#64748B;white-space:nowrap}
+.pl-made svg{width:14px;height:14px;fill:none;stroke:#22B573;stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round}
+.pl-making{margin-left:auto;display:inline-flex;align-items:center;gap:8px;min-height:30px;padding:0 12px;border-radius:999px;background:#EFEAFF;color:#4B33B8;font-size:13px;font-weight:600;white-space:nowrap}
+.spin{display:inline-block;width:13px;height:13px;flex:none;border-radius:50%;border:2px solid rgba(75,51,184,.25);border-top-color:#4B33B8;animation:spin .8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.pl-x{flex:none;display:inline-flex;align-items:center;justify-content:center;width:44px;height:44px;border-radius:50%;border:0;background:#FFFFFF;color:#334155;cursor:pointer;box-shadow:0 0 0 1px #E2E8F0}
+.pl-x:hover{background:#F4F1FA}
+.pl-x svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2.2;stroke-linecap:round}
+.pl-row{display:grid;grid-template-columns:minmax(0,1fr) 250px;gap:16px;min-height:0}
+.pl.max .pl-row{flex:1}
+.pl-stage{display:flex;flex-direction:column;min-width:0;border:1px solid rgba(226,232,240,.95);border-radius:16px;overflow:hidden;background:#FFFFFF;box-shadow:0 1px 3px rgba(0,0,0,.04),0 12px 28px -6px rgba(45,27,105,.06)}
+.pl-frame{position:relative;aspect-ratio:16 / 9;background:#F8F6F0;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.pl.max .pl-frame{aspect-ratio:auto;flex:1;min-height:0}
+.pl-frame video{display:block;width:100%;height:100%;object-fit:contain;cursor:pointer;background:#F8F6F0}
+.pl-cc{position:absolute;left:50%;bottom:6.5%;transform:translateX(-50%);width:max-content;max-width:min(92%,46ch);text-align:center;pointer-events:none;font:400 clamp(14px,1.55vw,19px)/1.4 Roboto,Arial,'DM Sans',sans-serif}
+.pl.max .pl-cc{font-size:clamp(17px,2.6vh,30px)}
+.pl-cc span{display:block}
+.pl-cc b{display:inline;padding:.1em .4em;background:rgba(8,8,8,.75);color:#FFFFFF;font-weight:400;box-decoration-break:clone;-webkit-box-decoration-break:clone}
+.demo-tag{position:absolute;left:10px;top:10px;padding:5px 11px;border-radius:999px;background:rgba(15,23,42,.74);color:#FFFFFF;font-size:12px;font-weight:600}
+.pl-bar{padding:2px 14px 6px;border-top:1px solid #EEF0F4}
+.pl-seek{position:relative;display:block;width:100%;height:16px;padding:0;border:0;background:transparent;cursor:pointer}
+.pl-seek i{position:absolute;left:0;right:0;top:5px;height:5px;border-radius:99px;background:#E7E5F0}
+.pl-seek b{position:absolute;left:0;top:5px;height:5px;border-radius:99px;background:linear-gradient(90deg,#6C4DF6,#8E75FF)}
+.pl-seek:hover i,.pl-seek:hover b{top:4px;height:7px}
+.pl-ctrl{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap}
+.pl-grp{display:flex;align-items:center;gap:2px}
+.pb{display:inline-flex;align-items:center;justify-content:center;gap:6px;min-width:40px;height:40px;padding:0 8px;border-radius:10px;border:0;background:transparent;color:#334155;cursor:pointer;font:600 13.5px 'DM Sans',ui-sans-serif,sans-serif}
+.pb:hover{background:#F4F1FA;color:#0F172A}
+.pb:disabled{opacity:.4;cursor:default;background:transparent}
+.pb svg{width:19px;height:19px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.pb.fillic svg{fill:currentColor;stroke:none}
+.pb.cc{font:800 12px 'DM Sans',sans-serif;letter-spacing:.04em}
+.pb.cc span{display:inline-flex;align-items:center;justify-content:center;min-width:28px;height:20px;border-radius:5px;border:1.8px solid currentColor}
+.pb.cc.on{color:#4B33B8}
+.pb:focus-visible,.pl-card:focus-visible,.pl-x:focus-visible,.pl-seek:focus-visible{outline:2px solid #6C4DF6;outline-offset:2px}
+.pl-tm{font-size:13px;color:#475569;font-variant-numeric:tabular-nums;padding:0 8px;white-space:nowrap}
+.pl-sn{font-size:13px;font-weight:600;color:#475569;font-variant-numeric:tabular-nums;min-width:40px;text-align:center}
+.pl-rail{display:flex;flex-direction:column;min-height:0;border:1px solid #E2E8F0;border-radius:16px;background:#FFFFFF;overflow:hidden}
+.pl-rail-h{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:11px 12px;border-bottom:1px solid #EEF0F4;font-size:13px;font-weight:700;color:#0F172A}
+.pl-rail-h small{font-size:12px;font-weight:600;color:#64748B}
+.pl-list{flex:1;overflow:auto;display:flex;flex-direction:column;gap:8px;padding:10px}
+.pl-card{display:flex;flex-direction:column;gap:6px;flex:none;padding:6px;border:1.5px solid #E2E8F0;border-radius:12px;background:#FFFFFF;cursor:pointer;text-align:left;font:inherit;color:#0F172A;transition:border-color .2s,background .2s}
+.pl-card.on{border-color:#6C4DF6;background:#F6F3FF;box-shadow:0 0 0 1px #6C4DF6,0 4px 14px rgba(99,102,241,.15)}
+.pl-card.wait{border-style:dashed;cursor:default}
+.pl-thumb{position:relative;aspect-ratio:16 / 9;border-radius:8px;overflow:hidden;background:#F1EEF8;display:flex;align-items:center;justify-content:center}
+.pl-thumb img{display:block;width:100%;height:100%;object-fit:cover}
+.pl-num{position:absolute;left:6px;top:6px;min-width:20px;height:20px;padding:0 6px;border-radius:6px;background:#4F46E5;color:#FFFFFF;font-size:11px;font-weight:800;display:inline-flex;align-items:center;justify-content:center}
+.pl-ready{width:28px;height:28px;border-radius:50%;background:#E1F6EC;display:flex;align-items:center;justify-content:center}
+.pl-ready svg{width:15px;height:15px;fill:none;stroke:#146B44;stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round}
+.pl-ct{font-size:12.5px;font-weight:600;line-height:1.3;padding:0 2px}
+.pl-cs{font-size:11.5px;color:#64748B;padding:0 2px 2px}
+.pl-wave{display:inline-flex;align-items:flex-end;gap:2px;height:10px;margin-left:6px}
+.pl-wave i{width:2px;height:4px;border-radius:1px;background:#6C4DF6;animation:wave .9s ease-in-out infinite}
+.pl-wave i:nth-child(2){animation-delay:.15s}.pl-wave i:nth-child(3){animation-delay:.3s}
+.pl-foot{margin:0;padding:0 4px;font-size:13px;color:#64748B}
+.pl-making-stage{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;padding:24px;text-align:center}
+.pl-making-stage .disp{font-size:clamp(20px,2.4vw,28px);font-weight:600;letter-spacing:-.02em;color:#221E3F;max-width:30ch;text-wrap:balance}
+.stage-line{display:inline-flex;align-items:center;gap:10px;min-height:36px;padding:0 14px;border-radius:999px;background:#EFEAFF;color:#4B33B8;font-size:14.5px;font-weight:600}
+.pl-cover{position:absolute;inset:0;z-index:2;display:flex;align-items:center;justify-content:center;padding:18px;background:rgba(248,246,240,.78);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
+.gate{width:100%;max-width:460px;display:flex;flex-direction:column;gap:12px;padding:22px;border-radius:20px;background:#FFFFFF;box-shadow:0 24px 50px -24px rgba(34,30,63,.45)}
+.gate .signup{max-width:none}
+@media (max-width:1100px){
+.pl-row{grid-template-columns:minmax(0,1fr)}
+.pl-list{flex-direction:row;overflow-x:auto;overflow-y:hidden}
+.pl-card{width:160px}
+}
+@media (max-width:720px){
+.ovl.dark.pl-ovl{padding:0;align-items:stretch}
+.pl{max-height:none;height:100%;border-radius:0;padding:10px 10px 12px}
+.pl-title{font-size:17px}
+.pl-made,.pl-time{display:none}
+.pl-card{width:132px}
+.pl-cc{font-size:13px;bottom:4%}
+.glen{top:7px;right:7px;font-size:11px}
+.pb.hide-xs{display:none}
+.sugg{position:static;margin-top:8px}
+}
+
+@media (max-width:1060px){
+.hero-grid{grid-template-columns:minmax(0,1fr);gap:44px}
+.navlinks{display:none}
+.bento{grid-template-columns:repeat(2,minmax(0,1fr))}
+.s4,.s3{grid-column:span 2}.s2{grid-column:span 1}
+.gal{grid-template-columns:repeat(2,minmax(0,1fr))}
+.getahead{grid-template-columns:minmax(0,1fr)}
+}
+@media (max-width:720px){
+.proof{display:grid;grid-template-columns:auto minmax(0,1fr);align-items:start;gap:6px 10px}
+.proof .live{margin-top:8px}
+.proof .week{grid-column:2;justify-self:start}
+footer .nl{display:inline-flex;align-items:center;min-height:44px}
+.mutepill{min-height:40px}
+.wrapx{padding:0 20px}
+.desk{min-height:0;flex-direction:column;padding:10px}
+.wdoc{flex:none}
+.wpan{flex:none;max-height:0;margin-left:0;margin-top:0;transition:max-height .8s cubic-bezier(.7,0,.2,1),opacity .45s ease .25s,margin-top .8s}
+.desk.split .wdoc{flex-basis:auto}
+.desk.split .wpan{flex-basis:auto;max-height:720px;margin-left:0;margin-top:10px}
+.wpan-in{min-width:0}
+.steps,.who{grid-template-columns:minmax(0,1fr);gap:26px}
+.crow{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
+.crow .ck{grid-column:1 / -1;padding-bottom:0}
+.chead .ck{display:none}
+.crow > span{padding:16px 18px;font-size:15.5px}
+.bento{grid-template-columns:minmax(0,1fr)}
+.s4,.s3,.s2{grid-column:span 1}
+.xsell{grid-template-columns:minmax(0,1fr)}
+.signup{flex-direction:column;border-radius:20px}
+.signup .btn{width:100%}
+.email-in{text-align:center}
+.topbar .btn{min-height:42px;padding:0 16px;font-size:14.5px}
+.keybtn{width:100%;justify-content:center}
+.hide-sm{display:none!important}
+.ovl{align-items:flex-end;padding:0}
+.ovl.dark{align-items:center;padding:12px}
+.dlg{max-width:none;border-radius:26px 26px 0 0;max-height:92vh;padding:30px 20px 26px}
+.bigplay{min-height:52px;font-size:15px}
+.bigplay i{width:36px;height:36px}
+}
+@media (max-width:720px){
+.gal{grid-template-columns:repeat(2,minmax(0,1fr));gap:22px 12px}
+.gcard{gap:8px}
+.gpic{border-radius:14px}
+.gtag{display:none}
+.gtitle{font-size:16px}
+.typed{font-size:12.5px}
+.gplay{left:8px;bottom:8px;height:28px;padding:0 9px 0 4px;font-size:12px}
+.gplay i{width:20px;height:20px}
+.search{flex-direction:column;border-radius:20px}
+.search .btn{width:100%}
+.search-in{text-align:left}
+.modeseg{width:100%}
+.mode{flex:1;justify-content:center;padding:0 10px;font-size:14.5px}
+.wlead{display:none}
+.search > svg{display:none}
+.onlysm{display:block}
+.askwrap{padding:16px}
+.tv{height:150px}
+}
+
+/* ===== v5.4 ===== */
+/* 8.7 a milder play mark: small dark-glass disc in the bottom-left corner, never over the middle of the picture */
+.gpm{position:absolute;left:12px;bottom:12px;top:auto;width:40px;height:40px;margin:0;border-radius:50%;display:flex;align-items:center;justify-content:center;background:rgba(20,16,40,.38);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);box-shadow:none;transition:width .2s,height .2s,background .2s}
+.gpm svg{width:15px;height:15px;margin-left:2px;fill:#FFFFFF;transition:fill .2s}
+.gcard:hover .gpm,.gcard:focus-visible .gpm,.tvplay:hover .gpm,.tvplay:focus-visible .gpm,.sthumb:hover .gpm,.sthumb:focus-visible .gpm{width:44px;height:44px;background:#FFFFFF}
+.gcard:hover .gpm svg,.gcard:focus-visible .gpm svg,.tvplay:hover .gpm svg,.tvplay:focus-visible .gpm svg,.sthumb:hover .gpm svg,.sthumb:focus-visible .gpm svg{fill:#6C4DF6}
+.sthumb .gpm{left:8px;bottom:8px;width:32px;height:32px}
+.sthumb .gpm svg{width:12px;height:12px}
+.sthumb:hover .gpm,.sthumb:focus-visible .gpm{width:36px;height:36px}
+.tvplay{position:relative;display:block;padding:0;border:0;border-radius:12px;overflow:hidden;cursor:pointer;background:#EEEAF6}
+.tvplay img{display:block;width:100%;height:100%;object-fit:cover}
+.tvplay:focus-visible{outline:2px solid #6C4DF6;outline-offset:3px}
+.sthumb:focus-visible{outline:2px solid #6C4DF6;outline-offset:2px}
+/* 8.1 seekable timeline: 6 px track in a 24 px hit area, 14 px knob on hover / focus / drag */
+.seek{position:relative;flex:1;min-width:0;height:24px;cursor:pointer;touch-action:none;user-select:none;-webkit-user-select:none;border-radius:6px;-webkit-tap-highlight-color:transparent}
+.seek:focus-visible{outline:2px solid #6C4DF6;outline-offset:2px}
+.seek-track{position:absolute;left:0;right:0;top:9px;height:6px;border-radius:99px;background:#ECE7F6;overflow:hidden}
+.seek-fill{display:block;height:100%;border-radius:99px;background:#6C4DF6;transition:width .25s linear}
+.seek.drag .seek-fill{transition:none}
+.seek.pl .seek-track{background:#E7E5F0}
+.seek.pl .seek-fill{background:linear-gradient(90deg,#6C4DF6,#8E75FF)}
+.seek-knob{position:absolute;top:5px;width:14px;height:14px;margin-left:-7px;border-radius:50%;background:#FFFFFF;box-shadow:0 0 0 2px #6C4DF6,0 2px 6px rgba(34,30,63,.3);opacity:0;transform:scale(.6);pointer-events:none;transition:opacity .15s,transform .15s,left .25s linear}
+.seek.drag .seek-knob{transition:opacity .15s,transform .15s}
+.seek:hover .seek-knob,.seek:focus-visible .seek-knob,.seek.drag .seek-knob{opacity:1;transform:none}
+.pp{flex:none;display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;padding:0;border-radius:50%;border:0;background:#FFFFFF;color:#6C4DF6;cursor:pointer;box-shadow:0 0 0 1.5px #D9D0FB,0 4px 10px -4px rgba(108,77,246,.35);transition:background .2s,box-shadow .2s}
+.pp:hover{background:#F6F3FF;box-shadow:0 0 0 1.5px #6C4DF6}
+.pp:focus-visible{outline:2px solid #6C4DF6;outline-offset:2px}
+.pp svg{width:16px;height:16px;fill:currentColor}
+.ptime{flex:none;min-width:74px;text-align:right;font-size:12.5px;font-weight:500;color:#6F6B86;font-variant-numeric:tabular-nums}
+/* 8.2 the app's pointer (BALL light), copied from the desktop app's .tl-spot-ball */
+.tl-spot-ball{position:absolute;z-index:4;pointer-events:none;border-radius:50%;opacity:0;background:radial-gradient(circle,#ffffff 0 30%,#ff9a2e 34% 58%,rgba(255,154,46,.35) 72%,rgba(255,154,46,0) 100%);box-shadow:0 0 0 1.5px rgba(255,255,255,.85),0 0 14px 5px rgba(255,154,46,.55),0 0 34px 14px rgba(255,154,46,.22);transition:left 720ms cubic-bezier(.22,.61,.36,1),top 720ms cubic-bezier(.22,.61,.36,1),opacity 380ms ease}
+.tl-spot-ball.ptr{z-index:3}
+.tl-spot-ball.is-on{opacity:1;animation:tl-spot-breathe 2.6s ease-in-out infinite}
+@keyframes tl-spot-breathe{0%,100%{box-shadow:0 0 0 1.5px rgba(255,255,255,.85),0 0 14px 5px rgba(255,154,46,.55),0 0 34px 14px rgba(255,154,46,.22)}50%{box-shadow:0 0 0 1.5px rgba(255,255,255,.9),0 0 18px 7px rgba(255,154,46,.68),0 0 44px 18px rgba(255,154,46,.3)}}
+.pl-cc{z-index:5}
+.mutepill{z-index:5}
+.pl-cover{z-index:6}
+/* 8.9 search mode: one wide window, then the app-style player */
+.wask{flex:1 1 100%}
+.desk:not(.ask) .wask{display:none}
+.desk.ask .wdoc{display:none}
+.desk.ask.play .wask{display:none}
+.desk.ask:not(.play) .wpan{display:none}
+.desk.ask.play .wpan{flex:1 1 100%;opacity:1;margin-left:0;transition:none}
+.wask .askwrap{padding:28px clamp(18px,4vw,52px);gap:16px}
+.wask .askwrap > .disp{font-size:clamp(22px,2.4vw,29px)}
+.askrow{display:flex;gap:10px;align-items:stretch}
+.askrow .askbox{flex:1;min-width:0}
+.askrow .btn{min-height:56px;padding:0 20px;border-radius:16px}
+.askin{flex:1;min-width:0;height:36px;padding:0;border:0;outline:0;background:transparent;color:#221E3F;font:400 16.5px 'DM Sans',ui-sans-serif,system-ui,sans-serif}
+.enterkey{display:inline-flex;align-items:center;height:22px;padding:0 8px;border-radius:6px;background:rgba(255,255,255,.22);border:1px solid rgba(255,255,255,.55);border-bottom-width:2px;font:600 12px 'DM Sans',ui-sans-serif,sans-serif;transition:transform .12s}
+.enterkey.pressed{transform:translateY(1px);border-bottom-width:1px}
+.abar{gap:10px;padding-right:8px}
+.abar > img{flex:none}
+.spill{display:inline-flex;align-items:center;gap:8px;min-width:0;flex:1 1 auto;max-width:440px;height:34px;padding:0 14px 0 12px;border-radius:999px;border:0;background:#F4F1FA;color:#221E3F;cursor:pointer;text-align:left;font:500 14px 'DM Sans',ui-sans-serif,sans-serif}
+.spill svg{width:16px;height:16px;flex:none;fill:none;stroke:#6C4DF6;stroke-width:2.2;stroke-linecap:round}
+.spill span{min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.spill:hover{background:#ECE6FF}
+.spill:focus-visible{outline:2px solid #6C4DF6;outline-offset:2px}
+.abar .grp{margin-left:auto;display:flex;align-items:center;gap:2px;flex:none}
+.pmain{flex:1;display:flex;flex-direction:column;gap:10px;min-width:0}
+.pbody.app{display:grid;grid-template-columns:minmax(0,1fr) 196px;gap:14px;padding:14px}
+.pbody.app .pvid{border-radius:12px}
+.prail-wrap{position:relative;min-height:0}
+.prail-wrap .pl-rail{position:absolute;inset:0}
+.prail-wrap .pl-list{flex-direction:column;overflow-x:hidden;overflow-y:auto}
+.prail-wrap .pl-card{width:auto}
+/* 8.4 questions with an Other box */
+.qfield{display:flex;flex-direction:column;gap:6px}
+.qlabel{font-size:14px;font-weight:600;color:#3A3655}
+.qlabel span{font-weight:400;color:#6F6B86}
+.qin{width:100%;min-height:46px;padding:0 14px;border-radius:12px;border:1px solid #E1DCEB;background:#FFFFFF;color:#221E3F;font:400 16px 'DM Sans',ui-sans-serif,sans-serif;outline:0}
+.qin:focus{border-color:#6C4DF6;box-shadow:0 0 0 4px rgba(108,77,246,.14)}
+.qin::placeholder{color:#7A7690}
+@media (max-width:720px){
+.mode{font-size:13.5px;gap:6px;padding:0 8px;white-space:nowrap}
+.askrow{flex-direction:column}
+.askrow .btn{width:100%}
+.wask .askwrap{padding:18px 16px}
+.desk.ask .wask{flex:none}
+.desk.ask.play .wpan{flex:none;max-height:none;margin-top:0}
+.pbody.app{grid-template-columns:minmax(0,1fr);padding:10px}
+.prail-wrap{position:static}
+.prail-wrap .pl-rail{position:static}
+.prail-wrap .pl-list{flex-direction:row;overflow-x:auto;overflow-y:hidden}
+.prail-wrap .pl-card{width:96px}
+.abar{gap:6px;padding-left:10px}
+.spill{max-width:none}
+.ptime{min-width:64px}
+}
+@media (prefers-reduced-motion:reduce){
+.tl-spot-ball{transition:none}
+.tl-spot-ball.is-on{animation:none}
+.seek-fill,.seek-knob{transition:none}
+}
+@media (prefers-reduced-motion:reduce){
+.caret{animation:none!important}
+.rise,.fade,.dlg,.lbox,.ovl,.delta,.keybtn.ready .key,.wave.live span,.live::before{animation:none!important}
+.uline path{animation:none!important;stroke-dashoffset:0}
+.wdoc,.wpan{transition:none}
+}
+</style>
+</helmet>
+<div id="top" class="v5" style="background: #FAF8F4; color: #221E3F; font-family: 'DM Sans', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif; font-size: 17px; line-height: 1.6; overflow-x: clip">
+
+<!-- NAV -->
+<header class="topbar">
+<nav aria-label="Main" class="wrapx wide" style="display: flex; align-items: center; justify-content: space-between; gap: 24px; min-height: 70px">
+<a href="#top" aria-label="Tubelight home" style="display: flex; align-items: center; min-height: 44px">
+<img src="/_blob/119a31f76ac61335ff35d1eb8a594ca4" alt="Tubelight" style="display: block; height: 30px; width: auto">
+</a>
+<div class="navlinks" style="align-items: center; gap: 34px">
+<a href="#how" class="nl">How it works</a>
+<a href="#examples" class="nl">Examples</a>
+<a href="#features" class="nl">Features</a>
+<a href="#faq" class="nl">FAQ</a>
+</div>
+<button type="button" class="btn sm" onClick="{{openModal}}">{{navCta}}</button>
+</nav>
+</header>
+
+<!-- HERO -->
+<section style="position: relative; padding: clamp(40px, 6vw, 80px) 0 clamp(72px, 9vw, 112px)">
+<div aria-hidden="true" style="position: absolute; right: -10%; top: -6%; width: 960px; height: 760px; pointer-events: none; background: radial-gradient(45% 45% at 60% 40%, rgba(108,77,246,0.10), rgba(108,77,246,0) 70%), radial-gradient(35% 35% at 80% 20%, rgba(255,194,58,0.12), rgba(255,194,58,0) 70%)"></div>
+<div class="wrapx wide hero-grid" style="position: relative">
+
+<!-- left: the promise and the action -->
+<div style="display: flex; flex-direction: column; align-items: flex-start; gap: 24px">
+<h1 class="disp rise d1" style="margin: 0; font-size: clamp(46px, 5.2vw, 74px); line-height: 1.02; letter-spacing: -0.045em; font-weight: 600; color: #221E3F">Understand anything in <span class="uline">seconds.<svg viewBox="0 0 300 24" aria-hidden="true"><path d="M4 16 C 70 6, 170 4, 296 11"></path></svg></span></h1>
+<p class="rise d2" style="margin: 0; max-width: 430px; font-size: clamp(18px, 1.5vw, 20px); line-height: 1.6; color: #57536E; text-wrap: pretty">Search a topic, or select any text and press <span class="kbd">Alt</span> + <span class="kbd">E</span>. Tubelight explains it with pictures and a voice in under 15 seconds.</p>
+<div class="rise d3" style="width: 100%; display: flex; flex-direction: column; gap: 14px; margin-top: 2px">
+<sc-if value="{{notSent}}" hint-placeholder-val="{{ true }}">
+<form class="signup" onSubmit="{{submit}}">
+<label for="em-hero" class="sr">Email address</label>
+<input id="em-hero" name="email" class="email-in" type="email" autocomplete="email" placeholder="Your email" value="{{email}}" onChange="{{onEmail}}">
+<button type="submit" class="btn">Join the waitlist</button>
+</form>
+<sc-if value="{{hasErr}}" hint-placeholder-val="{{ false }}"><p class="err" role="alert">{{err}}</p></sc-if>
+</sc-if>
+<sc-if value="{{sent}}" hint-placeholder-val="{{ false }}">
+<div class="joined fade" role="status">
+<span class="okdot" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="m5 12 5 5 9-10"></path></svg></span>
+<span>You’re on the waitlist{{posShort}}</span>
+<button type="button" class="linkbtn" onClick="{{openModal}}">{{moveUpLabel}}</button>
+</div>
+</sc-if>
+<p class="conds">
+<span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12 5 5 9-10"></path></svg>Free to try</span>
+<span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12 5 5 9-10"></path></svg>Windows 10 &amp; 11</span>
+<span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12 5 5 9-10"></path></svg>Invites in line order</span>
+</p>
+<p class="onlysm micro">Tubelight runs on Windows PCs. Join from your phone and your invite comes by email, so you can open it on your PC.</p>
+<div class="proof">
+<span class="live" aria-hidden="true"></span>
+<span><strong>{{proofMain}}</strong>{{proofRest}}</span>
+<sc-if value="{{hasWeek}}" hint-placeholder-val="{{ true }}"><span class="week">+{{weekText}} this week</span></sc-if>
+</div>
+<div style="display: flex; flex-wrap: wrap; align-items: center; gap: 2px 22px; margin-top: 2px">
+<a href="#how" class="linkbtn"><svg viewBox="0 0 24 24" aria-hidden="true" style="width: 18px; height: 18px; fill: #4B33B8"><path d="M7 4.5v15l12.5-7.5z"></path></svg>Watch the demo (1:21)</a>
+<a href="#examples" class="linkbtn" onClick="{{tryOwn}}"><svg viewBox="0 0 24 24" aria-hidden="true" style="width: 18px; height: 18px; fill: none; stroke: #4B33B8; stroke-width: 2.2; stroke-linecap: round"><path d="M11 18a7 7 0 1 0 0-14 7 7 0 0 0 0 14zM20 20l-3.5-3.5"></path></svg>Try it with your own topic</a>
+</div>
+</div>
+</div>
+
+<!-- right: the product, live, with a real explanation -->
+<div id="demo" class="rise d4" onKeyDown="{{onKey}}">
+<div class="modes">
+<div class="modeseg" role="group" aria-label="How do you want to ask?">
+<button type="button" class="{{modeAskCls}}" aria-pressed="{{isAsk}}" onClick="{{toAsk}}"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path></svg>Search a topic</button>
+<button type="button" class="{{modeSelCls}}" aria-pressed="{{isSel}}" onClick="{{toSel}}"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h10M4 12h16M4 17h7"></path><path d="M15 15l5 5"></path></svg>Select text · Alt + E</button>
+</div>
+</div>
+<div class="{{deskCls}}">
+<div class="win wdoc">
+<div class="wbar">
+<span style="display: flex; align-items: center; gap: 9px; min-width: 0"><span aria-hidden="true" style="width: 12px; height: 12px; border-radius: 4px; flex: none; background: {{appColor}}"></span><span style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{appName}}</span></span>
+<span aria-hidden="true" style="display: flex; gap: 14px; color: #A29DB5; font-size: 12px; font-weight: 500; flex: none">— ▢ ✕</span>
+</div>
+<div class="wbody">
+<p style="margin: 0; font-size: 12px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: #6F6B86">{{docKicker}}</p>
+<p class="disp" style="margin: 0; font-size: 21px; line-height: 1.2; font-weight: 600; letter-spacing: -0.02em; color: #221E3F">{{docTitle}}</p>
+<p class="wlead" style="margin: 0">{{docLead}}</p>
+<p style="margin: 0"><span class="selx">{{docSel}}</span> {{docTail}}</p>
+</div>
+</div>
+
+<div class="win wask">
+<div class="wbar">
+<span style="display: flex; align-items: center; gap: 9px; min-width: 0"><img src="/_blob/af4ad0e670d21cd458db108d9b3ac54d" alt="" style="display: block; width: 20px; height: auto"><span style="white-space: nowrap">Tubelight</span></span>
+<span aria-hidden="true" style="display: flex; gap: 14px; color: #A29DB5; font-size: 12px; font-weight: 500; flex: none">— ▢ ✕</span>
+</div>
+<form class="askwrap" role="search" onSubmit="{{heroSubmit}}">
+<p class="disp" style="margin: 0; font-size: 21px; line-height: 1.2; font-weight: 600; letter-spacing: -0.02em; color: #221E3F">What do you want to understand?</p>
+<div class="askrow">
+<div class="askbox"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path></svg><label for="hero-q" class="sr">Search a topic</label><input id="hero-q" class="askin" type="text" autocomplete="off" maxlength="200" ref="{{setHq}}" value="{{hq}}" onChange="{{onHq}}" onFocus="{{onHqFocus}}"></div>
+<button type="submit" class="btn go">Explain it<span class="{{enterCls}}" aria-hidden="true">Enter</span></button>
+</div>
+<p class="hint"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="8" y="3" width="8" height="4" rx="1"></rect><path d="M8 5H6a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"></path></svg>You can paste a whole paragraph too.</p>
+<p class="hint"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l1.9 5.1L19 10l-5.1 1.9L12 17l-1.9-5.1L5 10l5.1-1.9z"></path></svg>Your own topic? Press Enter for a free preview · about 20 s · email needed to watch</p>
+</form>
+</div>
+
+<div class="win wpan" ref="{{setPanel}}">
+<div class="wpan-in">
+<sc-if value="{{isSel}}" hint-placeholder-val="{{ true }}">
+<div class="wbar">
+<span style="display: flex; align-items: center; gap: 8px; min-width: 0"><img src="/_blob/af4ad0e670d21cd458db108d9b3ac54d" alt="" style="display: block; width: 20px; height: auto"><span style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{vidTitle}}</span></span>
+<span style="display: flex; align-items: center; gap: 2px; flex: none">
+<sc-if value="{{isDone}}" hint-placeholder-val="{{ false }}"><button type="button" class="ibtn" onClick="{{replay}}" aria-label="Replay the explanation"><svg viewBox="0 0 24 24"><path d="M4 12a8 8 0 1 0 2.5-5.8"></path><path d="M4 4v4h4"></path></svg>Replay</button></sc-if><button type="button" class="ibtn" aria-label="Open in the big player" title="Maximise" onClick="{{heroMax}}"><svg viewBox="0 0 24 24"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"></path></svg></button><button type="button" class="ibtn" aria-pressed="{{soundOn}}" aria-label="{{sndLabel}}" onClick="{{toggleSound}}"><svg viewBox="0 0 24 24"><path d="M11 5 6 9H2v6h4l5 4z"></path><path d="{{sndPath}}"></path></svg></button>
+</span>
+</div>
+</sc-if>
+<sc-if value="{{isAsk}}" hint-placeholder-val="{{ false }}">
+<div class="wbar abar">
+<img src="/_blob/af4ad0e670d21cd458db108d9b3ac54d" alt="" style="display: block; width: 20px; height: auto">
+<button type="button" class="spill" aria-label="{{pillAria}}" title="Search another topic" onClick="{{editTopic}}"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path></svg><span>{{pillTopic}}</span></button>
+<span class="grp">
+<sc-if value="{{isDone}}" hint-placeholder-val="{{ false }}"><button type="button" class="ibtn" onClick="{{replay}}" aria-label="Replay the explanation"><svg viewBox="0 0 24 24"><path d="M4 12a8 8 0 1 0 2.5-5.8"></path><path d="M4 4v4h4"></path></svg>Replay</button></sc-if><button type="button" class="ibtn" aria-pressed="{{soundOn}}" aria-label="{{sndLabel}}" onClick="{{toggleSound}}"><svg viewBox="0 0 24 24"><path d="M11 5 6 9H2v6h4l5 4z"></path><path d="{{sndPath}}"></path></svg></button><button type="button" class="ibtn" aria-label="Open in the big player" title="Maximise" onClick="{{heroMax}}"><svg viewBox="0 0 24 24"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"></path></svg></button>
+</span>
+</div>
+</sc-if>
+<div class="{{pbodyCls}}">
+<div class="pmain">
+<div class="pvid">
+<video ref="{{setHeroVid}}" src="{{vidSrc}}" poster="{{vidPoster}}" playsInline="{{ true }}" muted="{{ true }}" preload="metadata" onTimeUpdate="{{heroTime}}" onEnded="{{heroEnded}}" onPlay="{{heroPlay}}" onPause="{{heroPause}}" aria-label="{{vidAria}}"></video>
+<span class="{{hPtrCls}}" style="{{hPtrStyle}}" aria-hidden="true"></span>
+<sc-if value="{{showUnmute}}" hint-placeholder-val="{{ false }}"><button type="button" class="mutepill" onClick="{{toggleSound}}"><svg viewBox="0 0 24 24"><path d="M11 5 6 9H2v6h4l5 4z"></path><path d="M16 9l5 6M21 9l-5 6"></path></svg>Tap for sound</button></sc-if>
+</div>
+<p class="caps" aria-live="polite">{{heroCap}}</p>
+<div class="prog">
+<button type="button" class="pp" aria-label="{{ppLabel}}" onClick="{{togglePlay}}"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="{{ppPath}}"></path></svg></button>
+<div class="{{seekCls}}" role="slider" tabindex="0" aria-label="Seek" aria-valuemin="0" aria-valuemax="{{seekMax}}" aria-valuenow="{{seekNow}}" aria-valuetext="{{seekText}}" onPointerDown="{{seekDown}}" onPointerMove="{{seekMove}}" onPointerUp="{{seekUp}}" onPointerCancel="{{seekUp}}" onKeyDown="{{seekKey}}"><span class="seek-track"><span class="seek-fill" style="width: {{pct}}%"></span></span><span class="seek-knob" aria-hidden="true" style="left: {{pct}}%"></span></div>
+<span class="ptime">{{time}} / {{total}}</span>
+</div>
+</div>
+<sc-if value="{{isAsk}}" hint-placeholder-val="{{ false }}">
+<div class="prail-wrap">
+<div class="pl-rail">
+<div class="pl-rail-h"><span>Slides</span><small>{{hRailBadge}}</small></div>
+<div class="pl-list">
+<sc-for list="{{hslides}}" as="hs" hint-placeholder-count="3">
+<button type="button" class="{{hs.cls}}" aria-current="{{hs.on}}" aria-label="{{hs.aria}}" onClick="{{hs.pick}}">
+<span class="pl-thumb"><img src="{{hs.thumb}}" alt=""><span class="pl-num">{{hs.num}}</span></span>
+<span class="pl-ct">{{hs.title}}<sc-if value="{{hs.speaking}}" hint-placeholder-val="{{ false }}"><span class="pl-wave" aria-hidden="true"><i></i><i></i><i></i></span></sc-if></span>
+<span class="pl-cs">{{hs.sub}}</span>
+</button>
+</sc-for>
+</div>
+</div>
+</div>
+</sc-if>
+</div>
+</div>
+</div>
+</div>
+
+<sc-if value="{{isSel}}" hint-placeholder-val="{{ true }}">
+<div class="keyrow">
+<button type="button" class="{{keyCls}}" onClick="{{explain}}" aria-label="Press Alt plus E to explain the highlighted text"><span class="key">Alt</span><span aria-hidden="true" style="color: #A29DB5; font-size: 18px">+</span><span class="key">E</span><span style="margin-left: 6px">{{keyLabel}}</span></button>
+</div>
+</sc-if>
+<div class="tchips">
+<span style="font-size: 14.5px; color: #6F6B86; margin-right: 2px">Try another:</span>
+<sc-for list="{{topics}}" as="tp" hint-placeholder-count="3"><button type="button" class="{{tp.cls}}" aria-pressed="{{tp.pressed}}" onClick="{{tp.pick}}"><span class="tdot" aria-hidden="true" style="background: {{tp.color}}"></span>{{tp.label}}</button></sc-for>
+</div>
+<p class="real">Real Tubelight explanations in its own voice, made from the topics shown. In the app, Fast makes one in about 11 seconds (Rich takes up to 30); here they play straight away. The page in “Select text” is a sample. Use <span aria-hidden="true">⤢</span> to watch it big.</p>
+</div>
+
+</div>
+</section>
+
+<!-- HOW IT WORKS: the real demo -->
+<section id="how" class="sec" style="padding-top: 0; scroll-margin-top: 76px">
+<div class="wrapx">
+<div class="head">
+<h2 class="h2">See it on a real PC.</h2>
+<p class="lede">Three steps, no new tab. Here’s Tubelight on a real Windows PC.</p>
+</div>
+<div class="film">
+<video ref="{{setDemoVid}}" src="__DEMO_SRC__" poster="__DEMO_POSTER__" controls="{{demoControls}}" playsInline="{{ true }}" preload="none" onPlay="{{demoPlay}}" onEnded="{{demoEnded}}" aria-label="Tubelight demo on a Windows PC"></video>
+<sc-if value="{{demoCover}}" hint-placeholder-val="{{ true }}">
+<button type="button" class="cover" onClick="{{playDemo}}" aria-label="Play the Tubelight demo with sound">
+<img src="__DEMO_POSTER__" alt="">
+<span class="bigplay"><i aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M7 4.5v15l12.5-7.5z"></path></svg></i>Watch the demo · 1:21</span>
+</button>
+</sc-if>
+</div>
+<div class="steps">
+<div style="display: flex; flex-direction: column; gap: 12px">
+<span class="stepn" style="background: #FFF1CC; color: #8A5A00">1</span>
+<p class="disp" style="margin: 0; font-size: 22px; font-weight: 600; letter-spacing: -0.02em">Select any text</p>
+<p style="margin: 0; color: #57536E">In a PDF, a website, Word or Notion — wherever you can select text.</p>
+</div>
+<div style="display: flex; flex-direction: column; gap: 12px">
+<span class="stepn" style="background: #EFEAFF; color: #4B33B8">2</span>
+<p class="disp" style="margin: 0; font-size: 22px; font-weight: 600; letter-spacing: -0.02em">Press Alt + E</p>
+<p style="margin: 0; color: #57536E">One shortcut, no new tab. Nothing selected? Type a topic instead.</p>
+</div>
+<div style="display: flex; flex-direction: column; gap: 12px">
+<span class="stepn" style="background: #E1F6EC; color: #146B44">3</span>
+<p class="disp" style="margin: 0; font-size: 22px; font-weight: 600; letter-spacing: -0.02em">Watch and listen</p>
+<p style="margin: 0; color: #57536E">Pictures and a voice explain it, right beside your page. Ask a follow-up if you need to.</p>
+</div>
+</div>
+</div>
+</section>
+
+<!-- WHY -->
+<section class="sec" style="padding-top: 0">
+<div class="wrapx">
+<div class="head">
+<h2 class="h2">Why not just Google it?</h2>
+<p class="lede">Or ask ChatGPT? Both pull you away from what you’re reading. Tubelight explains it right where you are.</p>
+</div>
+<div class="cmp">
+<div class="crow chead"><span class="ck"></span><span class="cold" style="color: #6F6B86">Googling or ChatGPT</span><span class="cnew"><img src="/_blob/af4ad0e670d21cd458db108d9b3ac54d" alt="" style="display: block; width: 20px; height: auto">Tubelight</span></div>
+<div class="crow"><span class="ck">Where you go</span><span class="cold"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10" fill="#F1EEF6"></circle><path d="M8 12h8" stroke="#8C88A2" stroke-width="2" stroke-linecap="round"></path></svg>A new tab — and you lose your place</span><span class="cnew"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10" fill="#22B573"></circle><path d="m7.5 12.5 3 3 6-7" fill="none" stroke="#FFFFFF" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"></path></svg>Nowhere. It opens beside your page</span></div>
+<div class="crow"><span class="ck">What you do</span><span class="cold"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10" fill="#F1EEF6"></circle><path d="M8 12h8" stroke="#8C88A2" stroke-width="2" stroke-linecap="round"></path></svg>Type a question, then dig through results</span><span class="cnew"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10" fill="#22B573"></circle><path d="m7.5 12.5 3 3 6-7" fill="none" stroke="#FFFFFF" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"></path></svg>Press Alt + E, or type a topic</span></div>
+<div class="crow"><span class="ck">What you get</span><span class="cold"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10" fill="#F1EEF6"></circle><path d="M8 12h8" stroke="#8C88A2" stroke-width="2" stroke-linecap="round"></path></svg>Long articles, long videos or a wall of text</span><span class="cnew"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10" fill="#22B573"></circle><path d="m7.5 12.5 3 3 6-7" fill="none" stroke="#FFFFFF" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"></path></svg>Pictures and a voice about exactly what you selected</span></div>
+<div class="crow"><span class="ck">How long</span><span class="cold"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10" fill="#F1EEF6"></circle><path d="M8 12h8" stroke="#8C88A2" stroke-width="2" stroke-linecap="round"></path></svg>Minutes</span><span class="cnew"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10" fill="#22B573"></circle><path d="m7.5 12.5 3 3 6-7" fill="none" stroke="#FFFFFF" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"></path></svg>Under 15 seconds on Fast, up to 30 on Rich</span></div>
+</div>
+</div>
+</section>
+
+<!-- EXAMPLES: real saved explanations -->
+<section id="examples" class="sec" style="padding-top: 0; scroll-margin-top: 76px">
+<div class="wrapx">
+<div class="head">
+<h2 class="h2">Curious about anything?</h2>
+<p class="lede">Search any topic and Tubelight makes a free preview video for you, right here. Or press play on one it already made — every one below is real.</p>
+</div>
+<div class="sbox">
+<form class="search" role="search" onSubmit="{{onSearch}}">
+<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M11 18a7 7 0 1 0 0-14 7 7 0 0 0 0 14zM20 20l-3.5-3.5"></path></svg>
+<label for="topic-q" class="sr">What do you want to understand?</label>
+<input id="topic-q" class="search-in" type="text" role="combobox" aria-expanded="{{sOpen}}" aria-controls="topic-sugg" aria-autocomplete="list" aria-activedescendant="{{sActive}}" autocomplete="off" placeholder="{{ph}}" value="{{q}}" ref="{{setQ}}" onChange="{{onQ}}" onKeyDown="{{onQKey}}" onFocus="{{onQFocus}}" onBlur="{{onQBlur}}">
+<button type="submit" class="btn go"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M11 18a7 7 0 1 0 0-14 7 7 0 0 0 0 14zM20 20l-3.5-3.5"></path></svg>Explain it</button>
+</form>
+<sc-if value="{{sOpen}}" hint-placeholder-val="{{ false }}">
+<div class="sugg" id="topic-sugg" role="listbox" aria-label="Suggestions">
+<sc-for list="{{sugg}}" as="sg" hint-placeholder-count="5"><button type="button" id="{{sg.id}}" role="option" aria-selected="{{sg.on}}" class="{{sg.cls}}" onMouseDown="{{sg.pick}}"><span class="sg-ic" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="{{sg.icon}}"></path></svg></span><span class="sg-t"><b>{{sg.pre}}<mark>{{sg.mid}}</mark>{{sg.post}}</b><small>{{sg.hint}}</small></span><sc-if value="{{sg.hasBadge}}" hint-placeholder-val="{{ false }}"><span class="sg-badge">{{sg.badge}}</span></sc-if></button></sc-for>
+<p class="sugg-foot">Suggestions from Wikipedia. Your video is made fresh for your topic.</p>
+</div>
+</sc-if>
+</div>
+<p class="sfine">Free preview: one a day, about 20 seconds to make, and you’ll enter your email to watch it. Your topic is sent to our servers to make the video.</p>
+<div class="gal">
+<sc-for list="{{gallery}}" as="g" hint-placeholder-count="6">
+<button type="button" class="gcard" onClick="{{g.open}}" aria-label="{{g.aria}}">
+<span class="gpic"><img src="{{g.thumb}}" alt=""><span class="gpm" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 5.5v13l10.5-6.5z"></path></svg></span><span class="glen" aria-hidden="true">{{g.len}}</span></span>
+<span class="gtag" style="background: {{g.bg}}; color: {{g.fg}}">{{g.tag}}</span>
+<span class="gtitle">{{g.title}}</span>
+</button>
+</sc-for>
+</div>
+<p style="margin: 34px 0 0; font-size: 15px; color: #6F6B86">Unedited output from the Windows app. It’s AI, so it can slip now and then — if something looks off, ask a follow-up.</p>
+</div>
+</section>
+
+<!-- FEATURES -->
+<section id="features" class="sec" style="padding-top: 0; scroll-margin-top: 76px">
+<div class="wrapx">
+<div class="head">
+<h2 class="h2">Everything it can do.</h2>
+<p class="lede">One shortcut to start. A few extras when you need them.</p>
+</div>
+<div class="bento">
+
+<div class="tile s4" style="background: #F1ECFF">
+<div class="tv" style="background: #FFFFFF; gap: 16px; padding: 0 22px; justify-content: space-between">
+<span style="flex: 1; max-width: 220px; font-size: 14px; line-height: 1.6; color: #3A3655">…where they <span class="selx">burn and rush out through the nozzle.</span></span>
+<span style="display: inline-flex; align-items: center; gap: 6px; flex: none"><span class="key" style="min-width: 50px; height: 44px; font-size: 15px">Alt</span><span style="color: #A29DB5">+</span><span class="key" style="min-width: 44px; height: 44px; font-size: 15px">E</span></span>
+<button type="button" class="tvplay hide-sm" onClick="{{fKidneys}}" aria-label="Play: How your kidneys filter blood" style="width: 200px; height: 112px; flex: none"><img src="__SHEET_kidneys_0__" alt=""><span class="gpm" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 5.5v13l10.5-6.5z"></path></svg></span></button>
+</div>
+<h3>Explain anything you select</h3>
+<p>Select text and press Alt + E. A short explanation with pictures and a voice opens beside your page.</p>
+</div>
+
+<div class="tile s2" style="background: #FFFFFF; box-shadow: 0 0 0 1px #ECE7F3">
+<button type="button" class="tv tvplay" onClick="{{fZombie}}" aria-label="Play: Why zombie cells make us age" style="width: 100%; border-radius: 18px">
+<img src="__SHEET_zombie-cells_1__" alt="">
+<span class="gpm" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 5.5v13l10.5-6.5z"></path></svg></span>
+<span style="position: absolute; left: 10px; right: 10px; bottom: 10px; padding: 8px 10px; border-radius: 10px; background: rgba(255,255,255,0.94); color: #221E3F; font-size: 13px; font-weight: 500; text-align: center">Captions follow the voice.</span>
+</button>
+<h3>See it. Hear it.</h3>
+<p>Every answer is pictures, a voice and captions.</p>
+</div>
+
+<div class="tile s2" style="background: #E6F1FF">
+<div class="tv" aria-hidden="true" style="flex-direction: column; align-items: stretch; gap: 8px; padding: 0 18px">
+<div style="display: flex; align-items: center; gap: 10px; height: 46px; padding: 0 14px; border-radius: 14px; background: #FFFFFF; box-shadow: 0 0 0 2px #3B8EF0"><svg viewBox="0 0 24 24" style="width: 18px; height: 18px; fill: none; stroke: #1E5AA8; stroke-width: 2; stroke-linecap: round"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path></svg><span style="font-size: 15px; color: #221E3F">black ho<span style="display: inline-block; width: 2px; height: 16px; background: #221E3F; vertical-align: -2px"></span></span></div>
+<div style="display: flex; flex-direction: column; gap: 2px; padding: 8px 14px; border-radius: 14px; background: #FFFFFF; font-size: 14px; color: #57536E"><span>Black hole</span><span>Supermassive black hole</span></div>
+</div>
+<h3>Type it or paste it</h3>
+<p>Nothing to select? Type a topic or paste a paragraph and get the same kind of explanation.</p>
+</div>
+
+<div class="tile s2" style="background: #FFF4D6">
+<div class="tv" aria-hidden="true" style="flex-direction: column; align-items: stretch; gap: 8px; padding: 0 18px">
+<div style="display: flex; justify-content: space-between; align-items: center; height: 40px; padding: 0 14px; border-radius: 12px; background: #FFFFFF; font-size: 14.5px; font-weight: 600"><span>Fast</span><span style="color: #8A5A00">about 15 s</span></div>
+<div style="display: flex; justify-content: space-between; align-items: center; height: 40px; padding: 0 14px; border-radius: 12px; background: #FFFFFF; font-size: 14.5px; font-weight: 600"><span>Balanced</span><span style="color: #8A5A00">about 20 s</span></div>
+<div style="display: flex; justify-content: space-between; align-items: center; height: 40px; padding: 0 14px; border-radius: 12px; background: #FFC94A; color: #3D2800; font-size: 14.5px; font-weight: 600"><span>Rich visuals</span><span>about 30 s</span></div>
+</div>
+<h3>Quick or deep</h3>
+<p>Get the gist fast, or a fuller story with more pictures.</p>
+</div>
+
+<div class="tile s2" style="background: #E3F6EC">
+<div class="tv" aria-hidden="true" style="flex-direction: column; align-items: stretch; gap: 8px; padding: 0 18px">
+<span style="align-self: flex-end; padding: 8px 14px; border-radius: 16px 16px 4px 16px; background: #22B573; color: #FFFFFF; font-size: 14px; font-weight: 600">Explain it simpler</span>
+<span style="align-self: flex-start; max-width: 92%; padding: 9px 14px; border-radius: 4px 16px 16px 16px; background: #FFFFFF; font-size: 14px; line-height: 1.45; color: #221E3F">Pinch a garden hose and the water shoots out faster. A nozzle does the same.</span>
+</div>
+<h3>Ask follow-ups</h3>
+<p>Didn’t click? Ask for it simpler, step by step, or with an example.</p>
+</div>
+
+<div class="tile s3" style="background: #FFEDE7">
+<div class="tv" aria-hidden="true" style="flex-direction: column; gap: 16px">
+<span style="display: inline-flex; align-items: center; gap: 8px"><span class="key" style="min-width: 62px; height: 48px; background: #FFFFFF; border-color: #F2C7B9; box-shadow: 0 4px 0 #E9AE9B; color: #A63A1E">Tab</span><span style="color: #C98A77">+</span><span class="key" style="min-width: 48px; height: 48px; background: #FFFFFF; border-color: #F2C7B9; box-shadow: 0 4px 0 #E9AE9B; color: #A63A1E">R</span></span>
+<span style="max-width: 300px; font-size: 14px; line-height: 1.6; color: #6F6B86; text-align: center"><span style="background: #FFD3C4; color: #221E3F; border-radius: 3px">A star shines because it fuses hydrogen</span> into helium in its core…</span>
+</div>
+<h3>Read it aloud</h3>
+<p>Too long to read? Select it, press Tab + R, and listen while you follow along.</p>
+</div>
+
+<div class="tile s3" style="background: #FFFFFF; box-shadow: 0 0 0 1px #ECE7F3">
+<div class="tv sgrid">
+<sc-for list="{{saved}}" as="sv" hint-placeholder-count="4">
+<button type="button" class="sthumb" onClick="{{sv.open}}" aria-label="{{sv.aria}}"><img src="{{sv.thumb}}" alt=""><span class="gpm" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 5.5v13l10.5-6.5z"></path></svg></span></button>
+</sc-for>
+</div>
+<h3>Everything saved</h3>
+<p>Every explanation is saved on your PC until you delete it. Click one above to replay it.</p>
+</div>
+
+</div>
+</div>
+</section>
+
+<!-- WHO -->
+<section class="sec" style="padding-top: 0">
+<div class="wrapx">
+<div class="head">
+<h2 class="h2">Made for people who read hard things.</h2>
+</div>
+<div class="who">
+<div style="display: flex; flex-direction: column; gap: 14px">
+<span class="whoi" style="background: #FFF4D6; color: #8A5A00"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 9l10-5 10 5-10 5z"></path><path d="M6 11v5c0 1.5 3 3 6 3s6-1.5 6-3v-5"></path></svg></span>
+<p class="disp" style="margin: 0; font-size: 22px; font-weight: 600; letter-spacing: -0.02em">Students</p>
+<p style="margin: 0; color: #57536E">JEE, NEET, boards or college. Stuck at 1 a.m. with no teacher to ask? Select it and keep going.</p>
+</div>
+<div style="display: flex; flex-direction: column; gap: 14px">
+<span class="whoi" style="background: #E6F1FF; color: #1E5AA8"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 3h6"></path><path d="M10 3v6L4.5 18.5A1.7 1.7 0 0 0 6 21h12a1.7 1.7 0 0 0 1.5-2.5L14 9V3"></path></svg></span>
+<p class="disp" style="margin: 0; font-size: 22px; font-weight: 600; letter-spacing: -0.02em">Engineers &amp; researchers</p>
+<p style="margin: 0; color: #57536E">New paper, new jargon. Get the gist of a term without losing your place.</p>
+</div>
+<div style="display: flex; flex-direction: column; gap: 14px">
+<span class="whoi" style="background: #E3F6EC; color: #146B44"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 18h6M10 21h4"></path><path d="M12 3a6 6 0 0 0-3.5 10.9c.6.5 1 1.2 1 2V16h5v-.1c0-.8.4-1.5 1-2A6 6 0 0 0 12 3z"></path></svg></span>
+<p class="disp" style="margin: 0; font-size: 22px; font-weight: 600; letter-spacing: -0.02em">Curious minds</p>
+<p style="margin: 0; color: #57536E">Reading about money, space or health? Finally get the parts that never quite made sense.</p>
+</div>
+</div>
+<p style="margin: 40px 0 0; font-size: 16px; color: #6F6B86">Works wherever you can select text — Chrome, Edge, PDF readers, Word, Notion, Slack, VS Code — on Windows 10 and 11.</p>
+</div>
+</section>
+
+<!-- FAQ -->
+<section id="faq" class="sec" style="padding-top: 0; scroll-margin-top: 76px">
+<div class="wrapx" style="max-width: 900px">
+<div class="head">
+<h2 class="h2">Questions, answered.</h2>
+</div>
+<div>
+<details class="qa"><summary>What is Tubelight?<span class="plus" aria-hidden="true"></span></summary><p>A Windows app that explains anything you select. Select text, press Alt + E, and you get a short explanation — pictures, a voice and captions — right beside what you’re reading.</p></details>
+<details class="qa"><summary>When will I get access?<span class="plus" aria-hidden="true"></span></summary><p>We invite people in batches, in waitlist order. People who tell us how they’ll use Tubelight move up the line, so they’re invited sooner.</p></details>
+<details class="qa"><summary>Can I try it before I’m invited?<span class="plus" aria-hidden="true"></span></summary><p>Yes. Type a topic in the search box under “Curious about anything?” and Tubelight makes a free preview video right on this page — one a day. You’ll need your email to watch it, which also puts you on the waitlist.</p></details>
+<details class="qa"><summary>What happens after I join?<span class="plus" aria-hidden="true"></span></summary><p>Nothing, until your invite is ready. Then we email you a download link. No newsletters, and you can ask us to remove your email at any time.</p></details>
+<details class="qa"><summary>Why not just ask ChatGPT?<span class="plus" aria-hidden="true"></span></summary><p>You can — but that means switching tabs, typing a question and reading a wall of text. Tubelight shows and tells you, in seconds, without leaving your page.</p></details>
+<details class="qa"><summary>Does it cost anything?<span class="plus" aria-hidden="true"></span></summary><p>It’s free to try, with no card needed. Paid plans are there for people who learn a lot every day.</p></details>
+<details class="qa"><summary>Is it accurate?<span class="plus" aria-hidden="true"></span></summary><p>It’s very good on school, college and everyday topics. But like any AI it can slip now and then. If something looks off, ask a follow-up — and for anything high-stakes, check your textbook or teacher.</p></details>
+<details class="qa"><summary>Which computers does it work on?<span class="plus" aria-hidden="true"></span></summary><p>Windows 10 and 11. A Mac version is on the way — join the waitlist and we’ll tell you when it’s ready.</p></details>
+<details class="qa"><summary>What happens to the text I select?<span class="plus" aria-hidden="true"></span></summary><p>It’s sent to our servers to make your explanation. We keep a record of the explanations we make so we can fix problems and improve them. Your saved explanations also live on your own PC.</p></details>
+</div>
+</div>
+</section>
+
+<!-- FINAL CTA -->
+<section id="join" class="sec" style="padding-top: 0; scroll-margin-top: 76px">
+<div class="wrapx">
+<div class="cta">
+<div style="position: relative; max-width: 760px; margin: 0 auto; display: flex; flex-direction: column; align-items: center; gap: 22px">
+<h2 class="h2" style="font-size: clamp(38px, 5.2vw, 66px)">Get early access.</h2>
+<p class="lede" style="max-width: 540px">We invite people in batches, in line order. Tell us how you’ll use Tubelight and you’ll move up the line.</p>
+<sc-if value="{{notSent}}" hint-placeholder-val="{{ true }}">
+<form class="signup" onSubmit="{{submit}}" style="margin-top: 4px">
+<label for="em-join" class="sr">Email address</label>
+<input id="em-join" name="email" class="email-in" type="email" autocomplete="email" placeholder="Your email" value="{{email}}" onChange="{{onEmail}}">
+<button type="submit" class="btn">Join the waitlist</button>
+</form>
+<sc-if value="{{hasErr}}" hint-placeholder-val="{{ false }}"><p class="err" role="alert">{{err}}</p></sc-if>
+<p class="micro">We’ll email you when your invite is ready. Nothing else.</p>
+</sc-if>
+<sc-if value="{{sent}}" hint-placeholder-val="{{ false }}">
+<div class="joined fade" role="status">
+<span class="okdot" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="m5 12 5 5 9-10"></path></svg></span>
+<span>You’re on the waitlist{{posShort}}</span>
+<button type="button" class="linkbtn" onClick="{{openModal}}">{{moveUpLabel}}</button>
+</div>
+</sc-if>
+<div class="proof" style="justify-content: center">
+<span class="live" aria-hidden="true"></span>
+<span><strong>{{proofMain}}</strong>{{proofRest}}</span>
+</div>
+<div class="getahead">
+<div class="ga"><b>1</b><span>Join with your email. It takes ten seconds.</span></div>
+<div class="ga"><b>2</b><span>Tell us how you’ll use it. Every answer moves you up the line.</span></div>
+<div class="ga"><b>3</b><span>Get your invite by email and download Tubelight.</span></div>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+<!-- MORE FROM TUBELIGHT -->
+<section class="sec" style="padding-top: 0">
+<div class="wrapx">
+<div class="xsell">
+<div style="display: flex; flex-direction: column; gap: 10px">
+<p style="margin: 0; font-size: 13px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: #6F6B86">More from Tubelight</p>
+<p class="disp" style="margin: 0; font-size: clamp(26px, 3vw, 34px); line-height: 1.1; font-weight: 600; letter-spacing: -0.03em">Quick Search AI</p>
+<p style="margin: 0; max-width: 560px; color: #57536E">Hold <span class="kbd">Tab</span> + <span class="kbd">Q</span> and ask out loud. One clear answer pops up in the corner of your screen — no new tabs.</p>
+</div>
+<a href="https://search.tubelight.net" target="_blank" rel="noopener" class="btn ghost">Try Quick Search<svg viewBox="0 0 24 24" aria-hidden="true" style="width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round"><path d="M7 17 17 7M9 7h8v8"></path></svg></a>
+</div>
+</div>
+</section>
+
+<!-- FOOTER -->
+<footer style="border-top: 1px solid #ECE7F3; padding: 36px 0 48px">
+<div class="wrapx" style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 18px">
+<span style="display: flex; flex-wrap: wrap; align-items: center; gap: 8px 16px">
+<img src="/_blob/119a31f76ac61335ff35d1eb8a594ca4" alt="Tubelight" style="display: block; height: 26px; width: auto">
+<span style="font-size: 15px; color: #6F6B86">Understand anything in seconds.</span>
+</span>
+<span style="display: flex; flex-wrap: wrap; align-items: center; gap: 24px; font-size: 15px">
+<a href="#how" class="nl" style="font-size: 15px">How it works</a>
+<a href="#examples" class="nl" style="font-size: 15px">Examples</a>
+<a href="#faq" class="nl" style="font-size: 15px">FAQ</a>
+<a href="https://search.tubelight.net" target="_blank" rel="noopener" class="nl" style="font-size: 15px">Quick Search AI</a>
+<span style="color: #6F6B86">© 2026 Tubelight</span>
+</span>
+</div>
+</footer>
+
+<!-- PLAYER (mirrors the desktop app: stage + slide rail + transport) -->
+<sc-if value="{{plOpen}}" hint-placeholder-val="{{ false }}">
+<div class="{{plOvlCls}}" onClick="{{plBackdrop}}">
+<div class="{{plCls}}" role="dialog" aria-modal="true" aria-labelledby="pl-title" tabindex="-1" ref="{{setPlBox}}" onKeyDown="{{plKey}}">
+<div class="pl-head">
+<span id="pl-title" class="pl-title">{{plTitle}}</span>
+<sc-if value="{{plHasTime}}" hint-placeholder-val="{{ true }}"><span class="pl-time">{{plRun}}</span></sc-if>
+<sc-if value="{{plMakingNow}}" hint-placeholder-val="{{ false }}"><span class="pl-making"><span class="spin" aria-hidden="true"></span>{{plStage}}</span></sc-if>
+<sc-if value="{{plDoneMark}}" hint-placeholder-val="{{ true }}"><span class="pl-made"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12 5 5 9-10"></path></svg>{{plMadeText}}</span></sc-if>
+<button type="button" class="pl-x" aria-label="Close player" onClick="{{closePl}}"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"></path></svg></button>
+</div>
+<div class="pl-row">
+<div class="pl-stage">
+<div class="pl-frame">
+<sc-if value="{{plIsVideo}}" hint-placeholder-val="{{ true }}">
+<video ref="{{setPlVid}}" src="{{plSrc}}" poster="{{plPoster}}" playsInline="{{ true }}" preload="auto" onClick="{{plToggle}}" onTimeUpdate="{{plTime}}" onPlay="{{plOnPlay}}" onPause="{{plOnPause}}" onEnded="{{plOnEnd}}" aria-label="{{plTitle}}"></video>
+<span class="{{pPtrCls}}" style="{{pPtrStyle}}" aria-hidden="true"></span>
+<sc-if value="{{plShowCC}}" hint-placeholder-val="{{ true }}"><div class="pl-cc" aria-hidden="true"><sc-for list="{{plCC}}" as="ln" hint-placeholder-count="2"><span><b>{{ln.text}}</b></span></sc-for></div></sc-if>
+<sc-if value="{{plStandIn}}" hint-placeholder-val="{{ false }}"><span class="demo-tag">Design demo: a saved video stands in for the new one</span></sc-if>
+</sc-if>
+<sc-if value="{{plIsLive}}" hint-placeholder-val="{{ false }}">
+<div class="pl-making-stage">
+<span class="sg-ic" aria-hidden="true" style="width: 52px; height: 52px; border-radius: 16px; background: linear-gradient(135deg, #7A5CFA, #5B8CFF); color: #FFFFFF"><svg viewBox="0 0 24 24" style="width: 24px; height: 24px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linejoin: round"><path d="M12 3l1.9 5.1L19 10l-5.1 1.9L12 17l-1.9-5.1L5 10l5.1-1.9zM19 16l.8 2.2L22 19l-2.2.8L19 22l-.8-2.2L16 19l2.2-.8z"></path></svg></span>
+<p class="disp" style="margin: 0">“{{liveTopic}}”</p>
+<span class="stage-line" role="status"><span class="spin" aria-hidden="true"></span>{{plStage}}</span>
+</div>
+</sc-if>
+<sc-if value="{{showGate}}" hint-placeholder-val="{{ false }}">
+<div class="pl-cover">
+<div class="gate fade">
+<p class="disp" style="margin: 0; font-size: 22px; line-height: 1.2; font-weight: 600; letter-spacing: -0.02em">Your video is being made.</p>
+<p style="margin: 0; color: #57536E">Enter your email to watch it when it’s ready — usually about 20 seconds.</p>
+<form class="signup" onSubmit="{{gateSubmit}}">
+<label for="em-gate" class="sr">Email address</label>
+<input id="em-gate" name="email" class="email-in" type="email" autocomplete="email" placeholder="Your email" value="{{email}}" onChange="{{onEmail}}">
+<button type="submit" class="btn">Watch my video</button>
+</form>
+<sc-if value="{{hasErr}}" hint-placeholder-val="{{ false }}"><p class="err" role="alert">{{err}}</p></sc-if>
+<p class="micro">This also puts you on the Tubelight waitlist. We’ll only email you about your invite.</p>
+</div>
+</div>
+</sc-if>
+<sc-if value="{{showEnd}}" hint-placeholder-val="{{ false }}">
+<div class="pl-cover">
+<div class="gate fade" style="align-items: flex-start">
+<p class="disp" style="margin: 0; font-size: 22px; line-height: 1.2; font-weight: 600; letter-spacing: -0.02em">{{endTitle}}</p>
+<p style="margin: 0; color: #57536E">{{endBody}}</p>
+<div style="display: flex; flex-wrap: wrap; gap: 10px">
+<button type="button" class="btn" onClick="{{endCta}}">{{endCtaLabel}}</button>
+<button type="button" class="btn ghost" onClick="{{replayPl}}">Watch again</button>
+</div>
+</div>
+</div>
+</sc-if>
+</div>
+<div class="pl-bar">
+<div class="{{plSeekCls}}" role="slider" tabindex="0" aria-label="Seek" aria-valuemin="0" aria-valuemax="{{plSeekMax}}" aria-valuenow="{{plSeekNow}}" aria-valuetext="{{plSeekText}}" aria-disabled="{{plNoVideo}}" onPointerDown="{{plSeek}}" onPointerMove="{{plSeekMove}}" onPointerUp="{{plSeekUp}}" onPointerCancel="{{plSeekUp}}" onKeyDown="{{plSeekKey}}"><span class="seek-track"><span class="seek-fill" style="width: {{plPct}}%"></span></span><span class="seek-knob" aria-hidden="true" style="left: {{plPct}}%"></span></div>
+<div class="pl-ctrl">
+<div class="pl-grp">
+<button type="button" class="pb fillic" aria-label="{{plPlayLabel}}" onClick="{{plToggle}}" disabled="{{plNoVideo}}"><svg viewBox="0 0 24 24"><path d="{{plPlayPath}}"></path></svg><span class="hide-xs">{{plPlayLabel}}</span></button>
+<button type="button" class="pb" aria-label="Previous picture" onClick="{{plPrev}}" disabled="{{plNoVideo}}"><svg viewBox="0 0 24 24"><path d="m15 18-6-6 6-6"></path></svg></button>
+<span class="pl-sn">{{plSlideNum}}</span>
+<button type="button" class="pb" aria-label="Next picture" onClick="{{plNext}}" disabled="{{plNoVideo}}"><svg viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"></path></svg></button>
+<span class="pl-tm">{{plClock}}</span>
+</div>
+<div class="pl-grp">
+<button type="button" class="pb" aria-label="{{plSndLabel}}" onClick="{{plMute}}"><svg viewBox="0 0 24 24"><path d="M11 5 6 9H2v6h4l5 4z"></path><path d="{{plSndPath}}"></path></svg></button>
+<button type="button" class="{{plCCCls}}" aria-pressed="{{plCCOn}}" aria-label="Captions" onClick="{{plCCToggle}}"><span>CC</span></button>
+<button type="button" class="pb" aria-label="{{plMaxLabel}}" title="{{plMaxLabel}}" onClick="{{plMaxToggle}}"><svg viewBox="0 0 24 24"><path d="{{plMaxPath}}"></path></svg></button>
+</div>
+</div>
+</div>
+</div>
+<div class="pl-rail">
+<div class="pl-rail-h"><span>Slides</span><small>{{railBadge}}</small></div>
+<div class="pl-list">
+<sc-for list="{{slides}}" as="sl" hint-placeholder-count="3">
+<button type="button" class="{{sl.cls}}" aria-current="{{sl.on}}" aria-label="{{sl.aria}}" onClick="{{sl.pick}}" disabled="{{sl.wait}}">
+<span class="pl-thumb">
+<sc-if value="{{sl.hasImg}}" hint-placeholder-val="{{ true }}"><img src="{{sl.thumb}}" alt=""></sc-if>
+<sc-if value="{{sl.isReady}}" hint-placeholder-val="{{ false }}"><span class="pl-ready" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="m5 12 5 5 9-10"></path></svg></span></sc-if>
+<sc-if value="{{sl.isWait}}" hint-placeholder-val="{{ false }}"><span class="spin" aria-hidden="true"></span></sc-if>
+<span class="pl-num">{{sl.num}}</span>
+</span>
+<span class="pl-ct">{{sl.title}}<sc-if value="{{sl.speaking}}" hint-placeholder-val="{{ false }}"><span class="pl-wave" aria-hidden="true"><i></i><i></i><i></i></span></sc-if></span>
+<span class="pl-cs">{{sl.sub}}</span>
+</button>
+</sc-for>
+</div>
+</div>
+</div>
+<p class="pl-foot">{{plFoot}}</p>
+</div>
+</div>
+</sc-if>
+
+<!-- WAITLIST DIALOG -->
+<sc-if value="{{modalOpen}}" hint-placeholder-val="{{ false }}">
+<div class="ovl">
+<div class="dlg" role="dialog" aria-modal="true" aria-labelledby="wl-title" tabindex="-1" ref="{{setDlg}}" onKeyDown="{{dlgKey}}">
+<button type="button" class="xbtn" aria-label="Close" onClick="{{closeModal}}"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"></path></svg></button>
+
+<sc-if value="{{isEmailStep}}" hint-placeholder-val="{{ false }}">
+<div class="fade" style="display: flex; flex-direction: column; gap: 18px">
+<img src="/_blob/af4ad0e670d21cd458db108d9b3ac54d" alt="" style="display: block; width: 40px; height: auto">
+<h2 id="wl-title" class="disp" style="margin: 0; font-size: 32px; line-height: 1.1; font-weight: 600; letter-spacing: -0.03em">Join the waitlist</h2>
+<p style="margin: 0; color: #57536E">We invite people in batches, in line order. It takes ten seconds.</p>
+<form class="signup" onSubmit="{{submit}}" style="max-width: none">
+<label for="em-dlg" class="sr">Email address</label>
+<input id="em-dlg" name="email" class="email-in" type="email" autocomplete="email" placeholder="Your email" value="{{email}}" onChange="{{onEmail}}">
+<button type="submit" class="btn">Join</button>
+</form>
+<sc-if value="{{hasErr}}" hint-placeholder-val="{{ false }}"><p class="err" role="alert">{{err}}</p></sc-if>
+<p class="micro">We’ll email you when your invite is ready. Nothing else.</p>
+<div class="proof"><span class="live" aria-hidden="true"></span><span><strong>{{proofMain}}</strong>{{proofRest}}</span></div>
+</div>
+</sc-if>
+
+<sc-if value="{{isQStep}}" hint-placeholder-val="{{ false }}">
+<div style="display: flex; flex-direction: column; gap: 20px">
+<div style="display: flex; align-items: center; gap: 14px; padding-right: 44px">
+<span class="okdot" aria-hidden="true" style="width: 40px; height: 40px"><svg viewBox="0 0 24 24" style="width: 20px; height: 20px"><path d="m5 12 5 5 9-10"></path></svg></span>
+<div style="min-width: 0">
+<h2 id="wl-title" class="disp" style="margin: 0; font-size: 28px; line-height: 1.1; font-weight: 600; letter-spacing: -0.03em">You’re on the waitlist!</h2>
+<p style="margin: 2px 0 0; font-size: 15px; color: #6F6B86; overflow-wrap: anywhere">{{emailShown}}</p>
+</div>
+</div>
+<sc-if value="{{hasCount}}" hint-placeholder-val="{{ true }}">
+<div class="posbox">
+<div>
+<p style="margin: 0 0 6px; font-size: 14px; font-weight: 600; color: #4B33B8">Your place in line</p>
+<p class="posnum">{{posText}}</p>
+</div>
+<sc-if value="{{showDelta}}" hint-placeholder-val="{{ false }}"><span class="delta">↑ {{spotsText}} spots</span></sc-if>
+</div>
+</sc-if>
+<div style="display: flex; flex-direction: column; gap: 6px">
+<p class="disp" style="margin: 0; font-size: 21px; font-weight: 600; letter-spacing: -0.02em">Want an earlier invite?</p>
+<p style="margin: 0; color: #57536E">Tell us how you’ll use Tubelight. Every answer moves you up the line, so you’re invited sooner.</p>
+</div>
+<div class="segs"><sc-for list="{{segs}}" as="sg" hint-placeholder-count="5"><span class="{{sg.cls}}"></span></sc-for></div>
+
+<div class="fade" style="display: flex; flex-direction: column; gap: 12px">
+<p style="margin: 0; font-size: 14px; font-weight: 600; color: #6F6B86">Question {{qNum}} of {{qTotal}}{{qHint}}</p>
+<p class="disp" style="margin: 0; font-size: 22px; font-weight: 600; letter-spacing: -0.02em; text-wrap: balance">{{qText}}</p>
+<div class="qchips"><sc-for list="{{qOpts}}" as="o" hint-placeholder-count="6"><button type="button" class="{{o.cls}}" aria-pressed="{{o.on}}" onClick="{{o.pick}}">{{o.label}}</button></sc-for></div>
+<sc-if value="{{showOther}}" hint-placeholder-val="{{ false }}">
+<div class="qfield">
+<label for="q-other" class="qlabel">Tell us in a few words</label>
+<input id="q-other" class="qin" type="text" maxlength="80" autocomplete="off" ref="{{setOther}}" value="{{otherText}}" onChange="{{onOther}}" onKeyDown="{{onOtherKey}}">
+</div>
+</sc-if>
+<sc-if value="{{showAbout}}" hint-placeholder-val="{{ true }}">
+<div class="qfield">
+<label for="q-about" class="qlabel">What was it about? <span>(optional)</span></label>
+<input id="q-about" class="qin" type="text" maxlength="120" autocomplete="off" placeholder="e.g. the Krebs cycle in my biology notes" value="{{about}}" onChange="{{onAbout}}">
+</div>
+</sc-if>
+</div>
+<div style="display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap">
+<button type="button" class="linkbtn" style="color: #6F6B86" onClick="{{skipQ}}">Skip this question</button>
+<sc-if value="{{qNeedsNext}}" hint-placeholder-val="{{ false }}"><button type="button" class="btn sm" disabled="{{qNextOff}}" onClick="{{nextQ}}">{{qNextLabel}}</button></sc-if>
+</div>
+</div>
+</sc-if>
+
+<sc-if value="{{isDoneStep}}" hint-placeholder-val="{{ false }}">
+<div class="fade" style="display: flex; flex-direction: column; align-items: flex-start; gap: 18px">
+<span class="big-ic" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 19V5"></path><path d="m5 12 7-7 7 7"></path></svg></span>
+<h2 id="wl-title" class="disp" style="margin: 0; font-size: 32px; line-height: 1.1; font-weight: 600; letter-spacing: -0.03em; padding-right: 44px">{{doneTitle}}</h2>
+<sc-if value="{{hasCount}}" hint-placeholder-val="{{ true }}"><p style="margin: 0; font-size: 18px; color: #221E3F">You’re now <strong style="color: #4B33B8">{{posText}}</strong> in line.</p></sc-if>
+<p style="margin: 0; color: #57536E">We’ll email <strong style="color: #221E3F; font-weight: 600; overflow-wrap: anywhere">{{emailShown}}</strong> as soon as your invite is ready.</p>
+<div style="width: 100%; display: flex; flex-direction: column; gap: 10px; padding: 20px; border-radius: 20px; background: #F6F3FB">
+<p style="margin: 0; font-size: 13px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: #6F6B86">While you wait</p>
+<p style="margin: 0; color: #221E3F">Try <strong style="font-weight: 600">Quick Search AI</strong> — hold Tab + Q, ask out loud, and get one clear answer.</p>
+<a href="https://search.tubelight.net" target="_blank" rel="noopener" class="linkbtn" style="align-self: flex-start">Open Quick Search<svg viewBox="0 0 24 24" aria-hidden="true" style="width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round"><path d="M7 17 17 7M9 7h8v8"></path></svg></a>
+</div>
+<button type="button" class="btn" style="width: 100%" onClick="{{closeModal}}">Done</button>
+</div>
+</sc-if>
+
+</div>
+</div>
+</sc-if>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"waitlistCount":{"editor":"int","default":1,"min":0,"section":"Waitlist"},"joinedThisWeek":{"editor":"int","default":1,"min":0,"section":"Waitlist"},"spotsPerAnswer":{"editor":"int","default":60,"min":0,"section":"Waitlist"},"autoplay":{"editor":"boolean","default":true,"section":"Demo"},"$preview":{"width":1440,"height":9300}}'>
+var V = __DATA__;
+var HERO = [
+  { slug: 'rocket', label: 'Rockets', color: '#FF6F4F', app: 'Rockets.pdf', kicker: 'Physics · Chapter 4', title: 'How rockets fly',
+    lead: 'A rocket carries everything it needs to burn, because there is no air in space.',
+    sel: 'Liquid fuel and liquid oxygen are pumped into the combustion chamber, where they burn and rush out through the nozzle.', tail: 'The hot gas going down pushes the rocket up.',
+    typed: 'how rocket engine works' },
+  { slug: 'headaches', label: 'Headaches', color: '#22B573', app: 'Health article', kicker: 'Wellbeing', title: 'Small habits, better weeks',
+    lead: 'Keep a bottle of water on your desk and take a short walk after lunch.',
+    sel: 'Why do headaches happen if the brain itself can’t feel pain?', tail: 'The answer is in the layers around it.',
+    typed: 'why headaches happen' },
+  { slug: 'dna', label: 'DNA', color: '#3B8EF0', app: 'Biology notes.docx', kicker: 'Biology · Unit 3', title: 'Genetics',
+    lead: 'Every living cell carries a full set of instructions for life.',
+    sel: 'DNA is built from nucleotides that pair up and twist into a double helix.', tail: 'Its base pairs spell out the genetic code.',
+    typed: 'teach me about dna and its fasinating details' }
+];
+/* typed = the exact words someone typed into Tubelight to make each video (from the saved library) */
+var GALLERY = [
+  { slug: 'rocket', tag: 'Science', bg: '#FFEDE7', fg: '#A63A1E', typed: 'how rocket engine works', kw: 'rocket rockets engine engines space fuel thrust nozzle launch physics' },
+  { slug: 'headaches', tag: 'Health', bg: '#E3F6EC', fg: '#146B44', typed: 'why headaches happen', kw: 'headache headaches migraine brain pain head health' },
+  { slug: 'ocean', tag: 'Geography', bg: '#E6F1FF', fg: '#1E5AA8', typed: 'Ocean currents', kw: 'ocean oceans current currents sea water coriolis climate geography' },
+  { slug: 'tv', tag: 'Tech', bg: '#F1ECFF', fg: '#4B33B8', typed: 'how does modern tv worsk so good and high in quality', kw: 'tv television screen oled led pixels display picture tech' },
+  { slug: 'polar-bear', tag: 'Nature', bg: '#FFF4D6', fg: '#8A5A00', typed: 'life cycle of a polar bear', kw: 'polar bear bears arctic animal animals cubs ice nature' },
+  { slug: 'insurance', tag: 'Money', bg: '#FFEDE7', fg: '#A63A1E', typed: 'how lic policy works', kw: 'insurance lic policy premium money finance life' }
+];
+/* other ready-made videos that search can find (features section) */
+var MORE = [
+  { slug: 'kidneys', kw: 'kidney kidneys blood filter urine nephron bladder body medical' },
+  { slug: 'zombie-cells', kw: 'zombie senescent cell cells ageing aging inflammation medical' },
+  { slug: 'neurons', kw: 'neuron neurons memory memories brain synapse learning' },
+  { slug: 'appendix', kw: 'appendix gut bacteria intestine digestion body medical' },
+  { slug: 'supernova', kw: 'supernova star stars black hole holes space explosion' },
+  { slug: 'dark-matter', kw: 'dark matter galaxy galaxies gravity space universe' }
+];
+var SAVED = ['neurons', 'appendix', 'supernova', 'dark-matter'];
+var PH = ['how memory works', 'why is the sky blue?', 'how vaccines train your body', 'what is compound interest?'];
+/* stand-in for Wikipedia title suggestions (the live page asks Wikipedia; a design can’t) */
+var SEEDS = [
+  ['Black hole', 'Region of spacetime where nothing, not even light, escapes'],
+  ['Blood pressure', 'Pressure of circulating blood on the walls of arteries'],
+  ['Blood sugar', 'How much glucose is in your blood'],
+  ['Photosynthesis', 'How plants turn light into chemical energy'],
+  ['Compound interest', 'Interest earned on interest'],
+  ['Vaccine', 'A preparation that trains the immune system'],
+  ['Immune system', 'The body’s network of defences'],
+  ['Insulin', 'Hormone that lets cells take in sugar'],
+  ['Inflation', 'A general rise in prices over time'],
+  ['Quantum entanglement', 'Particles that share one state at a distance'],
+  ['Machine learning', 'Computers learning patterns from data'],
+  ['Heart', 'The muscle that pumps blood through the body'],
+  ['Heart attack', 'Blocked blood flow to the heart muscle'],
+  ['Memory', 'How the brain stores and recalls information'],
+  ['Sky', 'Why is the sky blue? Rayleigh scattering'],
+  ['Volcano', 'Where molten rock reaches the surface'],
+  ['Stock market', 'Where shares of companies are bought and sold'],
+  ['Electricity', 'The flow of electric charge'],
+  ['Gravity', 'The pull between masses'],
+  ['Sleep', 'Why the body and brain need rest']
+];
+var OTHER = 'Other';
+var WAITLIST_SHOW_MIN = 100; /* same default as WAITLIST_SHOW_MIN in app/api/waitlist/stats: the live count shows only at or above it */
+var QS = [
+  { q: 'Which best describes you?', multi: false, opts: ['School student', 'College student', 'Working professional', 'Teacher or researcher', 'Just curious', 'Other'] },
+  { q: 'Think of the last time you got stuck on something you were reading. Where were you reading it?', multi: false, about: true, opts: ['A PDF or e-book', 'A website or article', 'Word or Google Docs', 'Notion or OneNote', 'Slack, Teams or email', 'Other'] },
+  { q: 'What did you do to understand it?', multi: true, opts: ['Googled it', 'Asked ChatGPT or another AI', 'Watched a YouTube video', 'Asked a friend or teacher', 'Gave up and moved on', 'Other'] },
+  { q: 'In the last 7 days, how many times did that happen?', multi: false, opts: ['Not once', 'Once or twice', '3 to 5 times', 'Almost every day'] },
+  { q: 'What do you pay for today to learn or understand things?', multi: true, opts: ['Nothing, free tools only', 'ChatGPT Plus or another AI plan', 'Coaching or tuition', 'Online courses or apps', 'Books or test series', 'Other'] },
+  { q: 'How did you hear about Tubelight?', multi: false, opts: ['A friend', 'YouTube', 'Instagram', 'LinkedIn', 'Google search', 'Other'] }
+];
+var IC_SEARCH = 'M11 18a7 7 0 1 0 0-14 7 7 0 0 0 0 14zM20 20l-3.5-3.5';
+var IC_PLAY = 'M8 5.5v13l10.5-6.5z';
+var IC_SPARK = 'M12 3l1.9 5.1L19 10l-5.1 1.9L12 17l-1.9-5.1L5 10l5.1-1.9zM19 16l.8 2.2L22 19l-2.2.8L19 22l-.8-2.2L16 19l2.2-.8z';
+var IC_MAX = 'M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7';
+var IC_MIN = 'M4 14h6v6M20 10h-6V4M14 10l7-7M3 21l7-7';
+var STOP = { the: 1, how: 1, why: 1, what: 1, does: 1, and: 1, are: 1, for: 1, with: 1, about: 1, work: 1, works: 1, that: 1, this: 1, from: 1, into: 1, your: 1, explain: 1, teach: 1 };
+var LIVE_STEPS = ['Writing the story…', 'Planning 3 pictures…', 'Drawing the pictures…', 'Recording the voice…', 'Ready'];
+
+function words(t) { return String(t || '').toLowerCase().replace(/[^a-z0-9\s]/g, ' ').split(/\s+/).filter(function (w) { return w.length > 2 && !STOP[w]; }); }
+function mmss(s) { s = Math.max(0, Math.floor(s || 0)); var m = Math.floor(s / 60), r = s % 60; return m + ':' + (r < 10 ? '0' : '') + r; }
+function cueAt(cues, t) { if (!cues) return ''; for (var i = 0; i < cues.length; i++) { if (t >= cues[i].start && t < cues[i].end) return cues[i].text; } return ''; }
+/* two caption lines, like the app (about 40–46 characters each) */
+function wrap2(text) {
+  var w = String(text || '').trim().split(/\s+/); if (!w[0]) return [];
+  var max = Math.max(40, Math.ceil(text.length / 2) + 4), lines = [''];
+  w.forEach(function (x) { var l = lines[lines.length - 1]; if (l && (l + ' ' + x).length > max && lines.length < 2) lines.push(x); else lines[lines.length - 1] = l ? l + ' ' + x : x; });
+  return lines.map(function (x) { return { text: x }; });
+}
+function beatAt(beats, t) { if (!beats) return null; for (var i = 0; i < beats.length; i++) { if (t >= beats[i].start && t < beats[i].end) return beats[i]; } return null; }
+function sheetIdxAt(sheets, t) { var i = 0; for (var k = 0; k < (sheets || []).length; k++) { if (t + 0.05 >= sheets[k].start) i = k; } return i; }
+function cap(s) { s = String(s || '').trim(); return s.charAt(0).toUpperCase() + s.slice(1); }
+
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = {
+      topic: 0, mode: 'idle', vt: 0, pressed: false, touched: false, muted: true, paused: true,
+      demoOn: false, inMode: 'type', hq: '', hArm: false, pArm: false, drag: null, q: '', ph: 'Search a topic or paste text…', coarse: false,
+      sOpen: false, sIdx: -1,
+      pl: null, pt: 0, pPaused: true, pMuted: false, pCC: true, pMax: false, pEnded: false,
+      live: null,
+      email: '', sent: false, err: '', modal: null, qi: 0, picked: [], otherText: '', about: '', searched: '', answers: [], boost: 0, shown: 0, delta: false
+    };
+    this.setPanel = (el) => { this.panelEl = el; };
+    this.setDlg = (el) => { this.dlgEl = el; };
+    this.setHeroVid = (el) => { this.hv = el; };
+    this.setDemoVid = (el) => { this.dv = el; };
+    this.setPlVid = (el) => { this.pv = el; };
+    this.setPlBox = (el) => { this.plEl = el; };
+    this.setQ = (el) => { this.qEl = el; };
+    this.setHq = (el) => { this.hqEl = el; };
+    this.setOther = (el) => { this.otherEl = el; };
+    this.drag = null;
+    this.lt = [];
+  }
+  componentDidMount() {
+    try { if (window.matchMedia('(pointer: coarse)').matches) this.setState({ coarse: true }); } catch (e) {}
+    var reduce = false;
+    try { reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches; } catch (e) {}
+    this.reduce = reduce;
+    if (!reduce) this.cyclePh(0, 0); else this.setState({ ph: 'Search a topic or paste text…  e.g. ' + PH[0] });
+    /* search mode is the default: the sample topic types itself, Enter is pressed, the video plays muted (nobody pressed anything) */
+    if (this.props.autoplay === false || reduce) { this.setState({ hq: HERO[this.state.topic].typed }); return; }
+    this.a1 = setTimeout(() => { if (!this.state.touched) this.typeTopic(false); }, 900);
+  }
+  componentWillUnmount() {
+    clearTimeout(this.a1); clearTimeout(this.p1); clearInterval(this.tk); clearTimeout(this.dt); clearTimeout(this.nq); clearTimeout(this.fo);
+    clearInterval(this.ty); clearTimeout(this.phT); clearTimeout(this.ae); clearTimeout(this.bl); clearTimeout(this.at_h); clearTimeout(this.at_p); clearTimeout(this.fo2); this.clearLive();
+  }
+  vid(slug) { return V[slug] || {}; }
+
+  /* placeholder: app wording, the example types itself */
+  cyclePh(i, n) {
+    var ex = PH[i % PH.length];
+    var next = n < ex.length ? [i, n + 1, 60] : [i + 1, 0, 2200];
+    this.setState({ ph: 'Search a topic or paste text…  e.g. ' + ex.slice(0, n) });
+    this.phT = setTimeout(() => { this.cyclePh(next[0], next[1]); }, next[2]);
+  }
+
+  /* ---------- hero ---------- */
+  stopTyping() { clearTimeout(this.a1); clearInterval(this.ty); clearTimeout(this.ae); }
+  setMode(m) {
+    this.stopTyping(); this.armStop('h');
+    try { if (this.hv) this.hv.pause(); } catch (e) {}
+    this.setState({ inMode: m, mode: 'idle', vt: 0, touched: true, paused: true });
+    if (m === 'type') this.typeTopic(true); else this.setState({ hq: HERO[this.state.topic].typed });
+  }
+  /* the sample topic types itself into the search box, then Enter is pressed (by the page when byUser is false: muted) */
+  typeTopic(byUser) {
+    clearInterval(this.ty); clearTimeout(this.ae);
+    var full = HERO[this.state.topic].typed;
+    var pressEnter = () => { this.ae = setTimeout(() => { if (this.state.inMode === 'type' && this.state.mode === 'idle') this.go(!!byUser); }, 650); };
+    if (this.reduce) { this.setState({ hq: full }); if (byUser) pressEnter(); return; }
+    var n = 0;
+    this.setState({ hq: '' });
+    this.ty = setInterval(() => {
+      n++;
+      this.setState({ hq: full.slice(0, n) });
+      if (n >= full.length) { clearInterval(this.ty); pressEnter(); }
+    }, 45);
+  }
+  go(byUser) {
+    clearTimeout(this.a1); clearTimeout(this.p1); clearTimeout(this.ae);
+    var patch = { pressed: true, mode: 'playing', vt: 0 };
+    if (byUser) { patch.touched = true; patch.muted = false; }
+    this.setState(patch);
+    this.p1 = setTimeout(() => { this.setState({ pressed: false }); }, 260);
+    var el = this.hv;
+    if (el) {
+      try { el.muted = byUser ? false : true; el.currentTime = 0; var p = el.play(); if (p && p.catch) p.catch(() => { el.muted = true; this.setState({ muted: true }); el.play().catch(() => {}); }); } catch (e) {}
+    }
+    if (byUser && this.panelEl && typeof window !== 'undefined' && window.innerWidth < 720) {
+      setTimeout(() => { try { this.panelEl.scrollIntoView({ behavior: 'smooth', block: 'center' }); } catch (e) {} }, 350);
+    }
+  }
+  pickTopic(i) {
+    this.stopTyping(); this.armStop('h');
+    try { if (this.hv) this.hv.pause(); } catch (e) {}
+    this.setState({ touched: true, topic: i, mode: 'idle', vt: 0, paused: true, hq: HERO[i].typed });
+    if (this.state.inMode === 'type') setTimeout(() => { this.typeTopic(true); }, 0);
+  }
+  /* the hero search box: focusing it stops the typing and selects the text so the visitor can type over it */
+  heroFocus(e) {
+    this.stopTyping();
+    this.setState({ touched: true });
+    var el = e && e.target; try { if (el && el.select) { el.select(); setTimeout(() => { try { el.select(); } catch (x) {} }, 0); } } catch (x) {}
+  }
+  heroSubmit(e) {
+    if (e && e.preventDefault) e.preventDefault();
+    this.stopTyping();
+    var t = (this.state.hq || '').trim(); if (t.length < 2) return;
+    var tl = t.toLowerCase(), idx = -1;
+    HERO.forEach(function (h, i) { if (idx < 0 && (h.typed.toLowerCase() === tl || h.label.toLowerCase() === tl)) idx = i; });
+    if (idx >= 0) {
+      if (idx !== this.state.topic) { this.setState({ topic: idx, hq: HERO[idx].typed, touched: true, mode: 'idle', vt: 0 }); setTimeout(() => { this.go(true); }, 80); }
+      else this.go(true);
+      return;
+    }
+    var m = this.findMatches(t);
+    if (m.length && m[0].score >= Math.max(1, words(t).length)) this.openPlayer(m[0].g.slug, 0);
+    else this.startLive(t);
+  }
+  /* the topic pill in the player bar: back to the search box with the text selected */
+  editTopic() {
+    this.stopTyping(); this.armStop('h');
+    try { if (this.hv) this.hv.pause(); } catch (e) {}
+    this.setState({ mode: 'idle', vt: 0, paused: true, touched: true });
+    setTimeout(() => { try { if (this.hqEl) { this.hqEl.focus(); this.hqEl.select(); } } catch (e) {} }, 90);
+  }
+
+  /* ---------- seekable timelines (one implementation for the hero and the big player) ---------- */
+  durOf(k) { if (k === 'h') return this.vid(HERO[this.state.topic].slug).duration || 0; var P = this.state.pl; return P && P.kind === 'video' ? (this.vid(P.slug).duration || 0) : 0; }
+  curOf(k) { try { if (k === 'h') return this.hv ? this.hv.currentTime : this.state.vt; return this.pv ? this.pv.currentTime : this.state.pt; } catch (e) { return 0; } }
+  fracT(e, dur) { var r = e.currentTarget.getBoundingClientRect(); var f = r.width ? Math.min(1, Math.max(0, (e.clientX - r.left) / r.width)) : 0; return f * dur; }
+  seekAbs(k, t) { if (k === 'h') this.heroSeek(t, false); else this.seekTo(t); }
+  seekDown(k, e) {
+    if (!e) return; var dur = this.durOf(k); if (!dur) return;
+    try { e.currentTarget.setPointerCapture(e.pointerId); } catch (x) {}
+    this.drag = k; this.setState({ drag: k });
+    this.seekAbs(k, this.fracT(e, dur));
+  }
+  seekMove(k, e) { if (this.drag !== k || !e) return; var dur = this.durOf(k); if (dur) this.seekAbs(k, this.fracT(e, dur)); }
+  seekUp(k, e) {
+    if (this.drag !== k) return;
+    this.drag = null;
+    try { e.currentTarget.releasePointerCapture(e.pointerId); } catch (x) {}
+    this.setState({ drag: null });
+  }
+  seekKey(k, e) {
+    var dur = this.durOf(k); if (!dur || !e) return;
+    var cur = this.curOf(k), t = null;
+    if (e.key === 'ArrowRight') t = cur + 5; else if (e.key === 'ArrowLeft') t = cur - 5;
+    else if (e.key === 'PageUp') t = cur + 10; else if (e.key === 'PageDown') t = cur - 10;
+    else if (e.key === 'Home') t = 0; else if (e.key === 'End') t = dur;
+    if (t === null) return;
+    e.preventDefault(); e.stopPropagation();
+    this.seekAbs(k, t);
+  }
+  /* hero seek: seeking while idle or finished starts playback at that point (counts as the visitor's press, so sound comes on) */
+  heroSeek(t, force) {
+    var el = this.hv, dur = this.durOf('h'), st = this.state;
+    var restart = st.mode !== 'playing';
+    t = Math.max(0, Math.min(t, restart ? Math.max(0, dur - 0.2) : dur));
+    try { if (el) el.currentTime = t; } catch (x) {}
+    var patch = { vt: t };
+    if (restart) { patch.mode = 'playing'; patch.touched = true; patch.muted = false; this.stopTyping(); }
+    this.setState(patch);
+    if (el && (restart || (force && el.paused))) {
+      try { if (restart) el.muted = false; var p = el.play(); if (p && p.catch) p.catch(() => { el.muted = true; this.setState({ muted: true }); el.play().catch(() => {}); }); } catch (x) {}
+    }
+  }
+
+  /* ---------- the pointer (the app’s BALL light) ---------- */
+  sheetOf(k, t) {
+    var vd = k === 'h' ? this.vid(HERO[this.state.topic].slug) : this.vid(this.state.pl && this.state.pl.slug);
+    var b = beatAt(vd.beats, t); return b ? b.sheet : sheetIdxAt(vd.sheets || [], t);
+  }
+  armSheet(k, t) { var sh = this.sheetOf(k, t); if (this['sh_' + k] !== sh) { this['sh_' + k] = sh; this.armRestart(k); } }
+  armRestart(k) {
+    clearTimeout(this['at_' + k]);
+    var el = k === 'h' ? this.hv : this.pv, patch = {};
+    if (this.state[k + 'Arm']) { patch[k + 'Arm'] = false; this.setState(patch); }
+    if (el && !el.paused && !el.ended) this['at_' + k] = setTimeout(() => { var p2 = {}; p2[k + 'Arm'] = true; this.setState(p2); }, 600);
+  }
+  armStop(k) { clearTimeout(this['at_' + k]); if (this.state[k + 'Arm']) { var p = {}; p[k + 'Arm'] = false; this.setState(p); } }
+  /* where the light goes: the real picture box inside the video element (object-fit: contain of a 16:9 frame) */
+  ptrView(k, el, vd, t, live) {
+    var b = beatAt(vd.beats, t), sh = b && vd.sheets ? vd.sheets[b.sheet] : null;
+    var cw = el ? el.clientWidth : 0, ch = el ? el.clientHeight : 0;
+    var boxW = cw, boxH = cw * 9 / 16, bl = 0, bt = 0;
+    if (cw && ch) { if (cw / ch > 16 / 9) { boxH = ch; boxW = ch * 16 / 9; bl = (cw - boxW) / 2; } else { bt = (ch - boxH) / 2; } }
+    var ok = !!(cw && b && b.ptr && sh && sh.walk);
+    var last = this['pp_' + k] || { l: cw / 2, t: ch / 2, s: 12 };
+    if (ok) { last = { l: bl + b.ptr.x * boxW, t: bt + b.ptr.y * boxH, s: Math.max(9, Math.min(22, Math.round(0.016 * (sh.pw || 1) * boxW))) }; this['pp_' + k] = last; }
+    var on = ok && !!live;
+    return { cls: 'tl-spot-ball ptr' + (on ? ' is-on' : ''), style: 'left:' + Math.round(last.l) + 'px;top:' + Math.round(last.t) + 'px;width:' + last.s + 'px;height:' + last.s + 'px;margin:-' + (last.s / 2) + 'px 0 0 -' + (last.s / 2) + 'px' };
+  }
+
+  /* ---------- search (like the app’s home box) ---------- */
+  findMatches(q) {
+    var ws = words(q); if (!ws.length) return [];
+    var self = this;
+    return GALLERY.concat(MORE).map(function (g) {
+      var v = self.vid(g.slug);
+      var hay = ' ' + words(v.title + ' ' + (g.typed || '') + ' ' + (g.tag || '') + ' ' + g.kw).join(' ') + ' ';
+      var score = 0;
+      ws.forEach(function (w) { if (hay.indexOf(' ' + w) >= 0) score++; });
+      return { g: g, score: score };
+    }).filter(function (x) { return x.score > 0; }).sort(function (a, b) { return b.score - a.score; });
+  }
+  suggestions() {
+    var q = (this.state.q || '').trim(), self = this, out = [];
+    var split = function (title) {
+      var i = q ? title.toLowerCase().indexOf(q.toLowerCase()) : -1;
+      return i < 0 ? { pre: title, mid: '', post: '' } : { pre: title.slice(0, i), mid: title.slice(i, i + q.length), post: title.slice(i + q.length) };
+    };
+    if (!q) {
+      ['rocket', 'kidneys', 'supernova'].forEach(function (k) { var v = self.vid(k); out.push(Object.assign({ kind: 'watch', slug: k, title: v.title, hint: 'Ready-made video · ' + mmss(v.duration), badge: 'Watch', icon: IC_PLAY }, split(v.title))); });
+      return out;
+    }
+    this.findMatches(q).slice(0, 2).forEach(function (m) { var v = self.vid(m.g.slug); out.push(Object.assign({ kind: 'watch', slug: m.g.slug, title: v.title, hint: 'Ready-made video · ' + mmss(v.duration), badge: 'Watch', icon: IC_PLAY }, split(v.title))); });
+    var ql = q.toLowerCase();
+    SEEDS.filter(function (s) { var tl = s[0].toLowerCase(); return tl.indexOf(ql) === 0 || (ql.length > 2 && tl.indexOf(ql) >= 0); }).slice(0, 4)
+      .forEach(function (s) { out.push(Object.assign({ kind: 'topic', title: s[0], hint: s[1], badge: '', icon: IC_SEARCH }, split(s[0]))); });
+    if (q.length >= 2) out.push({ kind: 'make', title: q, pre: 'Make a video about “', mid: '', post: q.slice(0, 80) + '”', hint: 'Free preview · about 20 s · email needed to watch', badge: 'New', icon: IC_SPARK });
+    return out;
+  }
+  pickSug(item) {
+    this.setState({ sOpen: false, sIdx: -1 });
+    if (item.kind === 'watch') this.openPlayer(item.slug, 0);
+    else this.startLive(item.title);
+  }
+
+  /* ---------- player ---------- */
+  pauseOthers() { try { if (this.hv) this.hv.pause(); } catch (e) {} try { if (this.dv) this.dv.pause(); } catch (e) {} }
+  focusPl() { clearTimeout(this.fo); this.fo = setTimeout(() => { try { if (this.plEl) this.plEl.focus({ preventScroll: true }); } catch (e) {} }, 60); }
+  openPlayer(slug, t, extra) {
+    this.pauseOthers(); this.clearLive(); this.sh_p = -1; this.armStop('p');
+    this.setState({ pl: Object.assign({ kind: 'video', slug: slug }, extra || {}), live: null, pt: t || 0, pEnded: false, pPaused: true });
+    this.focusPl();
+    setTimeout(() => { var el = this.pv; if (!el) return; try { el.currentTime = t || 0; el.muted = this.state.pMuted; el.play().catch(() => {}); } catch (e) {} }, 80);
+  }
+  closePlayer() {
+    try { if (this.pv) this.pv.pause(); } catch (e) {}
+    this.clearLive(); this.armStop('p');
+    try { if (document.fullscreenElement) document.exitFullscreen(); } catch (e) {}
+    this.setState({ pl: null, live: null, pMax: false, pEnded: false });
+  }
+  toggleMax() {
+    var on = !this.state.pMax;
+    this.setState({ pMax: on });
+    try { if (on && this.plEl && this.plEl.requestFullscreen) this.plEl.requestFullscreen().catch(function () {}); else if (!on && document.fullscreenElement) document.exitFullscreen(); } catch (e) {}
+  }
+  seekTo(t) { var el = this.pv, dur = this.durOf('p'); t = Math.max(0, dur ? Math.min(t, dur) : t); if (el) { try { el.currentTime = t; if (el.paused && (!dur || t < dur - 0.1)) el.play().catch(function () {}); } catch (e) {} } this.setState({ pt: t, pEnded: !!dur && t >= dur - 0.1 }); }
+  curSlide() {
+    var P = this.state.pl; if (!P || P.kind !== 'video') return 0;
+    var sh = this.vid(P.slug).sheets || [], i = 0;
+    for (var k = 0; k < sh.length; k++) { if (this.state.pt + 0.05 >= sh[k].start) i = k; }
+    return i;
+  }
+
+  /* ---------- live preview (simulated here; the live page streams a real one) ---------- */
+  clearLive() { (this.lt || []).forEach(function (x) { clearTimeout(x); }); this.lt = []; }
+  startLive(topic) {
+    topic = String(topic || '').trim().slice(0, 200); if (topic.length < 2) return;
+    this.pauseOthers(); this.clearLive();
+    this.setState({ pl: { kind: 'live', topic: topic }, live: { topic: topic, step: 0, imgs: 0, n: 3 }, pEnded: false, err: '', sOpen: false, sIdx: -1, searched: topic });
+    this.focusPl();
+    var plan = [[1800, { step: 1 }], [3400, { step: 2, imgs: 1 }], [5000, { imgs: 2 }], [6600, { imgs: 3, step: 3 }], [9000, { step: 4 }]];
+    this.lt = plan.map((x) => setTimeout(() => {
+      var L = this.state.live; if (!L) return;
+      this.setState({ live: Object.assign({}, L, x[1]) });
+      setTimeout(() => { this.maybeReveal(); }, 0);
+    }, x[0]));
+  }
+  maybeReveal() {
+    var L = this.state.live;
+    if (L && L.step >= 4 && this.state.sent) this.openPlayer('kidneys', 0, { standIn: true, topic: L.topic });
+  }
+
+  /* ---------- waitlist ---------- */
+  count() { var n = parseInt(this.props.waitlistCount == null ? 1 : this.props.waitlistCount, 10); return isNaN(n) || n < 0 ? 0 : n; }
+  week() { var n = parseInt(this.props.joinedThisWeek == null ? 1 : this.props.joinedThisWeek, 10); return isNaN(n) || n < 0 ? 0 : n; }
+  spots() { var n = parseInt(this.props.spotsPerAnswer == null ? 60 : this.props.spotsPerAnswer, 10); return isNaN(n) || n < 0 ? 60 : n; }
+  focusDlg() { clearTimeout(this.fo); this.fo = setTimeout(() => { try { if (this.dlgEl) this.dlgEl.focus({ preventScroll: true }); } catch (e) {} }, 60); }
+  openModal() { var s = this.state; this.setState({ modal: !s.sent ? 'email' : (s.qi >= QS.length ? 'done' : 'q'), err: '' }); this.focusDlg(); }
+  focusOther() { clearTimeout(this.fo2); this.fo2 = setTimeout(() => { try { if (this.otherEl) this.otherEl.focus(); } catch (e) {} }, 80); }
+  /* what is stored for the current step: chips as strings, Other as "Other: …", the optional about-text as "About: …" */
+  answerValue() {
+    var s = this.state, q = QS[s.qi];
+    var vals = s.picked.map(function (l) { if (l !== OTHER) return l; var x = (s.otherText || '').trim(); return x ? 'Other: ' + x : 'Other'; });
+    var v = q.multi ? vals : (vals[0] || null);
+    var a = (s.about || '').trim();
+    if (q.about && a) v = [].concat(v || [], ['About: ' + a]);
+    return v;
+  }
+  validEmail() { var v = (this.state.email || '').trim(); if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v)) { this.setState({ err: 'That email doesn’t look quite right — mind checking it?' }); return false; } return true; }
+  tickTo(target) {
+    clearInterval(this.tk);
+    var from = this.state.shown, start = Date.now(), d = 700;
+    this.tk = setInterval(() => { var p = Math.min(1, (Date.now() - start) / d); var e = 1 - Math.pow(1 - p, 3); this.setState({ shown: Math.round(from + (target - from) * e) }); if (p >= 1) clearInterval(this.tk); }, 30);
+  }
+  advance(value, counted) {
+    var qi = this.state.qi, answers = this.state.answers.slice();
+    answers[qi] = value;
+    var nb = this.state.boost + (counted ? this.spots() : 0);
+    var next = qi + 1;
+    this.setState({ boost: nb, qi: next, picked: [], otherText: '', about: '', answers: answers, delta: counted });
+    if (counted) { this.tickTo(nb); clearTimeout(this.dt); this.dt = setTimeout(() => { this.setState({ delta: false }); }, 1400); }
+    if (next >= QS.length) { setTimeout(() => { this.setState({ modal: 'done' }); this.focusDlg(); }, counted ? 900 : 0); }
+  }
+  pick(label) {
+    var q = QS[this.state.qi], p = this.state.picked.slice(), at = p.indexOf(label);
+    if (q.multi) {
+      if (at >= 0) p.splice(at, 1); else p.push(label);
+      this.setState({ picked: p });
+      if (label === OTHER && at < 0) this.focusOther();
+      return;
+    }
+    if (q.about || label === OTHER) { /* these steps wait for Next: there is a text box to fill */
+      this.setState({ picked: at >= 0 ? [] : [label] });
+      if (label === OTHER && at < 0) this.focusOther();
+      return;
+    }
+    if (p.length && p[0] !== OTHER) return;
+    this.setState({ picked: [label] });
+    clearTimeout(this.nq);
+    this.nq = setTimeout(() => { this.advance(label, true); }, 320);
+  }
+
+  renderVals() {
+    var s = this.state, self = this;
+    var tp = HERO[s.topic], hv = this.vid(tp.slug);
+    var idle = s.mode === 'idle', playing = s.mode === 'playing' && !s.paused, done = s.mode === 'done';
+    var dur = hv.duration || 0, cues = hv.cues;
+    var fmt = function (n) { try { return Number(n).toLocaleString('en-IN'); } catch (e) { return String(n); } };
+    var cnt = this.count(), hasCount = cnt > 0 && cnt >= WAITLIST_SHOW_MIN, wk = this.week();
+    var pos = Math.max(1, cnt + 1 - s.shown), finalPos = Math.max(1, cnt + 1 - s.boost);
+    var q = QS[Math.min(s.qi, QS.length - 1)];
+    var P0 = s.pl, isVideo0 = !!(P0 && P0.kind === 'video'), pvd0 = isVideo0 ? this.vid(P0.slug) : {};
+    var ask = s.inMode === 'type';
+    var hsheets = hv.sheets || [], hcur = sheetIdxAt(hsheets, s.vt);
+    var hptr = this.ptrView('h', this.hv, hv, s.vt, s.mode === 'playing' && !s.paused && s.hArm);
+    var hslides = hsheets.map(function (sh, i) {
+      var on = i === hcur;
+      return { num: i + 1, thumb: sh.thumb, title: sh.title || ('Picture ' + (i + 1)), sub: mmss(sh.start), cls: 'pl-card' + (on ? ' on' : ''), on: on, speaking: on && playing,
+        aria: 'Picture ' + (i + 1) + (sh.title ? ': ' + sh.title : '') + ', starts at ' + mmss(sh.start), pick: function () { self.heroSeek(sh.start, true); } };
+    });
+    var pptr = this.ptrView('p', this.pv, pvd0, s.pt, isVideo0 && !s.pPaused && !s.pEnded && s.pArm);
+
+    /* search */
+    var sugg = s.sOpen ? this.suggestions() : [];
+    var sIdx = Math.min(s.sIdx, sugg.length - 1);
+
+    /* player */
+    var P = s.pl, isVideo = !!(P && P.kind === 'video'), isLive = !!(P && P.kind === 'live');
+    var pvd = isVideo ? this.vid(P.slug) : {}, L = s.live || {};
+    var sheets = pvd.sheets || [], cur = this.curSlide();
+    var pdur = pvd.duration || 0;
+    var slides = isVideo
+      ? sheets.map(function (sh, i) {
+          var on = i === cur;
+          return { num: i + 1, thumb: sh.thumb, hasImg: true, isReady: false, isWait: false, wait: false, on: on, speaking: on && !s.pPaused,
+            title: sh.title || ('Picture ' + (i + 1)), sub: mmss(sh.start), cls: 'pl-card' + (on ? ' on' : ''),
+            aria: 'Picture ' + (i + 1) + (sh.title ? ': ' + sh.title : '') + ', starts at ' + mmss(sh.start), pick: function () { self.seekTo(sh.start); } };
+        })
+      : (isLive ? [0, 1, 2].map(function (i) {
+          var ready = (L.imgs || 0) > i;
+          return { num: i + 1, thumb: '', hasImg: false, isReady: ready, isWait: !ready, wait: true, on: false, speaking: false,
+            title: 'Picture ' + (i + 1), sub: ready ? 'Drawn' : ((L.imgs || 0) === i && L.step >= 2 ? 'Being drawn…' : 'Queued'),
+            cls: 'pl-card' + (ready ? '' : ' wait'), aria: 'Picture ' + (i + 1) + (ready ? ' drawn' : ' not ready yet'), pick: function () {} };
+        }) : []);
+    var stageText = isLive ? (L.step === 2 ? 'Drawing picture ' + Math.min(3, (L.imgs || 0) + 1) + ' of 3…' : LIVE_STEPS[L.step || 0]) : '';
+    var ended = isVideo && s.pEnded;
+
+    return {
+      /* hero */
+      isSel: !ask, isAsk: ask,
+      modeSelCls: 'mode' + (ask ? '' : ' on'), modeAskCls: 'mode' + (ask ? ' on' : ''),
+      toSel: function () { self.setMode('select'); }, toAsk: function () { self.setMode('type'); },
+      hq: s.hq, setHq: this.setHq,
+      onHq: function (e) { self.stopTyping(); self.setState({ hq: e.target.value.slice(0, 200), touched: true }); },
+      onHqFocus: function (e) { self.heroFocus(e); },
+      heroSubmit: function (e) { self.heroSubmit(e); },
+      editTopic: function () { self.editTopic(); },
+      pillTopic: tp.typed, pillAria: 'Search again. Current topic: ' + tp.typed,
+      enterCls: 'enterkey' + (s.pressed ? ' pressed' : ''),
+      deskCls: 'desk' + (ask ? ' ask' : '') + (idle ? '' : (ask ? ' play' : ' split')),
+      pbodyCls: 'pbody' + (ask ? ' app' : ''),
+      appName: tp.app, appColor: tp.color,
+      docKicker: tp.kicker, docTitle: tp.title, docLead: tp.lead, docSel: tp.sel, docTail: tp.tail,
+      vidTitle: hv.title || '', vidSrc: hv.src, vidPoster: hv.poster, vidAria: 'Tubelight explanation: ' + (hv.title || ''),
+      heroCap: idle ? (ask ? ' ' : 'Press Alt + E to explain the highlighted text.') : (cueAt(cues, s.vt) || ' '),
+      pct: dur ? Math.min(100, Math.round(s.vt / dur * 1000) / 10) : 0,
+      time: mmss(s.vt), total: mmss(dur),
+      seekCls: 'seek' + (s.drag === 'h' ? ' drag' : ''),
+      seekMax: Math.round(dur), seekNow: Math.round(s.vt), seekText: mmss(s.vt) + ' of ' + mmss(dur),
+      seekDown: function (e) { self.seekDown('h', e); }, seekMove: function (e) { self.seekMove('h', e); },
+      seekUp: function (e) { self.seekUp('h', e); }, seekKey: function (e) { self.seekKey('h', e); },
+      hPtrCls: hptr.cls, hPtrStyle: hptr.style,
+      hslides: hslides, hRailBadge: hsheets.length + ' slides',
+      isDone: done,
+      showUnmute: !idle && s.muted,
+      keyCls: 'keybtn' + (idle ? ' ready' : '') + (s.pressed ? ' pressed' : ''),
+      keyLabel: !idle ? 'Explain it again' : (s.coarse ? 'Tap to explain the highlighted text' : 'Explain the highlighted text'),
+      explain: function () { self.go(true); },
+      replay: function () { self.go(true); },
+      ppLabel: s.paused ? 'Play' : 'Pause',
+      ppPath: s.paused ? 'M8 5.5v13l10.5-6.5z' : 'M7 5h3.5v14H7zM13.5 5H17v14h-3.5z',
+      togglePlay: function () {
+        if (idle) { self.go(true); return; }
+        var el = self.hv; if (!el) return;
+        try { if (el.paused) { el.play().catch(function () {}); } else { el.pause(); } } catch (e) {}
+      },
+      soundOn: !s.muted,
+      sndLabel: s.muted ? 'Sound off — turn on' : 'Sound on — turn off',
+      sndPath: s.muted ? 'M16 9l5 6M21 9l-5 6' : 'M15.5 8.5a5 5 0 0 1 0 7M19 5a10 10 0 0 1 0 14',
+      toggleSound: function () {
+        var m = !self.state.muted, el = self.hv;
+        if (el) { try { el.muted = m; if (!m && el.paused && self.state.mode !== 'idle') el.play().catch(function () {}); } catch (e) {} }
+        self.setState({ muted: m, touched: true });
+      },
+      heroMax: function () { var t0 = 0; try { t0 = self.hv ? self.hv.currentTime : 0; } catch (e) {} self.openPlayer(tp.slug, t0); },
+      heroTime: function (e) { var ct = e.target.currentTime; self.setState({ vt: ct }); self.armSheet('h', ct); },
+      heroEnded: function () { self.armStop('h'); self.setState({ mode: 'done', paused: true }); },
+      heroPlay: function () { self.setState(self.state.mode === 'done' ? { paused: false, mode: 'playing' } : { paused: false }); try { self.sh_h = self.sheetOf('h', self.hv ? self.hv.currentTime : 0); } catch (x) {} self.armRestart('h'); },
+      heroPause: function () { self.armStop('h'); self.setState({ paused: true }); },
+      setHeroVid: this.setHeroVid, setPanel: this.setPanel,
+      topics: HERO.map(function (x, i) { var on = s.topic === i; return { label: x.label, color: x.color, cls: 'tchip' + (on ? ' on' : ''), pressed: on, pick: function () { self.pickTopic(i); } }; }),
+      onKey: function (e) {
+        if (!e) return;
+        if (!ask && e.altKey && (e.code === 'KeyE' || e.key === 'e' || e.key === 'E')) { e.preventDefault(); self.go(true); }
+      },
+      tryOwn: function (e) {
+        if (e && e.preventDefault) e.preventDefault();
+        try { var sec = document.getElementById('examples'); if (sec) sec.scrollIntoView({ behavior: 'smooth', block: 'start' }); } catch (x) {}
+        setTimeout(function () { try { if (self.qEl) self.qEl.focus({ preventScroll: true }); } catch (x) {} }, 500);
+      },
+
+      /* demo film */
+      setDemoVid: this.setDemoVid,
+      demoCover: !s.demoOn, demoControls: s.demoOn,
+      playDemo: function () {
+        try { if (self.hv) self.hv.pause(); } catch (e) {}
+        self.setState({ demoOn: true });
+        var el = self.dv; if (el) { try { el.muted = false; el.play().catch(function () {}); } catch (e) {} }
+      },
+      demoPlay: function () { if (!self.state.demoOn) self.setState({ demoOn: true }); },
+      demoEnded: function () {},
+
+      /* examples + search */
+      gallery: GALLERY.map(function (g) { var v = self.vid(g.slug); return { thumb: v.thumb, title: v.title, len: mmss(v.duration), tag: g.tag, bg: g.bg, fg: g.fg, aria: 'Play: ' + v.title + ', ' + mmss(v.duration), open: function () { self.openPlayer(g.slug, 0); } }; }),
+      saved: SAVED.map(function (k) { var v = self.vid(k); return { thumb: v.thumb, aria: 'Play saved explanation: ' + v.title, open: function () { self.openPlayer(k, 0); } }; }),
+      fKidneys: function () { self.openPlayer('kidneys', 0); },
+      fZombie: function () { self.openPlayer('zombie-cells', 0); },
+      q: s.q, ph: s.ph, setQ: this.setQ,
+      sOpen: s.sOpen && sugg.length > 0,
+      sActive: sIdx >= 0 ? 'sg-' + sIdx : '',
+      sugg: sugg.map(function (it, i) {
+        return { id: 'sg-' + i, on: i === sIdx, cls: 'sg ' + it.kind + (i === sIdx ? ' on' : ''), icon: it.icon, pre: it.pre, mid: it.mid, post: it.post, hint: it.hint, badge: it.badge, hasBadge: !!it.badge,
+          pick: function (e) { if (e && e.preventDefault) e.preventDefault(); self.pickSug(it); } };
+      }),
+      onQ: function (e) { self.setState({ q: e.target.value.slice(0, 200), sOpen: true, sIdx: -1 }); },
+      onQFocus: function () { clearTimeout(self.bl); self.setState({ sOpen: true }); },
+      onQBlur: function () { clearTimeout(self.bl); self.bl = setTimeout(function () { self.setState({ sOpen: false, sIdx: -1 }); }, 150); },
+      onQKey: function (e) {
+        var list = self.suggestions(), n = list.length;
+        if (e.key === 'ArrowDown') { e.preventDefault(); self.setState({ sOpen: true, sIdx: n ? (Math.max(-1, self.state.sIdx) + 1) % n : -1 }); }
+        else if (e.key === 'ArrowUp') { e.preventDefault(); self.setState({ sOpen: true, sIdx: n ? (self.state.sIdx <= 0 ? n - 1 : self.state.sIdx - 1) : -1 }); }
+        else if (e.key === 'Escape') { self.setState({ sOpen: false, sIdx: -1 }); }
+        else if (e.key === 'Tab' && self.state.sOpen && self.state.sIdx >= 0 && list[self.state.sIdx] && list[self.state.sIdx].kind === 'topic') { e.preventDefault(); self.setState({ q: list[self.state.sIdx].title, sIdx: -1 }); }
+      },
+      onSearch: function (e) {
+        if (e && e.preventDefault) e.preventDefault();
+        var list = self.suggestions();
+        if (self.state.sOpen && self.state.sIdx >= 0 && list[self.state.sIdx]) { self.pickSug(list[self.state.sIdx]); return; }
+        var t = (self.state.q || '').trim(); if (t.length < 2) return;
+        var m = self.findMatches(t);
+        if (m.length && m[0].score >= Math.max(1, words(t).length)) self.openPlayer(m[0].g.slug, 0);
+        else self.startLive(t);
+      },
+
+      /* player */
+      plOpen: !!P,
+      plOvlCls: 'ovl dark pl-ovl' + (s.pMax ? ' maxed' : ''),
+      plCls: 'pl' + (s.pMax ? ' max' : ''),
+      setPlBox: this.setPlBox, setPlVid: this.setPlVid,
+      plTitle: isVideo ? (pvd.title || '') : (isLive ? 'Making your video…' : ''),
+      plHasTime: isVideo, plRun: mmss(pdur),
+      plMakingNow: isLive, plStage: stageText,
+      plDoneMark: isVideo, plMadeText: P && P.standIn ? 'Made just now' : 'Made by Tubelight',
+      plIsVideo: isVideo, plIsLive: isLive, plNoVideo: !isVideo, plStandIn: !!(P && P.standIn),
+      plSrc: pvd.src, plPoster: pvd.poster,
+      plShowCC: isVideo && s.pCC && !ended, plCC: isVideo ? wrap2(cueAt(pvd.cues, s.pt)) : [],
+      plTime: function (e) { var ct = e.target.currentTime; self.setState({ pt: ct }); self.armSheet('p', ct); },
+      plOnPlay: function () { self.setState({ pPaused: false, pEnded: false }); try { self.sh_p = self.sheetOf('p', self.pv ? self.pv.currentTime : 0); } catch (x) {} self.armRestart('p'); },
+      plOnPause: function () { self.armStop('p'); self.setState({ pPaused: true }); },
+      plOnEnd: function () { self.armStop('p'); self.setState({ pPaused: true, pEnded: true }); },
+      pPtrCls: pptr.cls, pPtrStyle: pptr.style,
+      plToggle: function () { var el = self.pv; if (!el) return; try { if (el.paused) el.play().catch(function () {}); else el.pause(); } catch (e) {} },
+      plPct: pdur ? Math.min(100, Math.round(s.pt / pdur * 1000) / 10) : 0,
+      plSeek: function (e) { self.seekDown('p', e); },
+      plSeekMove: function (e) { self.seekMove('p', e); }, plSeekUp: function (e) { self.seekUp('p', e); }, plSeekKey: function (e) { self.seekKey('p', e); },
+      plSeekCls: 'seek pl' + (s.drag === 'p' ? ' drag' : ''), plSeekMax: Math.round(pdur), plSeekNow: Math.round(s.pt),
+      plSeekText: mmss(s.pt) + ' of ' + mmss(pdur),
+      plPlayLabel: s.pPaused ? 'Play' : 'Pause',
+      plPlayPath: s.pPaused ? 'M8 5.5v13l10.5-6.5z' : 'M7 5h3.5v14H7zM13.5 5H17v14h-3.5z',
+      plPrev: function () { var sh = self.vid(P && P.slug).sheets || [], c = self.curSlide(); if (!sh.length) return; var t0 = self.state.pt - sh[c].start > 2 ? sh[c].start : (sh[Math.max(0, c - 1)] || sh[0]).start; self.seekTo(t0); },
+      plNext: function () { var sh = self.vid(P && P.slug).sheets || [], c = self.curSlide(); if (c + 1 < sh.length) self.seekTo(sh[c + 1].start); },
+      plSlideNum: isVideo ? (cur + 1) + ' / ' + sheets.length : '– / 3',
+      plClock: isVideo ? mmss(s.pt) + ' / ' + mmss(pdur) : '0:00 / –',
+      plSndLabel: s.pMuted ? 'Sound off — turn on' : 'Sound on — turn off',
+      plSndPath: s.pMuted ? 'M16 9l5 6M21 9l-5 6' : 'M15.5 8.5a5 5 0 0 1 0 7M19 5a10 10 0 0 1 0 14',
+      plMute: function () { var m = !self.state.pMuted; try { if (self.pv) self.pv.muted = m; } catch (e) {} self.setState({ pMuted: m }); },
+      plCCCls: 'pb cc' + (s.pCC ? ' on' : ''), plCCOn: s.pCC,
+      plCCToggle: function () { self.setState({ pCC: !self.state.pCC }); },
+      plMaxLabel: s.pMax ? 'Exit full screen' : 'Full screen',
+      plMaxPath: s.pMax ? IC_MIN : IC_MAX,
+      plMaxToggle: function () { self.toggleMax(); },
+      closePl: function () { self.closePlayer(); },
+      plBackdrop: function (e) { if (e && e.target === e.currentTarget) self.closePlayer(); },
+      plKey: function (e) {
+        if (!e) return;
+        var tag = e.target && e.target.tagName;
+        if (tag === 'INPUT') { if (e.key === 'Escape') self.closePlayer(); return; }
+        if (e.key === 'Escape') { if (self.state.pMax) self.toggleMax(); else self.closePlayer(); }
+        else if (e.key === ' ' && tag !== 'BUTTON') { e.preventDefault(); var el = self.pv; if (el) { try { if (el.paused) el.play().catch(function () {}); else el.pause(); } catch (x) {} } }
+        else if (e.key === 'ArrowRight') { var sh = self.vid(P && P.slug).sheets || [], c = self.curSlide(); if (c + 1 < sh.length) self.seekTo(sh[c + 1].start); }
+        else if (e.key === 'ArrowLeft') { var sh2 = self.vid(P && P.slug).sheets || [], c2 = self.curSlide(); if (sh2.length) self.seekTo(sh2[Math.max(0, c2 - 1)].start); }
+        else if (e.key === 'c' || e.key === 'C') self.setState({ pCC: !self.state.pCC });
+        else if (e.key === 'f' || e.key === 'F') self.toggleMax();
+      },
+      slides: slides,
+      railBadge: isVideo ? sheets.length + ' slides' : (L.imgs || 0) + ' of 3 ready',
+      liveTopic: L.topic || '',
+      showGate: isLive && !s.sent,
+      gateSubmit: function (e) {
+        if (e && e.preventDefault) e.preventDefault();
+        if (!self.validEmail()) return;
+        self.setState({ sent: true, err: '' });
+        setTimeout(function () { self.maybeReveal(); }, 0);
+      },
+      showEnd: ended,
+      endTitle: P && P.standIn ? 'That’s your first Tubelight video.' : 'Want to make your own?',
+      endBody: P && P.standIn ? 'Want an earlier invite? Tell us how you’ll use Tubelight — every answer moves you up the line.' : 'Join the waitlist, or type any topic in the search box and Tubelight makes a free preview for you.',
+      endCtaLabel: P && P.standIn ? 'Move up the line' : (s.sent ? 'Move up the line' : 'Join the waitlist'),
+      endCta: function () { self.closePlayer(); self.openModal(); },
+      replayPl: function () { self.seekTo(0); },
+      plFoot: isLive || (P && P.standIn)
+        ? 'Your topic is sent to our servers to make the video. It’s made by AI — if something looks off, ask a follow-up in the app.'
+        : 'Unedited output from the Windows app.  Space play/pause · ← → pictures · C captions · F full screen',
+
+      /* waitlist */
+      email: s.email, emailShown: (s.email || '').trim(),
+      sent: s.sent, notSent: !s.sent, err: s.err, hasErr: !!s.err,
+      onEmail: function (e) { self.setState({ email: e.target.value, err: '' }); },
+      submit: function (e) {
+        if (e && e.preventDefault) e.preventDefault();
+        if (!self.validEmail()) return;
+        self.setState({ sent: true, err: '', modal: 'q', qi: 0, picked: [], boost: 0, shown: 0 });
+        self.focusDlg();
+      },
+      proofMain: hasCount ? fmt(cnt) + ' people' : 'Invites go out in batches',
+      proofRest: hasCount ? ' are already waiting' : ' — earlier sign-ups get in first',
+      hasWeek: hasCount && wk > 0, weekText: fmt(wk),
+      navCta: s.sent ? 'Your spot' : 'Join the waitlist',
+      posShort: hasCount ? ' — #' + fmt(finalPos) + ' in line' : '',
+      moveUpLabel: s.qi >= QS.length ? 'See your spot' : 'Move up the line →',
+      openModal: function () { self.openModal(); },
+      closeModal: function () { self.setState({ modal: null }); },
+      dlgKey: function (e) { if (e && e.key === 'Escape') self.setState({ modal: null }); },
+      setDlg: this.setDlg,
+      modalOpen: !!s.modal, isEmailStep: s.modal === 'email', isQStep: s.modal === 'q', isDoneStep: s.modal === 'done',
+      segs: QS.map(function (x, i) { return { cls: 'seg' + (s.qi > i ? ' on' : '') }; }),
+      qNum: Math.min(s.qi + 1, QS.length), qTotal: QS.length, qText: q.q, qHint: q.multi ? ' · pick any' : '',
+      qOpts: (q.opts || []).map(function (label) { var on = s.picked.indexOf(label) >= 0; return { label: label, on: on, cls: 'qchip' + (on ? ' on' : ''), pick: function () { self.pick(label); } }; }),
+      showOther: s.picked.indexOf(OTHER) >= 0, otherText: s.otherText, setOther: this.setOther,
+      onOther: function (e) { self.setState({ otherText: e.target.value.slice(0, 80) }); },
+      onOtherKey: function (e) { if (e && e.key === 'Enter') { e.preventDefault(); if (self.state.picked.length) self.advance(self.answerValue(), true); } },
+      showAbout: !!q.about, about: s.about, onAbout: function (e) { self.setState({ about: e.target.value.slice(0, 120) }); },
+      qNeedsNext: !!(q.multi || q.about || s.picked.indexOf(OTHER) >= 0),
+      qNextOff: s.picked.length === 0 && !(q.about && (s.about || '').trim()),
+      qNextLabel: s.qi >= QS.length - 1 ? 'Finish' : 'Next',
+      nextQ: function () { self.advance(self.answerValue(), true); },
+      skipQ: function () { self.advance(null, false); },
+      hasCount: hasCount, posText: '#' + fmt(pos), showDelta: hasCount && s.delta, spotsText: fmt(this.spots()),
+      doneTitle: s.boost > 0 ? 'You moved up ' + fmt(s.boost) + ' spots!' : 'You’re all set!'
+    };
+  }
+}
+
+</script>
+</body>
+</html>
