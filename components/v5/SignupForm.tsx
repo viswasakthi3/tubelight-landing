@@ -112,26 +112,6 @@ export function InviteFriends() {
   );
 }
 
-/** Real count only. Falls back to the design's quiet line when the list is empty or unavailable. */
-export function useProof() {
-  const { stats } = useWaitlist();
-  const show = !!stats && stats.show && stats.total > 0;
-  return {
-    main: show ? `${fmt(stats!.total)} ${stats!.total === 1 ? "person" : "people"}` : "Invites go out in batches",
-    rest: show ? " on the waitlist" : " — join for early access",
-    week: show && stats!.thisWeek > 0 ? fmt(stats!.thisWeek) : null,
-  };
-}
-
-export function Proof({ center, live }: { center?: boolean; live?: boolean }) {
-  const p = useProof();
-  return (
-    <div className="proof" style={center ? { justifyContent: "center" } : undefined}>
-      {live ? <span className="live" aria-hidden="true" /> : null}
-      <span>
-        <strong>{p.main}</strong>
-        {p.rest}
-      </span>
-    </div>
-  );
+export function InviteStatus() {
+  return <p className="invite-status"><strong>Early access</strong> Invites go out in batches.</p>;
 }

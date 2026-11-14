@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import type { Beat, Sheet } from "@/lib/video-paths";
 
 /**
- * The app's pointer (the "orb" light) over a video (v5.4, 8.2).
+ * The app's pointer (the ring) over a video (v5.4, 8.2).
  * Sits inside the same positioned box as the <video>; it glides between the places the
  * beats point at, only while the video really plays, and only on pictures that have more
  * than one place to look at (sheet.walk). Decorative: the captions carry the meaning.
@@ -70,7 +70,7 @@ export function Pointer({
     last.current = {
       l: bl + beat.ptr.x * boxW,
       t: bt + beat.ptr.y * boxH,
-      s: Math.max(9, Math.min(22, Math.round(0.016 * (sheet.pw || 1) * boxW))),
+      s: Math.max(20, Math.min(38, Math.round(0.038 * boxW))),
     };
   }
   const p = last.current ?? { l: cw / 2, t: ch / 2, s: 12 };
@@ -78,7 +78,7 @@ export function Pointer({
 
   return (
     <span
-      className={"tl-spot-ball ptr" + (on ? " is-on" : "")}
+      className={"tl-spot-ring" + (on ? " is-on" : "")}
       aria-hidden="true"
       style={{ left: Math.round(p.l), top: Math.round(p.t), width: p.s, height: p.s, margin: `-${p.s / 2}px 0 0 -${p.s / 2}px` }}
     />

@@ -6,7 +6,6 @@ import { OTHER, QS } from "./questions";
 
 export type Placement = "hero" | "final" | "dialog" | "preview";
 export type Step = null | "email" | "q" | "done";
-type Stats = { total: number; thisWeek: number; show: boolean };
 
 export type WaitlistApi = {
   referralUrl: string;
@@ -27,7 +26,6 @@ export type WaitlistApi = {
   /** spots gained by the latest answer (flashes briefly) */
   delta: number;
   moved: number;
-  stats: Stats | null;
   modal: Step;
   openModal: () => void;
   closeModal: () => void;
@@ -64,7 +62,6 @@ export function WaitlistProvider({ children }: { children: React.ReactNode }) {
   const [shown, setShown] = useState(0);
   const [delta, setDelta] = useState(0);
   const [moved, setMoved] = useState(0);
-  const [stats, setStats] = useState<Stats | null>(null);
   const [modal, setModal] = useState<Step>(null);
   const [qi, setQi] = useState(0);
   const [picked, setPickedState] = useState<string[]>([]);
@@ -88,20 +85,6 @@ export function WaitlistProvider({ children }: { children: React.ReactNode }) {
       clearInterval(t.tick);
       clearTimeout(t.nq);
       clearTimeout(t.dt);
-    };
-  }, []);
-
-  // Keep the signup response if an older stats request finishes later.
-  useEffect(() => {
-    let live = true;
-    fetch("/api/waitlist/stats")
-      .then((r) => (r.ok ? r.json() : null))
-      .then((j) => {
-        if (live && j && typeof j.total === "number") setStats((current) => current ?? ({ total: j.total, thisWeek: Number(j.thisWeek) || 0, show: !!j.show }));
-      })
-      .catch(() => undefined);
-    return () => {
-      live = false;
     };
   }, []);
 
@@ -183,9 +166,6 @@ export function WaitlistProvider({ children }: { children: React.ReactNode }) {
           const url = new URL("/", location.origin);
           url.searchParams.set("ref", j.referralCode);
           setReferralUrl(url.href);
-        }
-        if (typeof j.total === "number") {
-          setStats((prev) => ({ total: j.total, thisWeek: prev?.thisWeek ?? 0, show: j.total > 0 }));
         }
         setSent(true);
         setPicked([]);
@@ -332,8 +312,8 @@ export function WaitlistProvider({ children }: { children: React.ReactNode }) {
   }, [advance]);
 
   const value = useMemo<WaitlistApi>(
-    () => ({ referralUrl, email, setEmail, err, submitting, sent, submit, position, shown, delta, moved, stats, modal, openModal, closeModal, qi, picked, otherText, setOtherText, aboutText, setAboutText, answerErr, pick, nextQ, skipQ }),
-    [referralUrl, email, setEmail, err, submitting, sent, submit, position, shown, delta, moved, stats, modal, openModal, closeModal, qi, picked, otherText, setOtherText, aboutText, setAboutText, answerErr, pick, nextQ, skipQ],
+    () => ({ referralUrl, email, setEmail, err, submitting, sent, submit, position, shown, delta, moved, modal, openModal, closeModal, qi, picked, otherText, setOtherText, aboutText, setAboutText, answerErr, pick, nextQ, skipQ }),
+    [referralUrl, email, setEmail, err, submitting, sent, submit, position, shown, delta, moved, modal, openModal, closeModal, qi, picked, otherText, setOtherText, aboutText, setAboutText, answerErr, pick, nextQ, skipQ],
   );
 
   return <Ctx.Provider value={value}>{children}</Ctx.Provider>;

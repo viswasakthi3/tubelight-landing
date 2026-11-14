@@ -439,17 +439,18 @@
 .v5 .pp:focus-visible{outline:2px solid #6C4DF6;outline-offset:2px}
 .v5 .pp svg{width:16px;height:16px;fill:currentColor}
 .v5 .ptime{flex:none;min-width:74px;text-align:right;font-size:12.5px;font-weight:500;color:#6F6B86;font-variant-numeric:tabular-nums}
-/* 8.2 the app's pointer (BALL light), copied from the desktop app's .tl-spot-ball */
-.v5 .tl-spot-ball{position:absolute;z-index:4;pointer-events:none;border-radius:50%;opacity:0;background:radial-gradient(circle,#ffffff 0 30%,#ff9a2e 34% 58%,rgba(255,154,46,.35) 72%,rgba(255,154,46,0) 100%);box-shadow:0 0 0 1.5px rgba(255,255,255,.85),0 0 14px 5px rgba(255,154,46,.55),0 0 34px 14px rgba(255,154,46,.22);transition:left 720ms cubic-bezier(.22,.61,.36,1),top 720ms cubic-bezier(.22,.61,.36,1),opacity 380ms ease}
-.v5 .tl-spot-ball.ptr{z-index:3}
-.v5 .tl-spot-ball.is-on{opacity:1;animation:tl-spot-breathe 2.6s ease-in-out infinite}
-@keyframes tl-spot-breathe{0%,100%{box-shadow:0 0 0 1.5px rgba(255,255,255,.85),0 0 14px 5px rgba(255,154,46,.55),0 0 34px 14px rgba(255,154,46,.22)}50%{box-shadow:0 0 0 1.5px rgba(255,255,255,.9),0 0 18px 7px rgba(255,154,46,.68),0 0 44px 18px rgba(255,154,46,.3)}}
+.v5 .invite-status{display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;margin:0;color:#57536e;font-size:15px}
+.v5 .invite-status strong{display:inline-flex;align-items:center;padding:5px 14px;border-radius:999px;background:#fff1cc;color:#704600;font-size:16px;line-height:1.5}
+.v5 .tl-spot-ring{position:absolute;z-index:3;pointer-events:none;box-sizing:border-box;border-radius:50%;border:2px solid white;box-shadow:0 0 0 2px #e08121,0 0 9px 3px #ff9a2e88;opacity:0;transition:left 720ms ease,top 720ms ease,opacity 300ms ease}
+.v5 .tl-spot-ring.is-on{opacity:1}
+.v5 .tl-spot-ring.is-on::after{content:"";position:absolute;inset:-4px;border:2px solid #ff9a2e;border-radius:50%;animation:tl-ring-wave 1.8s ease-out infinite}
+@keyframes tl-ring-wave{from{transform:scale(.95);opacity:.8}to{transform:scale(1.45);opacity:0}}
 .v5 .pl-cc{z-index:5}
 .v5 .mutepill{z-index:5}
 .v5 .pl-cover{z-index:6}
 @media (prefers-reduced-motion:reduce){
-.v5 .tl-spot-ball{transition:none}
-.v5 .tl-spot-ball.is-on{animation:none}
+.v5 .tl-spot-ring{transition:none}
+.v5 .tl-spot-ring.is-on::after{animation:none}
 .v5 .seek-fill,.v5 .seek-knob{transition:none}
 }
 /* 8.9 search mode: one wide window, then the app-style player */

@@ -1,3 +1,5 @@
+import type { Metadata } from "next";
+import { FAQS } from "@/lib/faqs";
 import "@/components/v5/v5.css";
 import { Comparison } from "@/components/v5/Comparison";
 import { DemoFilm } from "@/components/v5/DemoFilm";
@@ -11,6 +13,34 @@ import { Nav } from "@/components/v5/Nav";
 import { V5Providers } from "@/components/v5/Providers";
 import { Who } from "@/components/v5/Who";
 import { getVideos } from "@/lib/videos";
+
+const site = "https://tubelight.net/";
+const title = "Tubelight | AI Visual Explainer for Windows";
+const description = "Select text and press Alt + E to get a narrated visual explanation beside your work. Try a topic preview or join the Windows early-access waitlist.";
+const image = {
+  url: site + "shots/social-preview.jpg", width: 1200, height: 675,
+  alt: "Tubelight explains a rocket engine with an illustrated, narrated slide beside a document.",
+};
+
+export const metadata: Metadata = {
+  title: { absolute: title }, description, applicationName: "Tubelight",
+  alternates: { canonical: site },
+  openGraph: { type: "website", url: site, siteName: "Tubelight", title, description, images: [image] },
+  twitter: { card: "summary_large_image", title, description, images: [image] },
+};
+
+const structuredData = {
+  "@context": "https://schema.org",
+  "@graph": [
+    { "@type": "WebSite", "@id": site + "#website", url: site, name: "Tubelight", about: { "@id": site + "#app" } },
+    { "@type": "SoftwareApplication", "@id": site + "#app", name: "Tubelight", url: site,
+      applicationCategory: "EducationalApplication", operatingSystem: "Windows 10, Windows 11",
+      description, image: image.url, featureList: ["Explain selected text with Alt + E", "Search a topic", "Hear narration with captions", "Revisit saved explanations"] },
+    { "@type": "FAQPage", "@id": site + "#faq", mainEntity: FAQS.map(({q, a}) => ({
+      "@type": "Question", name: q, acceptedAnswer: { "@type": "Answer", text: a },
+    })) },
+  ],
+};
 
 export default function Home() {
   const videos = getVideos();
@@ -27,6 +57,7 @@ export default function Home() {
         overflowX: "clip",
       }}
     >
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData).replace(/</g, "\\u003c") }} />
       <V5Providers videos={videos}>
         <Nav />
         <main id="main">

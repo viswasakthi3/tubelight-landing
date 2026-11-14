@@ -4,7 +4,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { track } from "@/lib/track";
 import { usePlayer, useVideos } from "./Providers";
 import { matchedVideo } from "./catalog";
-import { Joined, SignupForm, useProof } from "./SignupForm";
+import { Joined, SignupForm, InviteStatus } from "./SignupForm";
 import { cueAt, mmss, pauseOthers, registerPauser } from "./media";
 import { Pointer } from "./Pointer";
 import { Seek } from "./Seek";
@@ -34,7 +34,6 @@ export function Hero() {
   const videos = useVideos();
   const w = useWaitlist();
   const player = usePlayer();
-  const proof = useProof();
   const [topic, setTopic] = useState(0);
   const [mode, setMode] = useState<Mode>("idle");
   const [way, setWay] = useState<Way>("type");
@@ -399,24 +398,16 @@ export function Hero() {
             </span>
           </h1>
           <p className="rise d2" style={{ margin: 0, maxWidth: 430, fontSize: "clamp(18px, 1.5vw, 20px)", lineHeight: 1.6, color: "#57536E", textWrap: "pretty" }}>
-            Search a topic, or select any text and press <span className="kbd">Alt</span> + <span className="kbd">E</span>. Tubelight explains it with pictures and a voice in under 15 seconds.
+            Select text on Windows and press <span className="kbd">Alt</span> + <span className="kbd">E</span>. Tubelight turns it into a short visual explanation with pictures, captions, and narration. You can also type a topic.
           </p>
           <div className="rise d3 hero-act" style={{ width: "100%", display: "flex", flexDirection: "column", gap: 14, marginTop: 2 }}>
             {!w.sent ? <SignupForm id="em-hero" placement="hero" label="Join the waitlist" /> : <Joined />}
             <p className="conds">
               <span><svg viewBox="0 0 24 24" aria-hidden="true">{CHECK}</svg>Free to try</span>
               <span><svg viewBox="0 0 24 24" aria-hidden="true">{CHECK}</svg>Windows 10 &amp; 11</span>
-              <span><svg viewBox="0 0 24 24" aria-hidden="true">{CHECK}</svg>Invites in line order</span>
             </p>
             <p className="onlysm micro">Tubelight runs on Windows PCs. Join from your phone and your invite comes by email, so you can open it on your PC.</p>
-            <div className="proof">
-              <span className="live" aria-hidden="true" />
-              <span>
-                <strong>{proof.main}</strong>
-                {proof.rest}
-              </span>
-              {proof.week ? <span className="week">+{proof.week} this week</span> : null}
-            </div>
+            <InviteStatus />
             <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", gap: "2px 22px", marginTop: 2 }}>
               <a href="#how" className="linkbtn">
                 <svg viewBox="0 0 24 24" aria-hidden="true" style={{ width: 18, height: 18, fill: "#4B33B8" }}>

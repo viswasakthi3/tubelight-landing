@@ -5,7 +5,7 @@ import { Back, Bolt, Check, Copy, Fwd, Mark, Mic, Pc, Plus, Reload, Search, User
 export const QS_FAQ: { q: string; a: string }[] = [
   {
     q: "Is it really free?",
-    a: "Yes. You get 50 searches every day, refilled at midnight. No account, no card. Copying text out of a screenshot is done on your PC and doesn’t use a search.",
+    a: "Yes. Each device gets 50 searches per day, with no account or card required. Copying text out of a screenshot happens on your PC and doesn’t use a search.",
   },
   {
     q: "Will it mess with my Tab key?",
@@ -17,7 +17,7 @@ export const QS_FAQ: { q: string; a: string }[] = [
   },
   {
     q: "Where do my questions go?",
-    a: "Your question is sent to find the answer. Your history is saved only on your PC, and you can clear it any time in Settings.",
+    a: "Your question is sent online to generate an answer. Your search history is saved on your PC, and you can clear it any time in Settings.",
   },
   {
     q: "Does it work on a Mac or my phone?",

@@ -1,21 +1,11 @@
 import type { MetadataRoute } from "next";
+import { headers } from "next/headers";
+import { SEARCH_SITE, siteForHost } from "@/lib/site-host";
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://tubelight.net";
+export const dynamic = "force-dynamic";
 
-export default function sitemap(): MetadataRoute.Sitemap {
-  const now = new Date();
-  return [
-    {
-      url: `${siteUrl}/`,
-      lastModified: now,
-      changeFrequency: "weekly",
-      priority: 1.0,
-    },
-    {
-      url: `${siteUrl}/upgrade`,
-      lastModified: now,
-      changeFrequency: "monthly",
-      priority: 0.8,
-    },
-  ];
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+  const site = siteForHost(await headers());
+  const paths = site === SEARCH_SITE ? ["/"] : ["/", "/download", "/upgrade"];
+  return paths.map((path) => ({ url: site + path }));
 }

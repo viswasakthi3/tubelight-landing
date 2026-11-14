@@ -1,6 +1,6 @@
 "use client";
 
-import { Joined, Proof, SignupForm } from "./SignupForm";
+import { Joined, InviteStatus, SignupForm } from "./SignupForm";
 import { useWaitlist } from "./WaitlistContext";
 
 export function FinalCta() {
@@ -15,7 +15,7 @@ export function FinalCta() {
               <p className="lede" style={{ maxWidth: 540 }}>We invite people in batches, in line order. Tell us how you’ll use Tubelight and you’ll move up the line.</p>
               {!w.sent ? <SignupForm id="em-join" placement="final" label="Join the waitlist" style={{ marginTop: 4 }} /> : <Joined />}
               {!w.sent ? <p className="micro">We’ll email you when your invite is ready. Nothing else.</p> : null}
-              <Proof center live />
+              <InviteStatus />
               <div className="getahead">
                 <div className="ga"><b>1</b><span>Join with your email. It takes ten seconds.</span></div>
                 <div className="ga"><b>2</b><span>Tell us how you’ll use it. Every answer moves you up the line.</span></div>

@@ -1,33 +1,13 @@
 import type { MetadataRoute } from "next";
+import { headers } from "next/headers";
+import { siteForHost } from "@/lib/site-host";
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://tubelight.net";
+export const dynamic = "force-dynamic";
 
-export default function robots(): MetadataRoute.Robots {
+export default async function robots(): Promise<MetadataRoute.Robots> {
+  const site = siteForHost(await headers());
   return {
-    rules: [
-      {
-        userAgent: "*",
-        allow: "/",
-        disallow: ["/api/", "/checkout"],
-      },
-      {
-        userAgent: [
-          "Googlebot",
-          "Googlebot-Image",
-          "Google-Extended",
-          "Bingbot",
-          "Applebot",
-          "Applebot-Extended",
-          "GPTBot",
-          "ClaudeBot",
-          "PerplexityBot",
-          "cohere-ai",
-        ],
-        allow: "/",
-        disallow: ["/api/"],
-      },
-    ],
-    sitemap: `${siteUrl}/sitemap.xml`,
-    host: siteUrl,
+    rules: { userAgent: "*", allow: "/", disallow: ["/api/", "/checkout"] },
+    sitemap: site + "/sitemap.xml",
   };
 }

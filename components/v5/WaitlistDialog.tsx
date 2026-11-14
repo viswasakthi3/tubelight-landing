@@ -3,7 +3,7 @@
 import { useEffect, useRef, type KeyboardEvent } from "react";
 import { fmt, trapTab } from "./media";
 import { OTHER, QS } from "./questions";
-import { InviteFriends, Proof, SignupForm } from "./SignupForm";
+import { InviteFriends, InviteStatus, SignupForm } from "./SignupForm";
 import { useWaitlist } from "./WaitlistContext";
 
 const X = (
@@ -66,7 +66,7 @@ export function WaitlistDialog() {
             <p style={{ margin: 0, color: "#57536E" }}>We invite people in batches, in line order. It takes ten seconds.</p>
             <SignupForm id="em-dlg" placement="dialog" label="Join" style={{ maxWidth: "none" }} />
             <p className="micro">We’ll email you when your invite is ready. Nothing else.</p>
-            <Proof live />
+            <InviteStatus />
           </div>
         ) : null}
 

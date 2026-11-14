@@ -1,0 +1,9 @@
+# Quick Search AI
+
+Quick Search AI is a Windows voice search app. Hold Tab + Q in any app, ask a question, and release the keys. A short answer appears with web sources and can be read aloud.
+
+- [How to use voice, selected text, or a screen region](https://search.tubelight.net/#how)
+- [Free allowance](https://search.tubelight.net/#free): 50 searches per device per day. No account is required.
+- [Privacy and system requirements](https://search.tubelight.net/#faq)
+- [Download Quick Search AI for Windows](https://apps.microsoft.com/detail/9NFK7MS99FB3)
+- [Tubelight visual explainer](https://tubelight.net/): For illustrated explanations of selected text using Alt + E.

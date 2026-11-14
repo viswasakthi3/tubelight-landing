@@ -9,9 +9,9 @@ import { QS_FAQ, SearchLanding } from "@/components/search/SearchLanding";
 const manrope = Manrope({ subsets: ["latin"], variable: "--font-manrope", display: "swap", weight: ["500", "600", "700", "800"] });
 
 const SITE = "https://search.tubelight.net";
-const TITLE = "Quick Search AI: stop opening new tabs";
+const TITLE = "Quick Search AI for Windows | Voice Search in Any App";
 const DESCRIPTION =
-  "Hold Tab + Q in any Windows app and ask out loud. Let go, and a short answer pops up in the corner, checked on the web and read out loud. 50 free searches a day, no account.";
+  "Quick Search AI brings voice search to Windows 10 and 11. Hold Tab + Q in any app to ask a question, then get a concise web answer with sources, read aloud. 50 free searches per device each day. No account required.";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE),
@@ -26,26 +26,29 @@ export const metadata: Metadata = {
     siteName: "Quick Search AI",
     title: TITLE,
     description: DESCRIPTION,
-    images: [{ url: "/search/og.jpg", width: 1200, height: 675, alt: "Quick Search AI: ask anything, anywhere. Hold Tab + Q." }],
+    images: [{ url: SITE + "/search/social-preview.jpg", width: 1200, height: 675, alt: "Quick Search AI shows a sourced answer about Mars beside a browser window on Windows." }],
   },
-  twitter: { card: "summary_large_image", title: TITLE, description: DESCRIPTION, images: ["/search/og.jpg"] },
-  keywords: ["Quick Search AI", "voice search Windows", "ask AI any app", "Tab + Q", "AI answers", "Tubelight"],
+  twitter: { card: "summary_large_image", title: TITLE, description: DESCRIPTION, images: [{ url: SITE + "/search/social-preview.jpg", alt: "Quick Search AI shows a sourced answer about Mars beside a browser window on Windows." }] },
 };
 
 export const viewport: Viewport = { themeColor: "#12101c" };
 
 const jsonLd = [
+  { "@context": "https://schema.org", "@type": "WebSite", "@id": SITE + "/#website", url: SITE, name: "Quick Search AI", about: { "@id": SITE + "/#app" } },
   {
     "@context": "https://schema.org",
     "@type": "SoftwareApplication",
+    "@id": SITE + "/#app",
+    image: SITE + "/search/social-preview.jpg",
     name: "Quick Search AI",
     operatingSystem: "Windows 10, Windows 11",
-    applicationCategory: "UtilitiesApplication",
+    applicationCategory: "ProductivityApplication",
     description: DESCRIPTION,
     url: SITE,
     downloadUrl: "https://apps.microsoft.com/detail/9NFK7MS99FB3",
+    featureList: ["Voice questions with Tab + Q", "Look up selected text", "Ask about a screen region with Tab + S", "Web answers with sources", "Read answers aloud", "50 free searches per day"],
     offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
-    publisher: { "@type": "Organization", name: "Tubelight", url: "https://tubelight.net" },
+    publisher: { "@type": "Organization", name: "Vault Labs" },
   },
   {
     "@context": "https://schema.org",
