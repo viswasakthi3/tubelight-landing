@@ -46,3 +46,5 @@ export const Windows = ({ size = 22 }: P) => (
     <rect x="2" y="12.5" width="9.5" height="9.5" rx="1" /><rect x="12.5" y="12.5" width="9.5" height="9.5" rx="1" />
   </svg>
 );
+export const Copy = ({ size = 16 }: P) => (<svg {...base(size)}><rect x="9" y="9" width="11" height="11" rx="2.5" /><path d="M15 9V6.5A2.5 2.5 0 0 0 12.5 4h-6A2.5 2.5 0 0 0 4 6.5v6A2.5 2.5 0 0 0 6.5 15H9" /></svg>);
+export const Plus = ({ size = 16 }: P) => (<svg {...base(size)} strokeWidth={2.4}><path d="M12 5v14M5 12h14" /></svg>);

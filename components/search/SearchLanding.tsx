@@ -1,6 +1,6 @@
-import { DemoMount, Film, GetButton } from "./client";
+import { DemoMount, Film, GetButton, PageMount } from "./client";
 import { DEMO_QUESTIONS, type DemoQuestion } from "./demo";
-import { Back, Bolt, Check, Fwd, Mark, Mic, Pc, Reload, Search, User } from "./icons";
+import { Back, Bolt, Check, Copy, Fwd, Mark, Mic, Pc, Plus, Reload, Search, User } from "./icons";
 
 export const QS_FAQ: { q: string; a: string }[] = [
   {
@@ -25,10 +25,11 @@ export const QS_FAQ: { q: string; a: string }[] = [
   },
 ];
 
-const TABS = [
-  "#ea4335", "#4285f4", "#f4b400", "#7e57c2", "#0f9d58", "#ff7043", "#26a69a", "#ec407a",
-  "#5c6bc0", "#8d6e63", "#29b6f6", "#9ccc65", "#ab47bc", "#ffa726", "#42a5f5", "#ef5350",
-];
+/* The crowded tab strip: the same question searched again and again. The first three tabs can still be
+   read; the rest are squeezed down to their icons, as in a real browser with 31 tabs. */
+const TAB_C = ["#ea4335", "#4285f4", "#6c4df6", "#34a853", "#fa7b17", "#12b5cb", "#e52592", "#a142f4"];
+const TAB_N = 26;
+const TAB_READ = 3;
 
 function Bars() {
   return <span className="qs-bars" aria-hidden="true"><i /><i /><i /><i /><i /></span>;
@@ -71,31 +72,29 @@ export function SearchLanding() {
       {/* ============ HERO ============ */}
       <header className="qs-hero">
         <nav className="qs-nav" aria-label="Main">
-          <div className="qs-wrap">
+          <div className="qs-wrap qs-wide">
             <a className="qs-brand" href="#top">
               <Mark size={38} />
               <span><b>Quick Search AI</b><span className="by">by Tubelight</span></span>
             </a>
             <div className="qs-nav-links">
-              <a className="nl qs-hide-sm" href="#how">How it works</a>
-              <a className="nl qs-hide-sm" href="#faq">FAQ</a>
-              <GetButton where="nav" size="sm" />
+              <a className="nl" href="#how">How it works</a>
+              <a className="nl" href="#faq">FAQ</a>
             </div>
           </div>
         </nav>
 
-        <div className="qs-wrap qs-hero-grid">
+        <div className="qs-wrap qs-wide qs-hero-grid">
           <div className="qs-hero-words">
             <p className="qs-pill"><span className="qs-tube" aria-hidden="true" />Free AI answers for Windows</p>
             <h1 className="qs-h1">Stop opening <span className="v">new tabs.</span></h1>
             <p className="qs-hero-sub">
-              Hold <kbd>Tab</kbd> + <kbd>Q</kbd> in any app and just ask, out loud. Let go, and the answer pops up in the
-              corner of your screen.
+              Hold <kbd>Tab</kbd> + <kbd>Q</kbd> in any app and ask out loud. Let go, and the answer pops up in the corner.
             </p>
-            <div className="qs-cta">
+            <div className="qs-cta" data-hero-cta="">
               <div className="qs-cta-row">
                 <GetButton where="hero" />
-                <a className="qs-film-link" href="#film"><span className="ring"><svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l11-6.5z" fill="currentColor" /></svg></span>Watch it work · 48s</a>
+                <a className="qs-film-link" href="#film" data-film-link=""><span className="ring"><svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l11-6.5z" fill="currentColor" /></svg></span>Watch it work · 55s</a>
               </div>
             </div>
             <ul className="qs-ticks">
@@ -108,27 +107,34 @@ export function SearchLanding() {
           <DemoMount>
             <figure className="qs-stage">
               <figcaption className="qs-sr">
-                A browser with 31 open tabs. Quick Search answers in the corner: {first.big} {first.sub}
+                A browser with 31 tabs, each one the same question searched again, and results that disagree.
+                Quick Search answers in the corner: {first.big} {first.sub}
               </figcaption>
               <div className="qs-browser" aria-hidden="true">
                 <div className="qs-tabs">
                   <div className="qs-tabs-strip">
-                    <span className="qs-tab wide"><i style={{ background: "#c0392b" }} /><span>Search results</span></span>
-                    {TABS.map((c, i) => (<span key={i} className="qs-tab"><i style={{ background: c }} /></span>))}
+                    {Array.from({ length: TAB_N }, (_, i) => (
+                      <span key={i} className={`qs-tab${i === 0 ? " on" : ""}${i < TAB_READ ? ` w${i + 1}` : ""}`}>
+                        <i style={{ background: TAB_C[i % TAB_C.length] }} />
+                        {i < TAB_READ && <span data-tab="">{first.tabs[i]}</span>}
+                      </span>
+                    ))}
                   </div>
+                  <span className="qs-newtab"><Plus size={16} /></span>
                   <span className="qs-tabcount">31 tabs</span>
                 </div>
                 <div className="qs-addr">
                   <Back /><Fwd /><Reload />
                   <div><Search /><span data-addr="">{first.addr}</span></div>
                 </div>
-                <div className="qs-page">
-                  <span className="site" data-site="">{first.site}</span>
-                  <span className="junk" data-junk="">{first.junk}</span>
-                  <span className="bar" style={{ width: "100%" }} />
-                  <span className="bar" style={{ width: "88%" }} />
-                  <span className="ad">ADVERTISEMENT</span>
-                  <span className="bar" style={{ width: "94%" }} />
+                <div className="qs-results">
+                  {first.results.map((r) => (
+                    <div className="qs-res" key={r.url}>
+                      <span className="u" data-res-url="">{r.url}</span>
+                      <span className="t" data-res-title="">{r.title}</span>
+                      <span className="s" />
+                    </div>
+                  ))}
                 </div>
               </div>
 
@@ -154,18 +160,27 @@ export function SearchLanding() {
                 <span className="qs-key wide">Tab</span><span className="plus" aria-hidden="true">+</span><span className="qs-key">Q</span>
               </button>
               <div className="qs-try-words">
-                <b>Try it right here</b>
-                <span data-hint="">Hold Tab + Q on your keyboard, or press the keys. Then let go.</span>
+                <b>Try it here</b>
+                <span data-hint="">Hold Tab + Q on your keyboard, or press the keys.</span>
               </div>
-            </div>
-            <div className="qs-pick" role="group" aria-label="Sample questions">
-              {DEMO_QUESTIONS.map((d, i) => (
-                <button type="button" key={d.id} data-pick="" aria-pressed={i === 0}>{d.pick}</button>
-              ))}
+              <div className="qs-pick" role="group" aria-label="Sample questions">
+                {DEMO_QUESTIONS.map((d, i) => (
+                  <button type="button" key={d.id} data-pick="" aria-pressed={i === 0}>{d.pick}</button>
+                ))}
+              </div>
             </div>
           </DemoMount>
         </div>
       </header>
+
+      {/* a slim bar with the one button, only once the hero button has scrolled away */}
+      <div className="qs-sticky" data-sticky="" data-show="false" inert>
+        <div className="qs-wrap qs-wide">
+          <a className="qs-brand" href="#top"><Mark size={30} /><span><b>Quick Search AI</b></span></a>
+          <GetButton where="sticky" size="sm" />
+        </div>
+      </div>
+      <PageMount />
 
       <main id="main">
         {/* ============ FILM ============ */}
@@ -173,8 +188,8 @@ export function SearchLanding() {
           <div className="qs-wrap qs-film">
             <div className="qs-head center">
               <p className="qs-eyebrow">See it for real</p>
-              <h2 className="qs-h2" id="film-h">48 seconds. <span className="v">Sound on.</span></h2>
-              <p className="qs-lede">Watch a pile of tabs turn into one answer, read out loud.</p>
+              <h2 className="qs-h2" id="film-h">55 seconds. <span className="v">Sound on.</span></h2>
+              <p className="qs-lede">A pile of tabs becomes one answer, read out loud.</p>
             </div>
             <Film />
           </div>
@@ -186,13 +201,12 @@ export function SearchLanding() {
             <div className="qs-head center">
               <p className="qs-eyebrow">How it works</p>
               <h2 className="qs-h2" id="how-h">Three ways to ask. <span className="v">In any app.</span></h2>
-              <p className="qs-lede">It sits on top of whatever you have open. Nothing to switch to.</p>
+              <p className="qs-lede">Works on top of any app. Nothing to switch to.</p>
             </div>
 
             <div className="qs-ways">
-              <article className="qs-way">
-                <div className="qs-scene lav" aria-hidden="true">
-                  <span className="floatkeys"><kbd>Tab</kbd><kbd>Q</kbd></span>
+              <article className="qs-way lav">
+                <div className="qs-scene" aria-hidden="true">
                   <div className="qs-bubble">
                     <span className="lab">Listening <Bars /></span>
                     <b>“Is April a good time to visit Tokyo?”</b>
@@ -203,14 +217,14 @@ export function SearchLanding() {
                   </div>
                 </div>
                 <div className="qs-way-text">
-                  <span className="keys"><kbd>Tab</kbd>+<kbd>Q</kbd></span>
+                  <span className="keys"><kbd>Tab</kbd><i>+</i><kbd>Q</kbd></span>
                   <h3>Ask out loud</h3>
-                  <p>Hold the keys, say your question, let go.</p>
+                  <p>Hold the keys, ask, let go.</p>
                 </div>
               </article>
 
-              <article className="qs-way">
-                <div className="qs-scene mint" aria-hidden="true">
+              <article className="qs-way mint">
+                <div className="qs-scene" aria-hidden="true">
                   <p className="qs-paper">A strong solar storm is on its way. After dark you may see the <mark>Northern Lights</mark>.</p>
                   <div className="qs-minicard">
                     <img src="/search/pic-aurora.webp" alt="" />
@@ -218,31 +232,39 @@ export function SearchLanding() {
                   </div>
                 </div>
                 <div className="qs-way-text">
-                  <span className="keys"><kbd>Select</kbd>then<kbd>Tab</kbd>+<kbd>Q</kbd></span>
+                  <span className="keys"><kbd>Select</kbd><i>then</i><kbd>Tab</kbd><i>+</i><kbd>Q</kbd></span>
                   <h3>Look up words you see</h3>
                   <p>Highlight a word on any page. It’s explained right there.</p>
                 </div>
               </article>
 
-              <article className="qs-way">
-                <div className="qs-scene peach" aria-hidden="true">
-                  <div className="qs-dlg">
-                    <span className="box" />
-                    <span className="x">×</span>
-                    <span><b>Location is not available</b>D:\Clients is not accessible.<code>Error 0x80070005</code></span>
+              <article className="qs-way peach">
+                <div className="qs-scene" aria-hidden="true">
+                  <div className="qs-snip">
+                    <div className="qs-dlg">
+                      <span className="x">×</span>
+                      <span><b>Location is not available</b>D:\Clients is not accessible.<code>Error 0x80070005</code></span>
+                    </div>
+                    <span className="sel" />
+                    <span className="tag">Tab + S</span>
+                    <svg className="cross" width="22" height="22" viewBox="0 0 22 22"><path d="M11 1v20M1 11h20" stroke="#1f1d2b" strokeWidth="2.2" strokeLinecap="round" /></svg>
                   </div>
-                  <div className="qs-acts">
-                    <span className="qs-act"><Bolt size={14} />Explain image</span>
-                    <span className="qs-act ok"><Check size={14} />Text copied · free</span>
-                  </div>
-                  <div className="qs-reply">
-                    <span>You don’t have permission for this folder.<em>Ask its owner, or change it in Properties › Security.</em></span>
+                  <div className="qs-att">
+                    <div className="top">
+                      <span className="thumb" />
+                      <span><b>Screenshot attached</b>What do you want to do?</span>
+                    </div>
+                    <div className="choices">
+                      <span className="qs-act"><Bolt size={14} />Ask about it</span>
+                      <span className="or">or</span>
+                      <span className="qs-act line"><Copy size={14} />Copy text</span>
+                    </div>
                   </div>
                 </div>
                 <div className="qs-way-text">
-                  <span className="keys"><kbd>Tab</kbd>+<kbd>S</kbd></span>
+                  <span className="keys"><kbd>Tab</kbd><i>+</i><kbd>S</kbd></span>
                   <h3>Ask about your screen</h3>
-                  <p>Box an error, a chart or a photo. Or copy text out of it, free.</p>
+                  <p>Box any part of your screen. Ask about it, or copy the text out, free.</p>
                 </div>
               </article>
             </div>
@@ -260,36 +282,32 @@ export function SearchLanding() {
               <p className="qs-lede">No ten blue links. No life story before the recipe.</p>
             </div>
 
-            <div className="qs-back">
-              <figure className="qs-thread">
-                <figcaption className="qs-sr">A Quick Search conversation. Q1: How far away is the Moon? About 384,400 km away on average. Q2: How long would it take to drive there? About 160 days at 100 km/h.</figcaption>
-                <div className="qs-card-head" aria-hidden="true"><Mark size={22} /><b>Quick Search</b><span className="esc">Esc</span></div>
-                <div className="qs-card-body" aria-hidden="true">
-                  <div className="turn">
-                    <p className="qs-q"><span className="n">Q1</span>How far away is the Moon?</p>
-                    <div className="qs-pic"><img src="/search/pic-moon.webp" alt="" /><i className="qs-mk">1</i><span className="count">1 / 10</span></div>
-                    <p className="qs-big">About 384,400 km away.</p>
-                    <div className="qs-meta">
-                      <span className="qs-mkgrp"><i className="qs-mk">2</i><span className="qs-chip"><i style={{ background: "#1f4fbf" }}>N</i>nasa.gov</span></span>
-                      <span className="qs-chip"><i style={{ background: "#22356b" }}>R</i>rmg.co.uk</span>
-                      <span className="qs-mkgrp"><i className="qs-mk">3</i><span className="qs-chip tts"><Bars />Reading aloud</span></span>
-                    </div>
-                  </div>
-                  <div className="turn">
-                    <p className="qs-q"><span className="n">Q2</span><span>How long would it take to drive <span className="there">there</span>?</span><i className="qs-mk">4</i></p>
-                    <p className="qs-big">About 160 days, nonstop at 100 km/h.</p>
-                  </div>
+            <figure className="qs-anno">
+              <figcaption className="qs-sr">A Quick Search conversation. Q1: How far away is the Moon? About 384,400 km away, from nasa.gov and rmg.co.uk. Q2: How long would it take to drive there? About 160 days at 100 km/h.</figcaption>
+              <span className="qs-anno-bg" aria-hidden="true" />
+              <div className="r r-head" aria-hidden="true"><div className="qs-card-head"><Mark size={22} /><b>Quick Search</b><span className="esc">Esc</span></div></div>
+              <div className="r r-q" aria-hidden="true"><p className="qs-q"><span className="n">Q1</span>How far away is the Moon?</p></div>
+              <div className="r r-pic" aria-hidden="true"><div className="qs-pic"><img src="/search/pic-moon.webp" alt="" /><span className="count">1 / 10</span></div><i className="qs-mk">1</i></div>
+              <div className="r r-big" aria-hidden="true"><p className="qs-big">About 384,400 km away.</p></div>
+              <div className="r r-src" aria-hidden="true">
+                <div className="qs-meta">
+                  <span className="qs-chip"><i style={{ background: "#1f4fbf" }}>N</i>nasa.gov</span>
+                  <span className="qs-chip"><i style={{ background: "#22356b" }}>R</i>rmg.co.uk</span>
                 </div>
-                <div className="qs-floor" aria-hidden="true"><Search /><span>Ask a follow-up…</span><i className="mic"><Mic size={16} /></i></div>
-              </figure>
+                <i className="qs-mk">2</i>
+              </div>
+              <div className="r r-q2" aria-hidden="true"><p className="qs-q"><span className="n">Q2</span><span>How long would it take to drive <span className="there">there</span>?</span></p><i className="qs-mk">3</i></div>
+              <div className="r r-big2" aria-hidden="true"><p className="qs-big">About 160 days, nonstop at 100 km/h.</p></div>
+              <div className="r r-floor" aria-hidden="true">
+                <div className="qs-floor"><Search /><span>Ask a follow-up…</span><span className="qs-chip tts"><Bars />Reading aloud</span><i className="mic"><Mic size={16} /></i></div>
+                <i className="qs-mk">4</i>
+              </div>
 
-              <ol className="qs-points">
-                <li><span className="num">1</span><span><b>A picture first</b><span>Real photos from the pages it read, so you get it at a glance.</span></span></li>
-                <li><span className="num">2</span><span><b>Sources you can open</b><span>Every answer shows where it came from.</span></span></li>
-                <li><span className="num">3</span><span><b>Read out loud</b><span>Keep your eyes on your work. Turn the voice off any time.</span></span></li>
-                <li><span className="num">4</span><span><b>Keep asking</b><span>It knows “there” means the Moon. No need to repeat yourself.</span></span></li>
-              </ol>
-            </div>
+              <p className="qs-call c1"><span className="in"><span className="num">1</span><span><b>A picture first</b><span>Real photos from the pages it read.</span></span></span></p>
+              <p className="qs-call c2"><span className="in"><span className="num">2</span><span><b>Sources you can open</b><span>Every answer shows where it came from.</span></span></span></p>
+              <p className="qs-call c3"><span className="in"><span className="num">3</span><span><b>Keep asking</b><span>It knows “there” means the Moon.</span></span></span></p>
+              <p className="qs-call c4"><span className="in"><span className="num">4</span><span><b>Read out loud</b><span>Turn the voice off any time.</span></span></span></p>
+            </figure>
           </div>
         </section>
 

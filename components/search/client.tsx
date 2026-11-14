@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { mountDemo } from "./demo";
+import { mountPage } from "./page";
 import { Play, Send, Windows } from "./icons";
 
 export const SITE = "https://search.tubelight.net";
@@ -111,14 +112,23 @@ export function DemoMount({ children }: { children: React.ReactNode }) {
   );
 }
 
-/** The 48-second film. Poster first; the phone gets the tall cut. */
+/** Page behaviour: the film link and the sticky download bar (see page.ts). */
+export function PageMount() {
+  useEffect(() => {
+    const root = document.getElementById("top");
+    return root ? mountPage(root) : undefined;
+  }, []);
+  return null;
+}
+
+/** The 55-second film. Poster first; the phone gets the tall cut. */
 export function Film() {
   const [src, setSrc] = useState("");
   const [poster, setPoster] = useState("/search/film-poster.jpg");
   function play() {
     const tall = window.matchMedia("(max-width: 640px)").matches;
     setPoster(tall ? "/search/film-poster-phone.jpg" : "/search/film-poster.jpg");
-    setSrc(tall ? "/search/stop-opening-tabs-phone.mp4" : "/search/stop-opening-tabs.mp4");
+    setSrc(tall ? "/search/quick-search-v3_phone.mp4" : "/search/quick-search-v3_desktop.mp4");
     qsTrack("qs_film_play", { tall });
   }
   return (
@@ -129,11 +139,11 @@ export function Film() {
         <>
           <picture>
             <source media="(max-width: 640px)" srcSet="/search/film-poster-phone.jpg" />
-            <img src="/search/film-poster.jpg" alt="A still from the film: Stop opening new tabs, with Quick Search answering how long to boil an egg." loading="lazy" />
+            <img src="/search/film-poster.jpg" alt="A still from the film: Wait… what is that? Press Tab and S to find out." loading="lazy" />
           </picture>
-          <button type="button" className="play" onClick={play} aria-label="Play the 48-second film with sound">
+          <button type="button" className="play" onClick={play} aria-label="Play the 55-second film with sound">
             <span className="disc"><Play size={34} /></span>
-            <span className="lbl">Play · 0:48</span>
+            <span className="lbl">Play · 0:55</span>
           </button>
         </>
       )}
