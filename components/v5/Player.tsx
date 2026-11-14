@@ -662,7 +662,7 @@ function LivePlayer({ topic, onClose }: { topic: string; onClose: () => void }) 
         {ended ? (
           <EndCard
             title="That’s your first Tubelight video."
-            body="Want an earlier invite? Tell us how you’ll use Tubelight — every answer moves you up the line."
+            body="Want an earlier invite? Tell us how you’ll use Tubelight — each answer earns priority points."
             cta="Move up the line"
             onCta={() => {
               w.openModal();

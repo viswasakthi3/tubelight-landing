@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { PRIORITY_POINTS } from "@/lib/waitlist-shared";
 import { fmt } from "./media";
 import { QS } from "./questions";
 import { useWaitlist, type Placement } from "./WaitlistContext";
@@ -68,7 +69,7 @@ export function SignupForm({
   );
 }
 
-/** "You're on the waitlist — #N in line" + the button that opens the dialog. */
+/** Show the saved invite score and reopen the signup dialog. */
 export function Joined() {
   const w = useWaitlist();
   const done = w.qi >= QS.length;
@@ -79,7 +80,7 @@ export function Joined() {
           <path d="m5 12 5 5 9-10" />
         </svg>
       </span>
-      <span>You’re on the waitlist{w.position !== null ? ` — #${fmt(w.position)} in line` : ""}</span>
+      <span>You’re on the waitlist · {fmt(w.points)} priority points</span>
       <button type="button" className="linkbtn" onClick={w.openModal}>
         {done ? "See your spot" : "Move up the line →"}
       </button>
@@ -101,8 +102,8 @@ export function InviteFriends() {
   }
   return (
     <div className="invite-box">
-      <strong>Know someone who’d try Tubelight?</strong>
-      <p>Send them your link. Each friend who joins gives you higher invite priority.</p>
+      <strong>Invite a friend for {PRIORITY_POINTS} more points</strong>
+      <p>Earn {PRIORITY_POINTS} priority points when a new person joins through your link.</p>
       <button type="button" className="btn sm" onClick={copy}>
         {status === "copied" ? "Link copied" : "Copy invite link"}
       </button>
@@ -113,5 +114,5 @@ export function InviteFriends() {
 }
 
 export function InviteStatus() {
-  return <p className="invite-status"><strong>Early access</strong> Invites go out in batches.</p>;
+  return <p className="invite-status"><strong>Early access</strong> Earn {PRIORITY_POINTS} priority points for each friend who joins.</p>;
 }

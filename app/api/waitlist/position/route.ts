@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { getPosition } from "@/lib/waitlist";
+import { getWaitlistStatus } from "@/lib/waitlist";
 import { verifyToken } from "@/lib/waitlist-token";
 
 export async function POST(request: Request) {
@@ -7,5 +7,5 @@ export async function POST(request: Request) {
   if (typeof body?.email !== "string" || !verifyToken(body.email, body.token)) {
     return NextResponse.json({ ok: false }, { status: 403 });
   }
-  return NextResponse.json({ position: await getPosition(body.email.trim().toLowerCase()) });
+  return NextResponse.json(await getWaitlistStatus(body.email.trim().toLowerCase()));
 }

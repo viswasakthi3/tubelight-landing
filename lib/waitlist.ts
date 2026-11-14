@@ -2,9 +2,9 @@ import { promises as fs } from "node:fs";
 import { randomUUID } from "node:crypto";
 import path from "node:path";
 import { Pool } from "pg";
-import { SPOTS_PER_ANSWER } from "./waitlist-shared";
+import { PRIORITY_POINTS } from "./waitlist-shared";
 
-export { SPOTS_PER_ANSWER };
+export { PRIORITY_POINTS };
 
 export type AnswerValue = string | string[];
 export type Answers = Record<string, AnswerValue>;
@@ -116,7 +116,7 @@ export async function saveSignup(signup: Signup, ref: string | null = null) {
       } else if (ref) {
         await client.query(
           "UPDATE tubelight_waitlist SET referrals = referrals + 1, boost = boost + $1 WHERE referral_code = $2 AND email <> $3",
-          [SPOTS_PER_ANSWER, ref, signup.email],
+          [PRIORITY_POINTS, ref, signup.email],
         );
       }
       const count = await client.query("SELECT COUNT(*)::int AS total FROM tubelight_waitlist");
@@ -139,7 +139,7 @@ export async function saveSignup(signup: Signup, ref: string | null = null) {
       const inviter = ref && all.find((s) => s.referralCode === ref);
       if (inviter) {
         inviter.referrals = (inviter.referrals ?? 0) + 1;
-        inviter.boost = (inviter.boost ?? 0) + SPOTS_PER_ANSWER;
+        inviter.boost = (inviter.boost ?? 0) + PRIORITY_POINTS;
       }
       all.push(member);
     }
@@ -153,12 +153,12 @@ export async function saveSignup(signup: Signup, ref: string | null = null) {
 
 type Queryable = Pick<Pool, "query">;
 
-async function pgPosition(q: Queryable, email: string): Promise<number | null> {
-  const result = await q.query<{ position: number }>(
+async function pgStatus(q: Queryable, email: string): Promise<{ position: number; boost: number } | null> {
+  const result = await q.query<{ position: number; boost: number }>(
     `SELECT 1 + (SELECT COUNT(*)::int FROM tubelight_waitlist other
-       WHERE (-other.boost, other.created_at, other.id) < (-me.boost, me.created_at, me.id)) AS position
+       WHERE (-other.boost, other.created_at, other.id) < (-me.boost, me.created_at, me.id)) AS position, me.boost
      FROM tubelight_waitlist me WHERE me.email = $1`, [email]);
-  return result.rows[0]?.position ?? null;
+  return result.rows[0] ?? null;
 }
 
 function fileRanked(all: Signup[]): { s: Signup; i: number }[] {
@@ -178,13 +178,15 @@ function filePosition(all: Signup[], email: string): number | null {
 }
 
 /** 1 + the number of people ranked ahead of this email, or null if they are not on the list. */
-export async function getPosition(email: string): Promise<number | null> {
+export async function getWaitlistStatus(email: string) {
   const db = getPool();
   if (db) {
     await ensureTable(db);
-    return await pgPosition(db, email);
+    return pgStatus(db, email);
   }
-  return filePosition(await readAll(), email);
+  const all = await readAll();
+  const member = all.find((s) => s.email === email);
+  return member ? { position: filePosition(all, email), boost: member.boost ?? 0 } : null;
 }
 
 export async function getTotal(): Promise<number> {
@@ -208,12 +210,13 @@ function countAnswered(answers: Answers): number {
 
 /** Boost is always recomputed from the stored answers, so repeats can't inflate it. */
 export function boostFor(answers: Answers): number {
-  return SPOTS_PER_ANSWER * countAnswered(answers);
+  return PRIORITY_POINTS * countAnswered(answers);
 }
 
 function roleFrom(answers: Answers): string | null {
   const a = answers["0"];
-  return typeof a === "string" && a.trim() ? a.trim().slice(0, 60) : null;
+  const role = Array.isArray(a) ? a[0] : a;
+  return role?.trim().slice(0, 60) || null;
 }
 
 export type AnswerResult = { position: number; previousPosition: number; boost: number };
@@ -235,20 +238,20 @@ export async function saveAnswer(email: string, question: number, answer: Answer
         await client.query("ROLLBACK");
         return null;
       }
-      const previousPosition = (await pgPosition(client, email)) ?? 1;
+      const previousPosition = (await pgStatus(client, email))?.position ?? 1;
       if (answer === null) {
         await client.query("COMMIT");
         return { position: previousPosition, previousPosition, boost: cur.rows[0].boost };
       }
       const answers: Answers = { ...(cur.rows[0].answers ?? {}), [key]: answer };
-      const boost = boostFor(answers) + cur.rows[0].referrals * SPOTS_PER_ANSWER;
+      const boost = boostFor(answers) + cur.rows[0].referrals * PRIORITY_POINTS;
       await client.query(
         `UPDATE tubelight_waitlist
             SET answers = $2::jsonb, boost = $3, role = COALESCE($4, role)
           WHERE email = $1`,
         [email, JSON.stringify(answers), boost, question === 0 ? roleFrom(answers) : null],
       );
-      const position = (await pgPosition(client, email)) ?? previousPosition;
+      const position = (await pgStatus(client, email))?.position ?? previousPosition;
       await client.query("COMMIT");
       return { position, previousPosition, boost };
     } catch (err) {
@@ -266,7 +269,7 @@ export async function saveAnswer(email: string, question: number, answer: Answer
     const previousPosition = filePosition(all, email) ?? 1;
     if (answer === null) return { position: previousPosition, previousPosition, boost: me.boost ?? 0 };
     me.answers = { ...(me.answers ?? {}), [key]: answer };
-    me.boost = boostFor(me.answers) + (me.referrals ?? 0) * SPOTS_PER_ANSWER;
+    me.boost = boostFor(me.answers) + (me.referrals ?? 0) * PRIORITY_POINTS;
     if (question === 0) me.role = roleFrom(me.answers) ?? me.role;
     await writeAll(all);
     return { position: filePosition(all, email) ?? previousPosition, previousPosition, boost: me.boost };

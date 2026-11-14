@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { forwardSignup, getPosition, isValidEmail, saveSignup, type Signup } from "@/lib/waitlist";
+import { forwardSignup, getWaitlistStatus, isValidEmail, saveSignup, type Signup } from "@/lib/waitlist";
 import { signToken } from "@/lib/waitlist-token";
 
 export const runtime = "nodejs";
@@ -65,13 +65,13 @@ export async function POST(request: Request) {
   const result = await saveSignup(signup, ref);
   if (!result.duplicate) await forwardSignup(signup);
 
-  const position = await getPosition(email);
+  const status = await getWaitlistStatus(email);
 
   return NextResponse.json({
     ok: true,
     duplicate: result.duplicate,
     message: result.duplicate ? "You're already on the list — invite is on its way." : "You're on the list.",
-    position,
+    ...status,
     total: result.total,
     referralCode: result.referralCode,
     token: signToken(email),

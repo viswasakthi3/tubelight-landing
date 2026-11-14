@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, type KeyboardEvent } from "react";
+import { PRIORITY_POINTS } from "@/lib/waitlist-shared";
 import { fmt, trapTab } from "./media";
 import { OTHER, QS } from "./questions";
 import { InviteFriends, InviteStatus, SignupForm } from "./SignupForm";
@@ -30,9 +31,8 @@ export function WaitlistDialog() {
 
   if (!w.modal) return null;
 
-  const hasCount = w.position !== null;
   const q = QS[Math.min(w.qi, QS.length - 1)];
-  const showNext = q.multi || !!q.about || otherOn;
+  const showNext = !!w.answerErr || q.multi || !!q.about || otherOn;
   const answered = w.picked.length > 0 || w.aboutText.trim() !== "";
   const onEnter = (e: KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter") {
@@ -40,7 +40,6 @@ export function WaitlistDialog() {
       if (answered) w.nextQ();
     }
   };
-  const posText = "#" + fmt(w.shown);
   const emailShown = w.email.trim();
 
   return (
@@ -81,19 +80,13 @@ export function WaitlistDialog() {
                 <p style={{ margin: "2px 0 0", fontSize: 15, color: "#6F6B86", overflowWrap: "anywhere" }}>{emailShown}</p>
               </div>
             </div>
-            {hasCount ? (
-              <div className="posbox">
-                <div>
-                  <p style={{ margin: "0 0 6px", fontSize: 14, fontWeight: 600, color: "#4B33B8" }}>Your place in line</p>
-                  <p className="posnum">{posText}</p>
-                </div>
-                {w.delta > 0 ? <span className="delta">↑ {fmt(w.delta)} spots</span> : null}
+            <div className="posbox">
+              <div>
+                <p style={{ margin: 0, color: "#4B33B8", fontWeight: 600 }}>Your invite priority</p>
+                <p className="posnum" aria-live="polite">{fmt(w.points)} points</p>
               </div>
-            ) : null}
-            <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
-              <p className="disp" style={{ margin: 0, fontSize: 21, fontWeight: 600, letterSpacing: "-0.02em" }}>Want an earlier invite?</p>
-              <p style={{ margin: 0, color: "#57536E" }}>Tell us how you’ll use Tubelight. Each answer adds to your invite priority.</p>
             </div>
+            <p style={{ margin: 0, color: "#57536E" }}>People with more points are invited first. Earn {PRIORITY_POINTS} points for each question you answer.</p>
             <div className="segs">
               {QS.map((_, i) => (
                 <span key={i} className={"seg" + (w.qi > i ? " on" : "")} />
@@ -109,7 +102,7 @@ export function WaitlistDialog() {
                 {[...q.opts, ...(q.other ? [OTHER] : [])].map((label) => {
                   const on = w.picked.includes(label);
                   return (
-                    <button key={label} type="button" className={"qchip" + (on ? " on" : "")} aria-pressed={on} onClick={() => w.pick(label)}>
+                    <button key={label} type="button" className={"qchip" + (on ? " on" : "")} disabled={w.savingAnswer} aria-pressed={on} onClick={() => w.pick(label)}>
                       {label}
                     </button>
                   );
@@ -119,6 +112,7 @@ export function WaitlistDialog() {
                 <div className="qfield">
                   <label htmlFor="q-other">Tell us in a few words</label>
                   <input
+                    disabled={w.savingAnswer}
                     id="q-other"
                     ref={otherRef}
                     className="qinput"
@@ -134,6 +128,7 @@ export function WaitlistDialog() {
                 <div className="qfield">
                   <label htmlFor="q-about">{q.about.label} <span className="qopt">(optional)</span></label>
                   <input
+                    disabled={w.savingAnswer}
                     id="q-about"
                     className="qinput"
                     type="text"
@@ -148,10 +143,10 @@ export function WaitlistDialog() {
             </div>
             {w.answerErr ? <p className="err" role="alert">{w.answerErr}</p> : null}
             <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 12, flexWrap: "wrap" }}>
-              <button type="button" className="linkbtn" style={{ color: "#6F6B86" }} onClick={w.skipQ}>Skip this question</button>
+              <button type="button" className="linkbtn" style={{ color: "#6F6B86" }} disabled={w.savingAnswer} onClick={w.skipQ}>Skip this question</button>
               {showNext ? (
-                <button type="button" className="btn sm" disabled={!answered} onClick={w.nextQ}>
-                  Next
+                <button type="button" className="btn sm" disabled={!answered || w.savingAnswer} onClick={w.nextQ}>
+                  {w.savingAnswer ? "Saving…" : w.answerErr ? "Try again" : "Next"}
                 </button>
               ) : null}
             </div>
@@ -165,13 +160,9 @@ export function WaitlistDialog() {
               <svg viewBox="0 0 24 24"><path d="M12 19V5" /><path d="m5 12 7-7 7 7" /></svg>
             </span>
             <h2 id="wl-title" className="disp" style={{ margin: 0, fontSize: 32, lineHeight: 1.1, fontWeight: 600, letterSpacing: "-0.03em", paddingRight: 44 }}>
-              {w.moved > 0 ? `You moved up ${fmt(w.moved)} spots!` : "You’re all set!"}
+              Your spot is saved
             </h2>
-            {hasCount ? (
-              <p style={{ margin: 0, fontSize: 18, color: "#221E3F" }}>
-                You’re now <strong style={{ color: "#4B33B8" }}>{"#" + fmt(w.position as number)}</strong> in line.
-              </p>
-            ) : null}
+            <p className="posbox" aria-live="polite">Your invite priority <strong>{fmt(w.points)} points</strong></p>
             <p style={{ margin: 0, color: "#57536E" }}>
               We’ll email <strong style={{ color: "#221E3F", fontWeight: 600, overflowWrap: "anywhere" }}>{emailShown}</strong> as soon as your invite is ready.
             </p>

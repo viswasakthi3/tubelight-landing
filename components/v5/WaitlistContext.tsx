@@ -19,13 +19,7 @@ export type WaitlistApi = {
    * `quiet` skips the questions dialog, which the preview gate does not want. Resolves true when joined.
    */
   submit: (placement: Placement, opts?: { topic?: string; quiet?: boolean }) => Promise<boolean>;
-  /** real place in line from the server, or null when unknown */
-  position: number | null;
-  /** animated number shown in the dialog */
-  shown: number;
-  /** spots gained by the latest answer (flashes briefly) */
-  delta: number;
-  moved: number;
+  points: number;
   modal: Step;
   openModal: () => void;
   closeModal: () => void;
@@ -36,6 +30,7 @@ export type WaitlistApi = {
   setOtherText: (v: string) => void;
   aboutText: string;
   setAboutText: (v: string) => void;
+  savingAnswer: boolean;
   answerErr: string;
   pick: (label: string) => void;
   nextQ: () => void;
@@ -58,33 +53,28 @@ export function WaitlistProvider({ children }: { children: React.ReactNode }) {
   const [submitting, setSubmitting] = useState(false);
   const [referralUrl, setReferralUrl] = useState("");
   const [sent, setSent] = useState(false);
-  const [position, setPosition] = useState<number | null>(null);
-  const [shown, setShown] = useState(0);
-  const [delta, setDelta] = useState(0);
-  const [moved, setMoved] = useState(0);
+  const [points, setPoints] = useState(0);
   const [modal, setModal] = useState<Step>(null);
   const [qi, setQi] = useState(0);
   const [picked, setPickedState] = useState<string[]>([]);
   const [otherText, setOtherRaw] = useState("");
   const [aboutText, setAboutRaw] = useState("");
+  const savingRef = useRef(false);
+  const [savingAnswer, setSavingAnswer] = useState(false);
   const [answerErr, setAnswerErr] = useState("");
 
   const token = useRef("");
   const sentEmail = useRef("");
-  const startPos = useRef<number | null>(null);
-  const shownRef = useRef(0);
   const qiRef = useRef(0);
   const pickedRef = useRef<string[]>([]);
   const otherRef = useRef("");
   const aboutRef = useRef("");
-  const timers = useRef<{ tick?: ReturnType<typeof setInterval>; nq?: ReturnType<typeof setTimeout>; dt?: ReturnType<typeof setTimeout> }>({});
+  const timers = useRef<{ nq?: ReturnType<typeof setTimeout> }>({});
 
   useEffect(() => {
     const t = timers.current;
     return () => {
-      clearInterval(t.tick);
       clearTimeout(t.nq);
-      clearTimeout(t.dt);
     };
   }, []);
 
@@ -117,21 +107,6 @@ export function WaitlistProvider({ children }: { children: React.ReactNode }) {
     setQi(n);
   }, []);
 
-  const tickTo = useCallback((target: number) => {
-    clearInterval(timers.current.tick);
-    const from = shownRef.current;
-    const start = Date.now();
-    const d = 700;
-    timers.current.tick = setInterval(() => {
-      const p = Math.min(1, (Date.now() - start) / d);
-      const e = 1 - Math.pow(1 - p, 3);
-      const v = Math.round(from + (target - from) * e);
-      shownRef.current = v;
-      setShown(v);
-      if (p >= 1) clearInterval(timers.current.tick);
-    }, 30);
-  }, []);
-
   const submit = useCallback(
     async (placement: Placement, opts?: { topic?: string; quiet?: boolean }): Promise<boolean> => {
       const v = email.trim();
@@ -155,13 +130,7 @@ export function WaitlistProvider({ children }: { children: React.ReactNode }) {
         }
         token.current = typeof j.token === "string" ? j.token : "";
         sentEmail.current = v.toLowerCase();
-        const pos = typeof j.position === "number" ? j.position : null;
-        startPos.current = pos;
-        shownRef.current = pos ?? 0;
-        setPosition(pos);
-        setShown(pos ?? 0);
-        setMoved(0);
-        setDelta(0);
+        setPoints(j.boost ?? 0);
         if (typeof j.referralCode === "string") {
           const url = new URL("/", location.origin);
           url.searchParams.set("ref", j.referralCode);
@@ -197,15 +166,12 @@ export function WaitlistProvider({ children }: { children: React.ReactNode }) {
         });
         if (!res.ok) return;
         const data = await res.json();
-        if (typeof data.position === "number") {
-          setPosition(data.position);
-          tickTo(data.position);
-        }
+        if (typeof data?.boost === "number") setPoints((prev) => Math.max(prev, data.boost));
       } catch { /* Keep the last confirmed position. */ }
     };
     window.addEventListener("focus", refresh);
     return () => window.removeEventListener("focus", refresh);
-  }, [sent, tickTo]);
+  }, [sent]);
 
   const openModal = useCallback(() => {
     setErr("");
@@ -213,61 +179,47 @@ export function WaitlistProvider({ children }: { children: React.ReactNode }) {
   }, [sent]);
   const closeModal = useCallback(() => setModal(null), []);
 
-  const goDone = useCallback((after: number) => {
-    setTimeout(() => {
-      setModal((m) => (m === "q" ? "done" : m));
-      track("waitlist_done");
-    }, after);
-  }, []);
-
   const advance = useCallback(
-    (value: string | string[] | null, counted: boolean) => {
+    async (value: string[] | null) => {
       const q = qiRef.current;
-      const next = q + 1;
+      if (q >= QS.length || savingRef.current) return;
+      setAnswerErr("");
+      if (value) {
+        savingRef.current = true;
+        setSavingAnswer(true);
+        try {
+          const res = await fetch("/api/waitlist/answers", {
+            method: "POST",
+            headers: { "content-type": "application/json" },
+            body: JSON.stringify({ email: sentEmail.current, token: token.current, question: q, answer: value }),
+          });
+          const data = await res.json();
+          if (!res.ok || !data.ok || typeof data.boost !== "number") throw new Error("Save failed");
+          setPoints((prev) => Math.max(prev, data.boost));
+        } catch {
+          setAnswerErr("Your answer couldn’t be saved. Try again or skip this question.");
+          return;
+        } finally {
+          savingRef.current = false;
+          setSavingAnswer(false);
+        }
+      }
       setPicked([]);
       clearTexts();
-      setAnswerErr("");
+      const next = q + 1;
       setQiBoth(next);
-      track("waitlist_answer", { question: q, skipped: !counted });
-      if (!counted) {
-        if (next >= QS.length) goDone(0);
-        return;
+      track("waitlist_answer", { question: q, skipped: !value });
+      if (next === QS.length) {
+        setModal((step) => step === "q" ? "done" : step);
+        track("waitlist_done");
       }
-      fetch("/api/waitlist/answers", {
-        method: "POST",
-        headers: { "content-type": "application/json" },
-        body: JSON.stringify({ email: sentEmail.current, token: token.current, question: q, answer: value }),
-      })
-        .then((r) => r.json().catch(() => ({})))
-        .then((j) => {
-          if (!j || !j.ok || typeof j.position !== "number") throw new Error("bad response");
-          const prev = typeof j.previousPosition === "number" ? j.previousPosition : j.position;
-          const gained = Math.max(0, prev - j.position);
-          if (startPos.current === null) startPos.current = prev;
-          if (shownRef.current === 0) {
-            shownRef.current = prev;
-            setShown(prev);
-          }
-          setPosition(j.position);
-          setMoved(Math.max(0, (startPos.current ?? prev) - j.position));
-          tickTo(j.position);
-          if (gained > 0) {
-            setDelta(gained);
-            clearTimeout(timers.current.dt);
-            timers.current.dt = setTimeout(() => setDelta(0), 1400);
-          }
-          if (next >= QS.length) goDone(gained > 0 ? 900 : 0);
-        })
-        .catch(() => {
-          setAnswerErr("Couldn’t save that one — you can keep going.");
-          if (next >= QS.length) goDone(0);
-        });
     },
-    [goDone, tickTo, setPicked, setQiBoth, clearTexts],
+    [setPicked, clearTexts, setQiBoth],
   );
 
   const pick = useCallback(
     (label: string) => {
+      if (savingRef.current) return;
       const q = QS[Math.min(qiRef.current, QS.length - 1)];
       if (q.multi) {
         const p = pickedRef.current.slice();
@@ -301,19 +253,19 @@ export function WaitlistProvider({ children }: { children: React.ReactNode }) {
     });
     const about = aboutRef.current.trim();
     if (about) out.push(`About: ${about}`);
-    advance(out, true);
+    if (out.length) void advance(out);
   }, [advance]);
   const nextQRef = useRef(nextQ);
   nextQRef.current = nextQ;
 
   const skipQ = useCallback(() => {
     clearTimeout(timers.current.nq);
-    advance(null, false);
+    void advance(null);
   }, [advance]);
 
   const value = useMemo<WaitlistApi>(
-    () => ({ referralUrl, email, setEmail, err, submitting, sent, submit, position, shown, delta, moved, modal, openModal, closeModal, qi, picked, otherText, setOtherText, aboutText, setAboutText, answerErr, pick, nextQ, skipQ }),
-    [referralUrl, email, setEmail, err, submitting, sent, submit, position, shown, delta, moved, modal, openModal, closeModal, qi, picked, otherText, setOtherText, aboutText, setAboutText, answerErr, pick, nextQ, skipQ],
+    () => ({ referralUrl, email, setEmail, err, submitting, sent, submit, points, modal, openModal, closeModal, qi, picked, otherText, setOtherText, aboutText, setAboutText, savingAnswer, answerErr, pick, nextQ, skipQ }),
+    [referralUrl, email, setEmail, err, submitting, sent, submit, points, modal, openModal, closeModal, qi, picked, otherText, setOtherText, aboutText, setAboutText, savingAnswer, answerErr, pick, nextQ, skipQ],
   );
 
   return <Ctx.Provider value={value}>{children}</Ctx.Provider>;

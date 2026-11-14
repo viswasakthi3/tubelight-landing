@@ -18,7 +18,7 @@ export function FinalCta() {
               <InviteStatus />
               <div className="getahead">
                 <div className="ga"><b>1</b><span>Join with your email. It takes ten seconds.</span></div>
-                <div className="ga"><b>2</b><span>Tell us how you’ll use it. Every answer moves you up the line.</span></div>
+                <div className="ga"><b>2</b><span>Tell us how you’ll use it. Each answer earns priority points.</span></div>
                 <div className="ga"><b>3</b><span>Get your invite by email and download Tubelight.</span></div>
               </div>
             </div>
