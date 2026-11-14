@@ -452,3 +452,49 @@
 .v5 .tl-spot-ball.is-on{animation:none}
 .v5 .seek-fill,.v5 .seek-knob{transition:none}
 }
+/* 8.9 search mode: one wide window, then the app-style player */
+.v5 .wask{flex:1 1 100%}
+.v5 .desk:not(.ask) .wask{display:none}
+.v5 .desk.ask .wdoc{display:none}
+.v5 .desk.ask.play .wask{display:none}
+.v5 .desk.ask:not(.play) .wpan{display:none}
+.v5 .desk.ask.play .wpan{flex:1 1 100%;opacity:1;margin-left:0;transition:none}
+.v5 .wask .askwrap{padding:28px clamp(18px,4vw,52px);gap:16px}
+.v5 .wask .askwrap > .disp{font-size:clamp(22px,2.4vw,29px)}
+.v5 .askrow{display:flex;gap:10px;align-items:stretch}
+.v5 .askrow .askbox{flex:1;min-width:0}
+.v5 .askrow .btn{min-height:56px;padding:0 20px;border-radius:16px}
+.v5 .askin{flex:1;min-width:0;height:36px;padding:0;border:0;outline:0;background:transparent;color:#221E3F;font:400 16.5px 'DM Sans',ui-sans-serif,system-ui,sans-serif}
+.v5 .enterkey{display:inline-flex;align-items:center;height:22px;padding:0 8px;border-radius:6px;background:rgba(255,255,255,.22);border:1px solid rgba(255,255,255,.55);border-bottom-width:2px;font:600 12px 'DM Sans',ui-sans-serif,sans-serif;transition:transform .12s}
+.v5 .enterkey.pressed{transform:translateY(1px);border-bottom-width:1px}
+.v5 .abar{gap:10px;padding-right:8px}
+.v5 .abar > img{flex:none}
+.v5 .spill{display:inline-flex;align-items:center;gap:8px;min-width:0;flex:1 1 auto;max-width:440px;height:34px;padding:0 14px 0 12px;border-radius:999px;border:0;background:#F4F1FA;color:#221E3F;cursor:pointer;text-align:left;font:500 14px 'DM Sans',ui-sans-serif,sans-serif}
+.v5 .spill svg{width:16px;height:16px;flex:none;fill:none;stroke:#6C4DF6;stroke-width:2.2;stroke-linecap:round}
+.v5 .spill span{min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.v5 .spill:hover{background:#ECE6FF}
+.v5 .spill:focus-visible{outline:2px solid #6C4DF6;outline-offset:2px}
+.v5 .abar .grp{margin-left:auto;display:flex;align-items:center;gap:2px;flex:none}
+.v5 .pmain{flex:1;display:flex;flex-direction:column;gap:10px;min-width:0}
+.v5 .pbody.app{display:grid;grid-template-columns:minmax(0,1fr) 196px;gap:14px;padding:14px}
+.v5 .pbody.app .pvid{border-radius:12px}
+.v5 .prail-wrap{position:relative;min-height:0}
+.v5 .prail-wrap .pl-rail{position:absolute;inset:0}
+.v5 .prail-wrap .pl-list{flex-direction:column;overflow-x:hidden;overflow-y:auto}
+.v5 .prail-wrap .pl-card{width:auto}
+@media (max-width:720px){
+.v5 .mode{font-size:13.5px;gap:6px;padding:0 8px;white-space:nowrap}
+.v5 .askrow{flex-direction:column}
+.v5 .askrow .btn{width:100%}
+.v5 .wask .askwrap{padding:18px 16px}
+.v5 .desk.ask .wask{flex:none}
+.v5 .desk.ask.play .wpan{flex:none;max-height:none;margin-top:0}
+.v5 .pbody.app{grid-template-columns:minmax(0,1fr);padding:10px}
+.v5 .prail-wrap{position:static}
+.v5 .prail-wrap .pl-rail{position:static}
+.v5 .prail-wrap .pl-list{flex-direction:row;overflow-x:auto;overflow-y:hidden}
+.v5 .prail-wrap .pl-card{width:96px}
+.v5 .abar{gap:6px;padding-left:10px}
+.v5 .spill{max-width:none}
+.v5 .ptime{min-width:64px}
+}
