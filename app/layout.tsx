@@ -1,6 +1,5 @@
 import type { Metadata, Viewport } from "next";
 import { Inter, Fraunces, Bricolage_Grotesque, DM_Sans } from "next/font/google";
-import { CrispChat } from "@/components/CrispChat";
 import "./globals.css";
 
 const inter = Inter({
@@ -78,7 +77,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           Skip to content
         </a>
         {children}
-        <CrispChat />
       </body>
     </html>
   );

@@ -154,10 +154,11 @@ export function Hero() {
     if (reduce) {
       setHq(HERO[0].typed);
     } else {
-      // Open on load: type the sample topic, press Enter, play muted (no sound without a press).
+      // Open on load: wait for left side entrance and underline to finish (1800ms) plus a 1s gap (2800ms total),
+      // so visitor attention is not split while the left side is loading.
       t.a1 = setTimeout(() => {
         if (!touched.current && wayRef.current === "type") typeTopic(0, false);
-      }, 700);
+      }, 2800);
     }
     return () => {
       off();
@@ -413,7 +414,7 @@ export function Hero() {
                 <svg viewBox="0 0 24 24" aria-hidden="true" style={{ width: 18, height: 18, fill: "#4B33B8" }}>
                   <path d="M7 4.5v15l12.5-7.5z" />
                 </svg>
-                Watch the demo (1:21)
+                Watch the demo (0:49)
               </a>
               <a
                 href="#examples"

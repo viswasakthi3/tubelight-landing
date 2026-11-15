@@ -1,0 +1,786 @@
+<title>Quick Search Shots</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600..800&family=Manrope:wght@500;600;700;800&display=swap">
+<style>
+/* Layout: a gallery page of seven 1920×1080 posters, each scaled to the column width.
+   The posters keep one fixed look (the landing page's lavender, mint, peach and violet) in either theme;
+   only the page around them follows the viewer's theme. */
+:root {
+  --page: #f6f4fb; --page-ink: #1f1d2b; --page-muted: #625d75; --page-line: #e3def2; --page-card: #ffffff; --page-accent: #5b3cf0;
+  --display: "Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
+  --body: "Manrope", "Segoe UI", system-ui, -apple-system, sans-serif;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --page: #15131c; --page-ink: #eeebf7; --page-muted: #a7a1bb; --page-line: #2c2838; --page-card: #1d1a26; --page-accent: #a996ff; color-scheme: dark; } }
+:root[data-theme="dark"] { --page: #15131c; --page-ink: #eeebf7; --page-muted: #a7a1bb; --page-line: #2c2838; --page-card: #1d1a26; --page-accent: #a996ff; color-scheme: dark; }
+body { background: var(--page); color: var(--page-ink); font-family: var(--body); }
+* { box-sizing: border-box; }
+
+/* ---------- gallery page ---------- */
+.page { max-width: 1240px; margin: 0 auto; padding-block: 56px 96px; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); display: flex; flex-direction: column; gap: 56px; }
+.intro { display: flex; flex-direction: column; gap: 14px; max-width: 46em; }
+.intro h1 { margin: 0; font: 800 clamp(34px, 5vw, 56px)/1.05 var(--display); letter-spacing: -.02em; text-wrap: balance; }
+.intro p { margin: 0; font: 500 17px/1.65 var(--body); color: var(--page-muted); }
+.intro code { font: 600 14px/1 ui-monospace, Consolas, monospace; color: var(--page-ink); background: var(--page-card); padding: 3px 7px; border-radius: 6px; border: 1px solid var(--page-line); }
+.shot { display: flex; flex-direction: column; gap: 18px; }
+.slot { position: relative; width: 100%; max-width: 100%; aspect-ratio: 16 / 9; border-radius: 14px; overflow: hidden; box-shadow: 0 24px 60px -30px rgba(30, 20, 70, .45), 0 0 0 1px var(--page-line); }
+.slot > .frame { position: absolute; left: 0; top: 0; transform-origin: 0 0; transform: scale(var(--s, .5)); }
+.meta { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.4fr); gap: 10px 32px; align-items: start; }
+.meta h2 { margin: 0; font: 800 22px/1.25 var(--display); letter-spacing: -.01em; display: flex; gap: 12px; align-items: baseline; }
+.meta h2 span { font: 700 13px/1 var(--body); color: var(--page-muted); letter-spacing: .08em; text-transform: uppercase; }
+.meta .use { margin: 6px 0 0; font: 600 14px/1.5 var(--body); color: var(--page-muted); }
+.copybox { display: flex; flex-direction: column; gap: 8px; min-width: 0; }
+.copybox label { font: 800 11.5px/1 var(--body); letter-spacing: .1em; text-transform: uppercase; color: var(--page-muted); }
+.copyrow { display: flex; gap: 10px; align-items: flex-start; }
+.copyrow p { margin: 0; flex: 1; min-width: 0; font: 500 15px/1.55 var(--body); padding: 12px 14px; border-radius: 10px; background: var(--page-card); border: 1px solid var(--page-line); }
+.copyrow button { flex: none; font: 700 13px/1 var(--body); padding: 11px 14px; border-radius: 9px; border: 1px solid var(--page-line); background: var(--page-card); color: var(--page-accent); cursor: pointer; }
+.copyrow button:hover { border-color: var(--page-accent); }
+.copyrow button:focus-visible { outline: 3px solid var(--page-accent); outline-offset: 2px; }
+@media (max-width: 760px) { .meta { grid-template-columns: minmax(0, 1fr); } .page { gap: 44px; padding-block: 32px 64px; } }
+
+/* shot mode (#shot-3): one poster alone at full size, for rendering the PNGs */
+html.solo, html.solo body { margin: 0; padding: 0; background: #000; overflow: hidden; }
+html.solo .page { display: none; }
+html.solo body > .frame { position: fixed; left: 0; top: 0; transform: none; }
+
+/* =====================================================================
+   POSTERS. Fixed palette, taken from the landing page (components/search/search.css).
+   ===================================================================== */
+.frame {
+  --ink: #1f1d2b; --ink-2: #474259; --muted: #6e6a82; --line: #e6e1f3;
+  --violet: #6c4df6; --violet-ink: #4a2fd0; --violet-soft: #efeaff; --violet-deep: #2c1a8f;
+  --lav: #ece6ff; --mint: #dff4ea; --mint-ink: #12704a; --peach: #ffeedb; --peach-ink: #8a4f10; --sky: #e4edff;
+  --hl: #ffe17a; --red: #e5484d; --ok: #137333; --fill: #f2f2f5; --label-2: #6e6e73; --white: #ffffff;
+  width: 1920px; height: 1080px; overflow: hidden; color: var(--ink); background: var(--lav);
+  font-family: var(--body); -webkit-font-smoothing: antialiased; color-scheme: light;
+}
+.frame p, .frame h1, .frame h2, .frame h3 { margin: 0; }
+.frame .in { position: absolute; inset: 0; padding: 92px 104px 0; }
+
+/* shared type */
+.eyebrow { font: 800 24px/1 var(--body); letter-spacing: .16em; text-transform: uppercase; color: var(--violet-ink); }
+.hd { font: 800 124px/.98 var(--display); letter-spacing: -.035em; color: var(--ink); text-wrap: balance; }
+.hd .v { color: var(--violet); }
+.hd-sm { font-size: 104px; }
+.lede { font: 600 38px/1.35 var(--body); color: var(--ink-2); letter-spacing: -.005em; text-wrap: pretty; }
+
+/* footer strip on every poster */
+.foot { position: absolute; left: 104px; bottom: 60px; display: flex; align-items: center; gap: 44px; white-space: nowrap; font: 700 26px/1 var(--body); color: var(--ink-2); }
+.foot .brand { display: flex; align-items: center; gap: 16px; }
+.foot .brand svg { width: 52px; height: 52px; display: block; }
+.foot .brand b { font: 800 30px/1 var(--body); color: var(--ink); letter-spacing: -.01em; }
+.foot .brand small { font: 600 24px/1 var(--body); color: var(--muted); margin-left: 4px; }
+.foot .url { display: flex; align-items: center; gap: 12px; color: var(--ink-2); padding-left: 44px; border-left: 2px solid rgba(31, 29, 43, .14); height: 40px; }
+.foot .url svg { width: 30px; height: 30px; }
+
+/* keycaps */
+.keys { display: inline-flex; align-items: center; gap: 22px; }
+.key { display: inline-grid; place-items: center; min-width: 150px; height: 150px; padding: 0 30px 10px; border-radius: 30px;
+  background: linear-gradient(#ffffff, #f3f2f7); color: #1d1d1f; font: 800 64px/1 var(--body); letter-spacing: -.01em;
+  box-shadow: 0 12px 0 #d3d1dc, 0 14px 0 1px rgba(30, 20, 70, .12), 0 30px 50px -18px rgba(40, 30, 110, .45), 0 0 0 1.5px rgba(0, 0, 0, .1); }
+.key.wide { min-width: 250px; }
+.key.down { transform: translateY(8px); background: linear-gradient(#f4f1ff, #ebe6ff); color: var(--violet-ink);
+  box-shadow: 0 4px 0 #c9c1ef, 0 6px 0 1px rgba(30, 20, 70, .12), 0 0 0 5px rgba(108, 77, 246, .35), 0 26px 50px -16px rgba(108, 77, 246, .55); }
+.keys .plus { font: 700 56px/1 var(--body); color: #a59dc8; }
+.keys .then { font: 700 34px/1 var(--body); color: var(--muted); }
+.keys.sm { gap: 14px; }
+.keys.sm .key { min-width: 96px; height: 96px; padding: 0 20px 6px; border-radius: 20px; font-size: 40px; box-shadow: 0 8px 0 #d3d1dc, 0 9px 0 1px rgba(30, 20, 70, .12), 0 20px 34px -14px rgba(40, 30, 110, .4), 0 0 0 1.5px rgba(0, 0, 0, .1); }
+.keys.sm .key.wide { min-width: 160px; }
+.keys.sm .plus { font-size: 40px; }
+.keys.sm .then { font-size: 28px; }
+
+/* ---------- the Quick Search card, drawn like the app ---------- */
+.card { position: absolute; width: 640px; border-radius: 30px; background: var(--white); overflow: hidden;
+  box-shadow: 0 60px 110px -40px rgba(50, 30, 140, .55), 0 14px 34px -14px rgba(32, 33, 36, .22), 0 0 0 1.5px rgba(32, 33, 36, .07); }
+.c-head { display: flex; align-items: center; gap: 14px; padding: 20px 26px 18px; border-bottom: 1.5px solid #efecf7; background: linear-gradient(180deg, #f8f6ff, #fdfcff); font: 700 22px/1 var(--body); color: var(--violet-ink); }
+.c-head svg.mk { width: 34px; height: 34px; border-radius: 8px; flex: none; }
+.c-head .win { margin-left: auto; display: flex; gap: 20px; color: #9a96aa; }
+.c-head .win svg { width: 20px; height: 20px; }
+.c-body { padding: 22px 26px 8px; display: flex; flex-direction: column; gap: 18px; }
+.c-q { display: flex; align-items: center; gap: 14px; font: 600 23px/1.35 var(--body); color: var(--label-2); }
+.c-q .n { flex: none; padding: 5px 10px; border-radius: 9px; background: var(--violet-soft); color: var(--violet-ink); font: 800 17px/1.2 var(--body); }
+.c-pic { position: relative; height: 210px; border-radius: 22px; overflow: hidden; background: #eee; }
+.c-pic img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.c-pic .count { position: absolute; right: 14px; top: 14px; padding: 5px 13px; border-radius: 999px; background: rgba(255, 255, 255, .85); color: #2a2540; font: 800 17px/1.3 var(--body); }
+.c-big { font: 800 40px/1.22 var(--body); color: #1c1a33; letter-spacing: -.012em; }
+.c-big mark, .page-mark { color: inherit; background: linear-gradient(transparent 52%, var(--hl) 52%, var(--hl) 92%, transparent 92%); padding: 0 .06em; }
+.c-sub { font: 600 27px/1.4 var(--body); color: #4c4860; }
+.chips { display: flex; flex-wrap: wrap; gap: 10px; }
+.chip { display: inline-flex; align-items: center; gap: 10px; padding: 9px 16px 9px 10px; border-radius: 999px; background: var(--fill); color: #1d1d1f; font: 700 19px/1.2 var(--body); white-space: nowrap; }
+.chip i { display: grid; place-items: center; width: 26px; height: 26px; border-radius: 8px; color: #fff; font: 800 14px/1 var(--body); font-style: normal; }
+.chip.tts { background: var(--violet-soft); color: var(--violet-ink); padding-left: 16px; }
+.bars { display: inline-flex; align-items: center; gap: 3px; height: 20px; }
+.bars i { display: block; width: 4px; border-radius: 2px; background: currentColor; }
+.bars i:nth-child(1) { height: 40%; } .bars i:nth-child(2) { height: 90%; } .bars i:nth-child(3) { height: 60%; } .bars i:nth-child(4) { height: 100%; } .bars i:nth-child(5) { height: 45%; }
+.c-floor { margin: 14px 18px 18px; display: flex; align-items: center; gap: 14px; height: 70px; padding: 0 9px 0 22px; border-radius: 20px; background: var(--fill); color: var(--label-2); font: 600 22px/1 var(--body); }
+.c-floor > span:not(.chip) { flex: 1; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.c-floor svg.s { width: 24px; height: 24px; flex: none; }
+.c-floor .mic { display: grid; place-items: center; width: 52px; height: 52px; border-radius: 50%; background: var(--violet); color: #fff; }
+.c-floor .mic svg { width: 24px; height: 24px; }
+
+/* speech bubble (listening) */
+.listen { position: absolute; display: flex; flex-direction: column; gap: 16px; padding: 28px 34px 30px; border-radius: 30px 30px 30px 8px; background: var(--white);
+  box-shadow: 0 40px 80px -36px rgba(50, 30, 140, .5), 0 0 0 1.5px rgba(32, 33, 36, .07); }
+.listen .lab { display: flex; align-items: center; gap: 14px; font: 800 20px/1 var(--body); letter-spacing: .14em; text-transform: uppercase; color: var(--violet); }
+.listen .lab::before { content: ""; width: 14px; height: 14px; border-radius: 50%; background: var(--red); box-shadow: 0 0 0 7px rgba(229, 72, 77, .16); }
+.listen .said { font: 800 40px/1.25 var(--body); color: #1f1f1f; letter-spacing: -.012em; }
+.wave { display: flex; align-items: center; gap: 6px; height: 64px; color: var(--violet); }
+.wave i { display: block; width: 8px; border-radius: 4px; background: currentColor; }
+
+/* egg diagram (no photo for this one) */
+.eggs { display: flex; justify-content: space-around; align-items: flex-end; height: 210px; padding: 22px 20px 16px; border-radius: 22px; background: linear-gradient(160deg, #fff7ea, #ffe9cc); }
+.egg { display: flex; flex-direction: column; align-items: center; gap: 8px; }
+.egg .shell { position: relative; width: 104px; height: 118px; border-radius: 50% 50% 48% 48% / 58% 58% 42% 42%; background: #fffdf8; box-shadow: inset 0 -8px 0 rgba(0, 0, 0, .04), 0 10px 18px -10px rgba(120, 70, 10, .5); display: grid; place-items: center; }
+.egg .yolk { width: 56px; height: 56px; border-radius: 50%; }
+.egg.soft .yolk { background: radial-gradient(circle at 40% 35%, #ffb43a, #f08a00); box-shadow: 0 10px 0 -2px #f39b14; }
+.egg.jammy .yolk { background: radial-gradient(circle at 40% 35%, #ffa630, #e07b00); }
+.egg.hard .yolk { background: radial-gradient(circle at 40% 35%, #ffe58a, #f6cf55); }
+.egg b { font: 800 24px/1 var(--body); color: #3b2a12; }
+.egg small { font: 700 17px/1 var(--body); color: #8a6a3a; }
+
+/* ================= 1. HERO ================= */
+/* Read order, by design: the dark screen pulls the eye, the white Quick Search window in its corner
+   is the brightest thing on it, then the headline says how you got it. The app behind is dimmed so
+   nothing in it competes with the answer. */
+.f1 { background: radial-gradient(900px 700px at 74% 46%, rgba(108, 77, 246, .26), rgba(108, 77, 246, 0) 70%), linear-gradient(135deg, #f1edff 0%, #e6deff 100%); }
+.f1 .glow { position: absolute; right: -300px; top: -420px; width: 1200px; height: 1200px; border-radius: 50%; background: radial-gradient(circle, rgba(255, 225, 122, .38), rgba(255, 225, 122, 0) 60%); }
+.f1 .words { position: absolute; left: 104px; top: 196px; width: 640px; display: flex; flex-direction: column; align-items: flex-start; gap: 30px; }
+.f1 .press { font: 800 64px/1 var(--display); letter-spacing: -.025em; color: var(--ink-2); }
+.f1 .keys { gap: 22px; margin-bottom: 40px; }
+.f1 .key { min-width: 164px; height: 164px; padding: 0 34px 10px; border-radius: 32px; font-size: 72px; }
+.f1 .key.wide { min-width: 270px; }
+.f1 .keys .plus { font-size: 60px; }
+.f1 .hd { font-size: 96px; line-height: 1.02; }
+
+/* the PC: a thin-bezel monitor on a light stand */
+.pc { position: absolute; left: 776px; top: 92px; width: 1064px; }
+.pc .bezel { position: relative; padding: 13px; border-radius: 26px; background: #0e0d13; box-shadow: 0 70px 120px -50px rgba(40, 24, 120, .6), 0 20px 40px -20px rgba(20, 12, 60, .35), inset 0 0 0 1.5px rgba(255, 255, 255, .08); }
+.pc .neck { width: 150px; height: 62px; margin: 0 auto; background: linear-gradient(90deg, #cfc8e6, #ebe7f6 50%, #cfc8e6); clip-path: polygon(14% 0, 86% 0, 100% 100%, 0 100%); }
+.pc .base { width: 380px; height: 16px; margin: 0 auto; border-radius: 8px 8px 12px 12px; background: linear-gradient(#efecf8, #cbc4e2); box-shadow: 0 18px 30px -12px rgba(40, 24, 120, .4); }
+.screen { position: relative; height: 676px; border-radius: 14px; overflow: hidden; background: #121118; display: flex; flex-direction: column; font-family: "Segoe UI", var(--body); }
+
+/* a dark chat app, dimmed a little so the answer wins */
+.chat { flex: 1; display: flex; flex-direction: column; min-height: 0; }
+.chat .tbar { display: flex; align-items: center; gap: 10px; height: 38px; padding: 0 0 0 16px; background: #1b1a22; font: 600 14px/1 "Segoe UI", var(--body); color: #a9a5b9; }
+.chat .tbar .ai { width: 18px; height: 18px; border-radius: 5px; background: linear-gradient(135deg, #34c38f, #1c8f68); }
+.chat .tbar .ctl { margin-left: auto; display: flex; }
+.chat .tbar .ctl span { width: 46px; text-align: center; font: 400 16px/38px "Segoe UI", sans-serif; color: #8c889c; }
+.chat .cols { flex: 1; display: flex; min-height: 0; }
+.chat .side { width: 232px; flex: none; background: #18171f; border-right: 1px solid #26252f; padding: 14px 10px; display: flex; flex-direction: column; gap: 4px; }
+.chat .find { height: 36px; margin: 0 4px 10px; border-radius: 9px; background: #23222b; display: flex; align-items: center; gap: 10px; padding: 0 12px; font: 400 14px/1 "Segoe UI", var(--body); color: #75718a; }
+.chat .find svg { width: 15px; height: 15px; }
+.chat .row { display: flex; align-items: center; gap: 12px; padding: 10px; border-radius: 12px; }
+.chat .row.on { background: #2a2934; }
+.chat .av { flex: none; display: grid; place-items: center; width: 42px; height: 42px; border-radius: 50%; font: 700 17px/1 "Segoe UI", var(--body); color: #fff; }
+.chat .row b { display: block; font: 600 16px/1.2 "Segoe UI", var(--body); color: #e7e5ef; }
+.chat .row small { display: block; margin-top: 3px; font: 400 14px/1.2 "Segoe UI", var(--body); color: #7d7990; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 150px; }
+.chat .convo { flex: 1; display: flex; flex-direction: column; min-width: 0; background: #131219; }
+.chat .chead { display: flex; align-items: center; gap: 12px; height: 62px; padding: 0 22px; border-bottom: 1px solid #23222b; }
+.chat .chead .av { width: 38px; height: 38px; font-size: 15px; }
+.chat .chead b { display: block; font: 600 17px/1.2 "Segoe UI", var(--body); color: #efedf6; }
+.chat .chead small { display: block; font: 400 13px/1.3 "Segoe UI", var(--body); color: #7d7990; }
+.chat .msgs { flex: 1; padding: 26px 22px; display: flex; flex-direction: column; gap: 12px; }
+.chat .day { align-self: center; padding: 5px 12px; border-radius: 8px; background: #1f1e27; font: 600 12px/1 "Segoe UI", var(--body); color: #7d7990; letter-spacing: .04em; }
+.chat .msg { display: flex; gap: 10px; align-items: flex-end; max-width: 312px; }
+.chat .msg .av { width: 30px; height: 30px; font-size: 13px; }
+.chat .bub { padding: 10px 14px 11px; border-radius: 16px 16px 16px 5px; background: #24232d; }
+.chat .bub b { display: block; margin-bottom: 3px; font: 700 13px/1.2 "Segoe UI", var(--body); }
+.chat .bub span { display: block; font: 400 17px/1.35 "Segoe UI", var(--body); color: #d9d6e4; }
+.chat .compose { margin: 0 22px 18px; height: 46px; border-radius: 12px; background: #1f1e27; display: flex; align-items: center; padding: 0 16px; font: 400 15px/1 "Segoe UI", var(--body); color: #6c6880; }
+
+/* Windows taskbar */
+.taskbar { flex: none; height: 48px; display: flex; align-items: center; justify-content: center; gap: 6px; background: #1d1c25; border-top: 1px solid #2a2933; position: relative; }
+.taskbar .tb { display: grid; place-items: center; width: 40px; height: 40px; border-radius: 6px; position: relative; }
+.taskbar .tb.on { background: #2c2b36; }
+.taskbar .tb.on::after { content: ""; position: absolute; bottom: 2px; left: 50%; width: 16px; height: 3px; margin-left: -8px; border-radius: 2px; background: #9b87ff; }
+.taskbar .tb svg { width: 24px; height: 24px; }
+.taskbar .tb i { display: block; width: 24px; height: 24px; border-radius: 6px; }
+.taskbar .tsearch { display: flex; align-items: center; gap: 8px; width: 150px; height: 32px; padding: 0 12px; border-radius: 16px; background: #2a2933; font: 400 13px/1 "Segoe UI", var(--body); color: #8c889c; margin-right: 4px; }
+.taskbar .tsearch svg { width: 14px; height: 14px; }
+.taskbar .clock { position: absolute; right: 16px; top: 0; bottom: 0; display: flex; flex-direction: column; justify-content: center; align-items: flex-end; gap: 3px; font: 400 12px/1 "Segoe UI", var(--body); color: #d9d6e4; }
+.taskbar .wx { position: absolute; left: 16px; top: 0; bottom: 0; display: flex; align-items: center; gap: 8px; font: 400 13px/1 "Segoe UI", var(--body); color: #d9d6e4; }
+.taskbar .wx i { width: 18px; height: 18px; border-radius: 50%; background: radial-gradient(circle at 40% 40%, #ffd66b, #f5a524); }
+
+/* the Quick Search window, at its real size in the corner of the screen */
+.qs { position: absolute; right: 18px; bottom: 64px; width: 392px; border-radius: 18px; background: #fff; overflow: hidden; z-index: 3; font-family: var(--body);
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, .6), 0 0 0 6px rgba(155, 135, 255, .45), 0 0 70px 6px rgba(140, 110, 255, .55), 0 30px 60px -20px rgba(0, 0, 0, .7); }
+.qs .h { display: flex; align-items: center; gap: 9px; height: 42px; padding: 0 14px; border-bottom: 1px solid #efecf7; background: linear-gradient(180deg, #f8f6ff, #fdfcff); font: 700 15px/1 var(--body); color: var(--violet-ink); }
+.qs .h svg.mk { width: 22px; height: 22px; border-radius: 6px; }
+.qs .h .win { margin-left: auto; display: flex; gap: 14px; color: #9a96aa; }
+.qs .h .win svg { width: 14px; height: 14px; }
+.qs .b { padding: 13px 15px 4px; display: flex; flex-direction: column; gap: 11px; }
+.qs .q { display: flex; align-items: center; gap: 9px; font: 600 15px/1.3 var(--body); color: #4c4860; }
+.qs .q .m { flex: none; display: grid; place-items: center; width: 26px; height: 26px; border-radius: 50%; background: #fdecec; color: var(--red); }
+.qs .q .m svg { width: 14px; height: 14px; }
+.qs .pic { position: relative; height: 112px; border-radius: 12px; overflow: hidden; }
+.qs .pic img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.qs .pic .count { position: absolute; right: 8px; top: 8px; padding: 3px 8px; border-radius: 999px; background: rgba(255, 255, 255, .88); color: #2a2540; font: 800 11px/1.3 var(--body); }
+.qs .big { font: 800 27px/1.2 var(--body); color: #1c1a33; letter-spacing: -.012em; }
+.qs .big mark { color: inherit; background: linear-gradient(transparent 52%, var(--hl) 52%, var(--hl) 92%, transparent 92%); padding: 0 .04em; }
+.qs .sub { font: 600 16px/1.4 var(--body); color: #4c4860; }
+.qs .chips { gap: 7px; }
+.qs .chip { gap: 7px; padding: 5px 11px 5px 6px; font-size: 13px; }
+.qs .chip i { width: 18px; height: 18px; border-radius: 5px; font-size: 10px; }
+.qs .fl { margin: 10px 10px 10px; display: flex; align-items: center; gap: 9px; height: 46px; padding: 0 6px 0 14px; border-radius: 14px; background: var(--fill); color: var(--label-2); font: 600 14px/1 var(--body); }
+.qs .fl > span:first-of-type { flex: 1; }
+.qs .fl svg.s { width: 16px; height: 16px; }
+.qs .fl .tts { display: inline-flex; align-items: center; gap: 7px; padding: 6px 10px; border-radius: 999px; background: var(--violet-soft); color: var(--violet-ink); font: 700 13px/1 var(--body); }
+.qs .fl .tts .bars { height: 14px; gap: 2px; }
+.qs .fl .tts .bars i { width: 3px; }
+.qs .fl .mic { display: grid; place-items: center; width: 34px; height: 34px; border-radius: 50%; background: var(--violet); color: #fff; }
+.qs .fl .mic svg { width: 16px; height: 16px; }
+
+/* ================= 2. THREE STEPS ================= */
+.f2 { background: #f8f7fc; }
+.f2 .top { display: flex; justify-content: space-between; align-items: flex-end; }
+.f2 .steps { position: absolute; left: 104px; right: 104px; top: 300px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 56px; }
+.step { position: relative; display: flex; flex-direction: column; gap: 30px; }
+.step .stage { position: relative; height: 470px; border-radius: 36px; display: grid; place-items: center; overflow: hidden; }
+.step:nth-child(1) .stage { background: var(--lav); }
+.step:nth-child(2) .stage { background: #fdeceb; }
+.step:nth-child(3) .stage { background: var(--mint); }
+.step .cap { display: flex; gap: 20px; align-items: baseline; }
+.step .cap .num { flex: none; display: grid; place-items: center; width: 58px; height: 58px; border-radius: 50%; background: var(--ink); color: #fff; font: 800 28px/1 var(--body); transform: translateY(-6px); }
+.step .cap b { display: block; font: 800 46px/1.1 var(--display); letter-spacing: -.02em; }
+.step .cap span { display: block; margin-top: 8px; font: 600 27px/1.35 var(--body); color: var(--muted); }
+.step .arrow { position: absolute; right: -50px; top: 205px; z-index: 2; width: 44px; height: 44px; color: #b9b2d8; }
+.f2 .listen { position: relative; width: 470px; border-radius: 30px; }
+.f2 .listen .said { font-size: 38px; }
+.f2 .mini { position: relative; width: 470px; border-radius: 28px; background: #fff; overflow: hidden; box-shadow: 0 40px 80px -40px rgba(20, 90, 60, .5), 0 0 0 1.5px rgba(32, 33, 36, .07); }
+.f2 .mini .c-body { padding: 22px 24px 24px; gap: 16px; }
+.f2 .mini .eggs { height: 170px; padding: 16px 14px 12px; }
+.f2 .mini .egg .shell { width: 78px; height: 90px; }
+.f2 .mini .egg .yolk { width: 42px; height: 42px; }
+.f2 .mini .egg b { font-size: 20px; }
+.f2 .mini .egg small { font-size: 15px; }
+.f2 .mini .c-big { font-size: 34px; }
+.f2 .mini .c-head { padding: 16px 22px 14px; font-size: 20px; }
+.f2 .mini .c-head svg.mk { width: 28px; height: 28px; }
+
+/* ================= 3. TABS vs ONE ANSWER ================= */
+.f3 { background: #f8f7fc; }
+.f3 .words { position: absolute; left: 104px; top: 92px; width: 1200px; display: flex; flex-direction: column; gap: 26px; }
+.f3 .browser { position: absolute; left: 104px; top: 390px; width: 1060px; height: 520px; border-radius: 26px; background: #fff; overflow: hidden; box-shadow: 0 40px 90px -50px rgba(40, 30, 110, .45), 0 0 0 1.5px rgba(32, 33, 36, .08); }
+.tabs { display: flex; align-items: flex-end; gap: 4px; height: 66px; padding: 0 16px; background: #e9e7ef; }
+.tab { flex: 0 0 auto; display: flex; align-items: center; gap: 8px; height: 50px; padding: 0 12px; border-radius: 12px 12px 0 0; background: #dedbe6; overflow: hidden; }
+.tab i { flex: none; width: 18px; height: 18px; border-radius: 5px; }
+.tab span { font: 600 16px/1 var(--body); color: #4a4655; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.tab.read { width: 200px; }
+.tab.on { background: #fff; }
+.tab.ico { width: 26px; padding: 0 4px; justify-content: center; }
+.tabcount { margin-left: auto; align-self: center; flex: none; padding: 8px 14px; border-radius: 999px; background: var(--red); color: #fff; font: 800 18px/1 var(--body); }
+.addr { display: flex; align-items: center; gap: 14px; height: 64px; margin: 12px 18px; padding: 0 22px; border-radius: 999px; background: #f1f0f5; font: 600 22px/1 var(--body); color: #3d3a48; }
+.addr svg { width: 22px; height: 22px; color: #8a86a0; }
+.results { padding: 6px 40px; display: flex; flex-direction: column; gap: 22px; }
+.res .u { display: block; font: 600 18px/1.3 var(--body); color: #5f6368; }
+.res .t { display: block; margin-top: 4px; font: 700 28px/1.25 var(--body); color: #1a0dab; }
+.res .s { display: block; margin-top: 10px; height: 14px; width: 78%; border-radius: 7px; background: #ecebf1; }
+.f3 .browser::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(248, 247, 252, 0) 55%, rgba(248, 247, 252, .96)); }
+.f3 .to { position: absolute; left: 1190px; top: 640px; display: flex; flex-direction: column; align-items: center; gap: 10px; color: var(--violet); font: 800 22px/1 var(--body); letter-spacing: .12em; text-transform: uppercase; }
+.f3 .to svg { width: 64px; height: 64px; }
+.f3 .card { left: 1300px; top: 250px; width: 540px; }
+.f3 .card .c-big { font-size: 38px; }
+.sleep { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; height: 210px; padding: 18px; border-radius: 22px; background: radial-gradient(240px 140px at 80% 0%, rgba(255, 225, 122, .18), rgba(255, 225, 122, 0) 70%), linear-gradient(160deg, #2b2470, #17134a); }
+.sleep .s { display: flex; flex-direction: column; align-items: center; justify-content: flex-end; gap: 6px; padding-bottom: 10px; border-radius: 16px; background: rgba(255, 255, 255, .07); }
+.sleep .s.on { background: rgba(255, 255, 255, .16); box-shadow: inset 0 0 0 2px rgba(255, 225, 122, .55); }
+.sleep .moon { width: 46px; height: 46px; margin-bottom: 8px; border-radius: 50%; box-shadow: inset -13px 6px 0 0 #ffe17a; transform: rotate(-20deg); }
+.sleep .s:not(.on) .moon { box-shadow: inset -13px 6px 0 0 #b9b0ff; }
+.sleep b { font: 800 34px/1 var(--body); color: #fff; letter-spacing: -.01em; }
+.sleep small { font: 700 18px/1 var(--body); color: rgba(255, 255, 255, .7); }
+
+/* ================= 4. HIGHLIGHT A WORD ================= */
+.f4 { background: var(--mint); }
+.f4 .words { position: absolute; left: 104px; top: 236px; width: 780px; display: flex; flex-direction: column; gap: 34px; }
+.f4 .eyebrow, .f4 .hd .v { color: var(--mint-ink); }
+.f4 .paper { position: absolute; left: 900px; top: 80px; width: 940px; height: 880px; border-radius: 22px; overflow: hidden; background: #fff; padding: 112px 60px 56px; box-shadow: 0 40px 90px -50px rgba(10, 80, 50, .45), 0 0 0 1.5px rgba(32, 33, 36, .07); display: flex; flex-direction: column; gap: 22px; }
+.paper .kick { font: 800 18px/1 var(--body); letter-spacing: .14em; text-transform: uppercase; color: #9a96aa; }
+.paper h3 { font: 800 50px/1.1 var(--display); letter-spacing: -.02em; color: #1f1d2b; }
+.paper p { font: 500 29px/1.62 Georgia, "Times New Roman", serif; color: #3c3946; }
+.paper .sel { background: #b7d2ff; color: #0b2a66; padding: 2px 4px; border-radius: 4px; box-decoration-break: clone; -webkit-box-decoration-break: clone; }
+.paper .ibeam { display: inline-block; width: 3px; height: 1.05em; background: #1f1d2b; vertical-align: -.15em; margin-left: 2px; }
+/* the article sits in a real window, and Quick Search docks in its corner like it does on screen */
+.paper .ln { display: block; height: 15px; border-radius: 8px; background: #eeedf2; }
+.paper .ln:first-of-type { margin-top: 14px; }
+.paper .ln:nth-of-type(5) { margin-top: 26px; }
+.wbar { position: absolute; left: 0; right: 0; top: 0; display: flex; align-items: center; gap: 12px; height: 54px; padding-left: 22px; background: #f3f2f6; border-bottom: 1px solid #e6e4ec; font: 600 18px/1 "Segoe UI", var(--body); color: #57536a; }
+.wbar .fav { width: 22px; height: 22px; border-radius: 6px; background: linear-gradient(135deg, #2f9e6e, #12704a); }
+.wbar .ctl { margin-left: auto; display: flex; }
+.wbar .ctl span { width: 58px; text-align: center; font: 400 20px/54px "Segoe UI", sans-serif; color: #77738a; }
+.f4 .card { left: 1296px; top: 482px; width: 520px; border-radius: 22px; box-shadow: 0 0 0 6px rgba(18, 112, 74, .22), 0 0 70px 4px rgba(18, 112, 74, .28), 0 30px 60px -24px rgba(10, 60, 40, .55); }
+.f4 .card .c-head { padding: 15px 20px 13px; font-size: 19px; }
+.f4 .card .c-head svg.mk { width: 28px; height: 28px; }
+.f4 .card .c-body { padding: 16px 20px 6px; gap: 13px; }
+.f4 .card .c-q { font-size: 20px; }
+.f4 .card .c-q .n { font-size: 15px; }
+.f4 .card .c-pic { height: 128px; border-radius: 16px; }
+.f4 .card .c-big { font-size: 33px; }
+.f4 .card .c-sub { font-size: 21px; }
+
+/* ================= 5. SCREEN REGION ================= */
+.f5 { background: var(--peach); }
+.f5 .words { position: absolute; left: 104px; top: 92px; width: 800px; display: flex; flex-direction: column; gap: 34px; }
+.f5 .eyebrow, .f5 .hd .v { color: var(--peach-ink); }
+.f5 .snip { position: absolute; left: 930px; top: 110px; width: 760px; height: 400px; }
+.dlg { position: absolute; inset: 40px; border-radius: 18px; background: #fff; box-shadow: 0 30px 70px -40px rgba(120, 70, 10, .55), 0 0 0 1.5px rgba(32, 33, 36, .1); display: flex; flex-direction: column; }
+.dlg .bar { display: flex; align-items: center; justify-content: space-between; height: 54px; padding: 0 22px; border-bottom: 1.5px solid #eee; font: 600 19px/1 "Segoe UI", var(--body); color: #444; }
+.dlg .bar .x { font: 400 30px/1 "Segoe UI", sans-serif; color: #666; }
+.dlg .bd { display: flex; gap: 24px; padding: 30px 30px; }
+.dlg .ic { flex: none; display: grid; place-items: center; width: 58px; height: 58px; border-radius: 50%; background: #d83b3b; color: #fff; font: 800 34px/1 var(--body); }
+.dlg .tx b { display: block; font: 700 27px/1.3 "Segoe UI", var(--body); color: #1f1f1f; }
+.dlg .tx span { display: block; margin-top: 8px; font: 500 22px/1.4 "Segoe UI", var(--body); color: #444; }
+.dlg .tx code { display: inline-block; margin-top: 10px; font: 600 20px/1 Consolas, ui-monospace, monospace; color: #8a2d1a; background: #fff1ec; padding: 6px 10px; border-radius: 6px; }
+.dlg .btn { margin: auto 30px 26px auto; padding: 12px 34px; border-radius: 6px; background: #f3f3f3; border: 1.5px solid #cfcfcf; font: 600 19px/1 "Segoe UI", var(--body); color: #222; }
+.snip .box { position: absolute; inset: 0; border: 4px dashed var(--ink); border-radius: 10px; background: rgba(108, 77, 246, .06); }
+.snip .tag { position: absolute; left: -4px; top: -54px; padding: 10px 16px; border-radius: 10px; background: var(--ink); color: #fff; font: 800 22px/1 var(--body); }
+.snip .cross { position: absolute; right: -26px; bottom: -26px; width: 52px; height: 52px; }
+.f5 .card { left: 1150px; top: 430px; width: 670px; }
+.f5 .att { display: flex; align-items: center; gap: 16px; padding: 12px; border-radius: 18px; background: var(--fill); }
+.f5 .att .th { flex: none; width: 112px; height: 64px; border-radius: 10px; background: #fff; border: 1.5px solid #ddd; display: flex; align-items: center; gap: 8px; padding: 0 10px; }
+.f5 .att .th i { width: 22px; height: 22px; border-radius: 50%; background: #d83b3b; flex: none; }
+.f5 .att .th s { display: block; height: 7px; flex: 1; border-radius: 4px; background: #ddd; text-decoration: none; }
+.f5 .att b { display: block; font: 800 22px/1.2 var(--body); color: #1f1d2b; }
+.f5 .att span { display: block; font: 600 19px/1.3 var(--body); color: var(--label-2); }
+.f5 .card .c-big { font-size: 38px; }
+.f5 .card .c-sub { font-size: 25px; }
+.f5 .copytx { display: inline-flex; align-items: center; gap: 10px; padding: 9px 16px; border-radius: 999px; border: 2px solid #d9d4ea; color: var(--violet-ink); font: 800 19px/1.2 var(--body); }
+.f5 .copytx svg { width: 20px; height: 20px; }
+.f5 .free { position: absolute; left: 104px; top: 600px; display: flex; align-items: center; gap: 16px; font: 700 28px/1.3 var(--body); color: var(--peach-ink); }
+.f5 .free svg { width: 34px; height: 34px; flex: none; }
+
+/* ================= 6. ANATOMY OF AN ANSWER ================= */
+.f6 { background: var(--sky); }
+.f6 .words { position: absolute; left: 104px; top: 92px; width: 900px; display: flex; flex-direction: column; gap: 26px; }
+.f6 .eyebrow { color: #2a4fb8; }
+.f6 .hd .v { color: #2a5bd7; }
+.f6 .list { position: absolute; left: 104px; top: 470px; width: 820px; display: flex; flex-direction: column; gap: 34px; }
+.f6 .item { display: flex; gap: 26px; align-items: flex-start; }
+.mk-n { flex: none; display: grid; place-items: center; width: 60px; height: 60px; border-radius: 50%; background: var(--ink); color: #fff; font: 800 28px/1 var(--body); box-shadow: 0 0 0 6px #fff; }
+.f6 .item b { display: block; font: 800 42px/1.1 var(--display); letter-spacing: -.02em; }
+.f6 .item div span { display: block; margin-top: 6px; font: 600 28px/1.35 var(--body); color: #4c5878; }
+.f6 .card { left: 1060px; top: 70px; width: 720px; }
+.f6 .card .c-pic { height: 200px; }
+.f6 .card .c-body { gap: 16px; }
+.f6 .card .c-big { font-size: 38px; }
+.f6 .pin { position: absolute; z-index: 4; }
+.f6 .c-q .there { background: var(--violet-soft); color: var(--violet-ink); padding: 0 6px; border-radius: 6px; }
+.f6 .q2 { margin-top: 8px; padding-top: 22px; border-top: 1.5px dashed #e3dff0; display: flex; flex-direction: column; gap: 12px; }
+
+/* ================= 7. FREE ================= */
+.f7 { background: var(--violet); color: #fff; }
+.f7 .bg { position: absolute; inset: 0; background: radial-gradient(1100px 800px at 85% 15%, rgba(255, 225, 122, .28), rgba(255, 225, 122, 0) 60%), linear-gradient(160deg, #6c4df6, #4a2fd0 70%, #3a20b8); }
+.f7 .fifty { position: absolute; left: 96px; top: 40px; display: flex; flex-direction: column; }
+.f7 .fifty .n { font: 800 520px/.9 var(--display); letter-spacing: -.035em; color: #fff; text-shadow: 0 30px 80px rgba(20, 8, 90, .35); }
+.f7 .fifty .w { margin-top: -10px; margin-left: 14px; font: 800 88px/1 var(--display); letter-spacing: -.03em; color: #fff; }
+.f7 .fifty .w em { font-style: normal; color: var(--hl); }
+.f7 .facts { position: absolute; left: 1080px; top: 120px; width: 740px; display: flex; flex-direction: column; gap: 22px; }
+.f7 .fact { display: flex; align-items: center; gap: 26px; padding: 28px 32px; border-radius: 26px; background: rgba(255, 255, 255, .1); box-shadow: inset 0 0 0 1.5px rgba(255, 255, 255, .16); }
+.f7 .fact .ic { flex: none; display: grid; place-items: center; width: 72px; height: 72px; border-radius: 20px; background: #fff; color: var(--violet-ink); }
+.f7 .fact .ic svg { width: 36px; height: 36px; }
+.f7 .fact b { display: block; font: 800 38px/1.15 var(--body); letter-spacing: -.01em; }
+.f7 .fact span { display: block; margin-top: 6px; font: 600 25px/1.3 var(--body); color: rgba(255, 255, 255, .78); }
+.f7 .store { position: absolute; left: 110px; top: 760px; display: inline-flex; align-items: center; gap: 20px; padding: 26px 40px 26px 30px; border-radius: 24px; background: #fff; color: var(--violet-ink); font: 800 38px/1 var(--body); box-shadow: 0 24px 50px -20px rgba(20, 8, 90, .6); }
+.f7 .store svg { width: 44px; height: 44px; }
+.f7 .store small { display: block; font: 700 22px/1 var(--body); color: var(--muted); margin-bottom: 8px; }
+.f7 .foot { color: rgba(255, 255, 255, .85); }
+.f7 .foot .url { border-left-color: rgba(255, 255, 255, .25); }
+.f7 .foot .brand b { color: #fff; }
+.f7 .foot .brand small { color: rgba(255, 255, 255, .7); }
+.f7 .foot .url { color: #fff; }
+</style>
+
+<!-- shared symbols (kept out of layout, not display:none, so the gradient renders) -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <linearGradient id="mkg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#8f72ff" /><stop offset="1" stop-color="#4527d4" /></linearGradient>
+  </defs>
+  <symbol id="mark" viewBox="0 0 1024 1024">
+    <rect width="1024" height="1024" rx="232" fill="url(#mkg)" />
+    <circle cx="452" cy="452" r="190" fill="#ffe9a3" opacity=".3" />
+    <circle cx="452" cy="452" r="214" fill="none" stroke="#ffffff" stroke-width="68" />
+    <path d="M452 322C468 404 500 436 582 452C500 468 468 500 452 582C436 500 404 468 322 452C404 436 436 404 452 322Z" fill="#fff3c4" />
+    <path d="M618 618L792 792" stroke="#ffffff" stroke-width="92" stroke-linecap="round" />
+  </symbol>
+  <symbol id="i-search" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><circle cx="11" cy="11" r="6.5" /><path d="M16 16l4.5 4.5" /></g></symbol>
+  <symbol id="i-mic" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><rect x="9" y="3" width="6" height="11" rx="3" /><path d="M5 11a7 7 0 0 0 14 0M12 18v3" /></g></symbol>
+  <symbol id="i-min" viewBox="0 0 24 24"><path d="M5 12h14" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" /></symbol>
+  <symbol id="i-close" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" /></symbol>
+  <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M4 12h15M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" /></symbol>
+  <symbol id="i-copy" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="11" height="11" rx="2.5" /><path d="M15 9V6.5A2.5 2.5 0 0 0 12.5 4h-6A2.5 2.5 0 0 0 4 6.5v6A2.5 2.5 0 0 0 6.5 15H9" /></g></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round" /></symbol>
+  <symbol id="i-user" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="12" cy="8" r="4" /><path d="M4 21c1.5-4 4.5-6 8-6s6.5 2 8 6" /></g></symbol>
+  <symbol id="i-pc" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><rect x="3" y="4" width="18" height="12" rx="2" /><path d="M8 20h8M12 16v4" /></g></symbol>
+  <symbol id="i-key" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="6" width="19" height="12" rx="3" /><path d="M6 10h.01M10 10h.01M14 10h.01M18 10h.01M7 14h10" /></g></symbol>
+  <symbol id="i-reload" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M20 11a8 8 0 1 0-2.3 5.7" /><path d="M20 4v7h-7" /></g></symbol>
+  <symbol id="i-win" viewBox="0 0 24 24"><g fill="currentColor"><rect x="2" y="2" width="9.5" height="9.5" rx="1" /><rect x="12.5" y="2" width="9.5" height="9.5" rx="1" /><rect x="2" y="12.5" width="9.5" height="9.5" rx="1" /><rect x="12.5" y="12.5" width="9.5" height="9.5" rx="1" /></g></symbol>
+  <symbol id="i-globe" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9" /><path d="M3 12h18M12 3c2.5 2.6 3.8 5.6 3.8 9s-1.3 6.4-3.8 9c-2.5-2.6-3.8-5.6-3.8-9S9.5 5.6 12 3z" /></g></symbol>
+</svg>
+
+<template id="foot-tpl">
+  <div class="foot">
+    <span class="brand"><svg viewBox="0 0 1024 1024"><use href="#mark" /></svg><b>Quick Search AI</b><small>by Tubelight</small></span>
+    <span class="url"><svg viewBox="0 0 24 24"><use href="#i-globe" /></svg>search.tubelight.net</span>
+  </div>
+</template>
+<template id="head-tpl">
+  <div class="c-head"><svg class="mk" viewBox="0 0 1024 1024"><use href="#mark" /></svg>Quick Search<span class="win"><svg viewBox="0 0 24 24"><use href="#i-min" /></svg><svg viewBox="0 0 24 24"><use href="#i-close" /></svg></span></div>
+</template>
+<template id="floor-tpl">
+  <div class="c-floor"><svg class="s" viewBox="0 0 24 24"><use href="#i-search" /></svg><span>Ask a follow-up…</span><span class="chip tts" style="flex:none"><span class="bars"><i></i><i></i><i></i><i></i><i></i></span>Reading aloud</span><i class="mic"><svg viewBox="0 0 24 24"><use href="#i-mic" /></svg></i></div>
+</template>
+
+<main class="page">
+  <header class="intro">
+    <h1>Quick Search, in seven pictures</h1>
+    <p>Each image tells one thing about Quick Search AI, big enough to read in a feed. They are 1920 × 1080, the 16:9 size the Microsoft Store, X, LinkedIn and YouTube all take. The PNG files are in <code>marketing/quick-search-shots/png</code>. Post them in this order, or pick any one on its own.</p>
+  </header>
+
+  <!-- 1 -->
+  <article class="shot">
+    <div class="slot">
+      <section class="frame f1" id="shot-1" data-name="01-hold-tab-q">
+        <div class="glow"></div>
+        <div class="words">
+          <p class="press">Press</p>
+          <div class="keys"><span class="key wide down">Tab</span><span class="plus">+</span><span class="key down">Q</span></div>
+          <h2 class="hd">Ask anything.<br><span class="v">Know instantly.</span></h2>
+        </div>
+        <div class="pc">
+          <div class="bezel">
+            <div class="screen">
+              <div class="chat">
+                <div class="tbar"><span class="ai"></span>Chats<span class="ctl"><span>–</span><span>▢</span><span>✕</span></span></div>
+                <div class="cols">
+                  <div class="side">
+                    <div class="find"><svg viewBox="0 0 24 24"><use href="#i-search" /></svg>Search</div>
+                    <div class="row on"><span class="av" style="background:#e0567a">JP</span><div><b>Japan trip</b><small>Ken: Is April a good time…</small></div></div>
+                    <div class="row"><span class="av" style="background:#3d8bfd">M</span><div><b>Maya</b><small>Sent the flight prices</small></div></div>
+                    <div class="row"><span class="av" style="background:#f59f00">H</span><div><b>Home</b><small>Who has the spare key?</small></div></div>
+                    <div class="row"><span class="av" style="background:#12b886">W</span><div><b>Work</b><small>Standup moved to 10</small></div></div>
+                    <div class="row"><span class="av" style="background:#7950f2">S</span><div><b>Sam</b><small>Ha, fair enough</small></div></div>
+                  </div>
+                  <div class="convo">
+                    <div class="chead"><span class="av" style="background:#e0567a">JP</span><div><b>Japan trip</b><small>Maya, Ken, you</small></div></div>
+                    <div class="msgs">
+                      <div class="msg"><span class="av" style="background:#3d8bfd">M</span><div class="bub"><b style="color:#7fb0ff">Maya</b><span>Flights are really cheap in April!</span></div></div>
+                      <div class="msg"><span class="av" style="background:#f08c00">K</span><div class="bub"><b style="color:#ffc078">Ken</b><span>Is April a good time to visit Tokyo though?</span></div></div>
+                    </div>
+                    <div class="compose">Type a message</div>
+                  </div>
+                </div>
+              </div>
+              <div class="taskbar">
+                <span class="wx"><i></i>18°C Sunny</span>
+                <span class="tb"><svg viewBox="0 0 24 24" style="color:#5aa9ff"><use href="#i-win" /></svg></span>
+                <span class="tsearch"><svg viewBox="0 0 24 24"><use href="#i-search" /></svg>Search</span>
+                <span class="tb"><i style="background:linear-gradient(135deg,#ffd43b,#f59f00)"></i></span>
+                <span class="tb"><i style="border-radius:50%;background:conic-gradient(#20c997,#339af0,#20c997)"></i></span>
+                <span class="tb on"><i style="background:linear-gradient(135deg,#34c38f,#1c8f68)"></i></span>
+                <span class="tb"><i style="background:linear-gradient(135deg,#4dabf7,#1971c2)"></i></span>
+                <span class="tb on"><svg viewBox="0 0 1024 1024"><use href="#mark" /></svg></span>
+                <span class="clock"><span>9:41 AM</span><span>15-11-2026</span></span>
+              </div>
+              <div class="qs">
+                <div class="h"><svg class="mk" viewBox="0 0 1024 1024"><use href="#mark" /></svg>Quick Search<span class="win"><svg viewBox="0 0 24 24"><use href="#i-min" /></svg><svg viewBox="0 0 24 24"><use href="#i-close" /></svg></span></div>
+                <div class="b">
+                  <p class="q"><span class="m"><svg viewBox="0 0 24 24"><use href="#i-mic" /></svg></span>“Is April a good time to visit Tokyo?”</p>
+                  <div class="pic"><img src="data:image/webp;base64,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" alt=""><span class="count">1 / 8</span></div>
+                  <p class="big">Yes. It’s <mark>cherry blossom season</mark>.</p>
+                  <p class="sub">Mild days, about 15–19 °C. Book hotels early.</p>
+                  <div class="chips"><span class="chip"><i style="background:#c0392b">J</i>jnto.go.jp</span><span class="chip"><i style="background:#d6232f">T</i>timeout.com</span></div>
+                </div>
+                <div class="fl"><svg class="s" viewBox="0 0 24 24"><use href="#i-search" /></svg><span>Ask a follow-up…</span><span class="tts"><span class="bars"><i></i><i></i><i></i><i></i><i></i></span>Reading aloud</span><i class="mic"><svg viewBox="0 0 24 24"><use href="#i-mic" /></svg></i></div>
+              </div>
+            </div>
+          </div>
+          <div class="neck"></div>
+          <div class="base"></div>
+        </div>
+        <div data-foot></div>
+      </section>
+    </div>
+    <div class="meta">
+      <div><h2><span>01</span>Hold Tab + Q</h2><p class="use">Lead image. Store screenshot 1, link preview, first post.</p></div>
+      <div class="copybox"><label for="alt-1">Alt text</label><div class="copyrow"><p id="alt-1">Press Tab and Q. Ask anything, know instantly. Quick Search AI on a Windows PC. In a group chat, a friend asks “Is April a good time to visit Tokyo?”. Holding Tab and Q, the user asks the same thing out loud, and a small Quick Search window in the corner of the screen answers with a cherry blossom photo: “Yes. It’s cherry blossom season. Mild days, about 15–19 °C. Book hotels early,” with sources jnto.go.jp and timeout.com, read aloud.</p><button type="button" data-copy="alt-1">Copy</button></div></div>
+    </div>
+  </article>
+
+  <!-- 2 -->
+  <article class="shot">
+    <div class="slot">
+      <section class="frame f2" id="shot-2" data-name="02-hold-ask-let-go">
+        <div class="in">
+          <div class="top">
+            <h2 class="hd">Hold. Ask. <span class="v">Let go.</span></h2>
+            <div class="keys sm" style="margin-bottom:14px"><span class="key wide">Tab</span><span class="plus">+</span><span class="key">Q</span></div>
+          </div>
+        </div>
+        <div class="steps">
+          <div class="step">
+            <div class="stage"><div class="keys"><span class="key wide down">Tab</span><span class="plus">+</span><span class="key down">Q</span></div></div>
+            <div class="cap"><span class="num">1</span><div><b>Hold Tab + Q</b><span>In any app on your PC.</span></div></div>
+            <svg class="arrow" viewBox="0 0 24 24"><use href="#i-arrow" /></svg>
+          </div>
+          <div class="step">
+            <div class="stage">
+              <div class="listen" style="position:relative">
+                <span class="lab">Listening</span>
+                <p class="said">“How long do I boil an egg?”</p>
+                <span class="wave" data-wave="22"></span>
+              </div>
+            </div>
+            <div class="cap"><span class="num">2</span><div><b>Ask out loud</b><span>Like asking a friend.</span></div></div>
+            <svg class="arrow" viewBox="0 0 24 24"><use href="#i-arrow" /></svg>
+          </div>
+          <div class="step">
+            <div class="stage">
+              <div class="mini">
+                <div data-head></div>
+                <div class="c-body">
+                  <div class="eggs"><span class="egg soft"><span class="shell"><span class="yolk"></span></span><b>6 min</b><small>runny</small></span><span class="egg jammy"><span class="shell"><span class="yolk"></span></span><b>7 min</b><small>jammy</small></span><span class="egg hard"><span class="shell"><span class="yolk"></span></span><b>10 min</b><small>hard</small></span></div>
+                  <p class="c-big"><mark>6 min</mark> runny, <mark>7</mark> jammy, <mark>10</mark> hard.</p>
+                </div>
+              </div>
+            </div>
+            <div class="cap"><span class="num">3</span><div><b>Let go</b><span>Read the answer, or hear it.</span></div></div>
+          </div>
+        </div>
+        <div data-foot></div>
+      </section>
+    </div>
+    <div class="meta">
+      <div><h2><span>02</span>Hold. Ask. Let go.</h2><p class="use">The whole product in three steps. Good as a carousel opener.</p></div>
+      <div class="copybox"><label for="alt-2">Alt text</label><div class="copyrow"><p id="alt-2">How Quick Search AI works in three steps. One: hold Tab and Q in any app. Two: ask out loud, for example “How long do I boil an egg?”. Three: let go, and the answer appears: 6 minutes runny, 7 jammy, 10 hard.</p><button type="button" data-copy="alt-2">Copy</button></div></div>
+    </div>
+  </article>
+
+  <!-- 3 -->
+  <article class="shot">
+    <div class="slot">
+      <section class="frame f3" id="shot-3" data-name="03-stop-opening-tabs">
+        <div class="words">
+          <h2 class="hd">Stop opening <span class="v">new tabs.</span></h2>
+          <p class="lede">31 tabs that disagree, or one short answer with its sources.</p>
+        </div>
+        <div class="browser">
+          <div class="tabs" data-tabs></div>
+          <div class="addr"><svg viewBox="0 0 24 24"><use href="#i-search" /></svg>how many hours of sleep do i need</div>
+          <div class="results">
+            <div class="res"><span class="u">hustle.example.com</span><span class="t">Sleep 5 hours. Top CEOs do.</span><span class="s"></span></div>
+            <div class="res"><span class="u">lifeblog.example.net</span><span class="t">My 4 a.m. routine changed everything (part 1)</span><span class="s" style="width:64%"></span></div>
+            <div class="res"><span class="u">reddit.com › r/sleep</span><span class="t">6 or 9 hours?? Every site says something else</span><span class="s" style="width:70%"></span></div>
+          </div>
+        </div>
+        <div class="to"><svg viewBox="0 0 24 24"><use href="#i-arrow" /></svg></div>
+        <div class="card">
+          <div data-head></div>
+          <div class="c-body">
+            <p class="c-q"><span class="n">Q1</span>How many hours of sleep do I need?</p>
+            <div class="sleep"><span class="s on"><span class="moon"></span><b>7–9 h</b><small>adults</small></span><span class="s"><span class="moon"></span><b>8–10 h</b><small>teens</small></span><span class="s"><span class="moon"></span><b>9–12 h</b><small>kids</small></span></div>
+            <p class="c-big"><mark>7 to 9 hours</mark> a night for adults.</p>
+            <p class="c-sub">A steady wake-up time helps most.</p>
+            <div class="chips"><span class="chip"><i style="background:#3b5bdb">S</i>sleepfoundation.org</span><span class="chip"><i style="background:#005eb8">N</i>nhs.uk</span></div>
+          </div>
+          <div data-floor></div>
+        </div>
+        <div data-foot></div>
+      </section>
+    </div>
+    <div class="meta">
+      <div><h2><span>03</span>Stop opening new tabs</h2><p class="use">The problem and the fix side by side. Strongest for ads and X.</p></div>
+      <div class="copybox"><label for="alt-3">Alt text</label><div class="copyrow"><p id="alt-3">Stop opening new tabs. On the left, a browser with 31 tabs of the same search and results that disagree about how many hours of sleep you need. On the right, one Quick Search answer: 7 to 9 hours a night for adults, 8 to 10 for teens and 9 to 12 for kids, from sleepfoundation.org and nhs.uk.</p><button type="button" data-copy="alt-3">Copy</button></div></div>
+    </div>
+  </article>
+
+  <!-- 4 -->
+  <article class="shot">
+    <div class="slot">
+      <section class="frame f4" id="shot-4" data-name="04-highlight-a-word">
+        <div class="words">
+          <p class="eyebrow">Look up what you read</p>
+          <h2 class="hd hd-sm">Highlight a word. <span class="v">Get it explained.</span></h2>
+          <div class="keys sm"><span class="key wide">Select</span><span class="then">then</span><span class="key wide">Tab</span><span class="plus">+</span><span class="key">Q</span></div>
+        </div>
+        <div class="paper">
+          <div class="wbar"><span class="fav"></span>Solar storm on its way – Daily News<span class="ctl"><span>–</span><span>▢</span><span>✕</span></span></div>
+          <span class="kick">Weather · Tonight</span>
+          <h3>Solar storm on its way</h3>
+          <p>A strong solar storm reaches Earth this evening. After dark, people far from city lights may see the <span class="sel">Northern Lights</span><span class="ibeam"></span> low on the horizon.</p>
+          <span class="ln" style="width:94%"></span><span class="ln" style="width:90%"></span><span class="ln" style="width:96%"></span><span class="ln" style="width:62%"></span><span class="ln" style="width:92%"></span><span class="ln" style="width:88%"></span><span class="ln" style="width:95%"></span><span class="ln" style="width:84%"></span><span class="ln" style="width:40%"></span>
+        </div>
+        <div class="card">
+          <div data-head></div>
+          <div class="c-body">
+            <p class="c-q"><span class="n">Q1</span>Northern Lights</p>
+            <div class="c-pic"><img src="data:image/webp;base64,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" alt=""><span class="count">1 / 9</span></div>
+            <p class="c-big">Glowing curtains of light <mark>near the poles</mark>.</p>
+            <p class="c-sub">Made when solar wind makes the sky glow.</p>
+          </div>
+          <div style="height:18px"></div>
+        </div>
+        <div data-foot></div>
+      </section>
+    </div>
+    <div class="meta">
+      <div><h2><span>04</span>Highlight a word</h2><p class="use">For students and readers. Works well on LinkedIn and Reddit.</p></div>
+      <div class="copybox"><label for="alt-4">Alt text</label><div class="copyrow"><p id="alt-4">Highlight a word, get it explained. In a news app, the words “Northern Lights” are selected. After pressing Tab and Q, a Quick Search window docks in the corner of the app and shows a photo of an aurora and explains: glowing curtains of light near the poles, made when solar wind hits the air high above Earth.</p><button type="button" data-copy="alt-4">Copy</button></div></div>
+    </div>
+  </article>
+
+  <!-- 5 -->
+  <article class="shot">
+    <div class="slot">
+      <section class="frame f5" id="shot-5" data-name="05-ask-about-your-screen">
+        <div class="words">
+          <p class="eyebrow">Ask about your screen</p>
+          <h2 class="hd hd-sm">Box it. <span class="v">Ask about it.</span></h2>
+          <div class="keys sm"><span class="key wide">Tab</span><span class="plus">+</span><span class="key">S</span></div>
+        </div>
+        <p class="free"><svg viewBox="0 0 24 24"><use href="#i-copy" /></svg>Or copy the text out of it. That part is free.</p>
+        <div class="snip">
+          <div class="dlg">
+            <div class="bar">Location is not available<span class="x">×</span></div>
+            <div class="bd"><span class="ic">×</span><div class="tx"><b>D:\Clients is not accessible.</b><span>Access is denied.</span><code>Error 0x80070005</code></div></div>
+            <span class="btn">OK</span>
+          </div>
+          <span class="box"></span>
+          <span class="tag">Tab + S</span>
+          <svg class="cross" viewBox="0 0 22 22"><path d="M11 1v20M1 11h20" stroke="#1f1d2b" stroke-width="2.4" stroke-linecap="round" /></svg>
+        </div>
+        <div class="card">
+          <div data-head></div>
+          <div class="c-body">
+            <div class="att"><span class="th"><i></i><s></s></span><div><b>Screenshot attached</b><span>What does this error mean?</span></div></div>
+            <p class="c-big">Windows is <mark>blocking your access</mark> to that folder.</p>
+            <p class="c-sub">0x80070005 means “access denied”. Right-click D:\Clients, open Properties, then Security, and give your account access.</p>
+            <div class="chips"><span class="chip"><i style="background:#0f6cbd">M</i>learn.microsoft.com</span><span class="copytx"><svg viewBox="0 0 24 24"><use href="#i-copy" /></svg>Copy text</span></div>
+          </div>
+          <div style="height:26px"></div>
+        </div>
+        <div data-foot></div>
+      </section>
+    </div>
+    <div class="meta">
+      <div><h2><span>05</span>Ask about your screen</h2><p class="use">For people who fight error messages. Works for IT and support audiences.</p></div>
+      <div class="copybox"><label for="alt-5">Alt text</label><div class="copyrow"><p id="alt-5">Box it, ask about it. With Tab and S, someone draws a box around a Windows error, “D:\Clients is not accessible, Error 0x80070005”. Quick Search explains that Windows is blocking access to the folder and how to fix it in Properties, Security. You can also copy the text out of the box for free.</p><button type="button" data-copy="alt-5">Copy</button></div></div>
+    </div>
+  </article>
+
+  <!-- 6 -->
+  <article class="shot">
+    <div class="slot">
+      <section class="frame f6" id="shot-6" data-name="06-one-answer-with-proof">
+        <div class="words">
+          <p class="eyebrow">What comes back</p>
+          <h2 class="hd hd-sm">One short answer. <span class="v">With proof.</span></h2>
+        </div>
+        <div class="list">
+          <div class="item"><span class="mk-n">1</span><div><b>A picture first</b><span>Real photos from the pages it read.</span></div></div>
+          <div class="item"><span class="mk-n">2</span><div><b>Sources you can open</b><span>Every answer shows where it came from.</span></div></div>
+          <div class="item"><span class="mk-n">3</span><div><b>Keep asking</b><span>It knows “there” means the Moon.</span></div></div>
+        </div>
+        <div class="card">
+          <div data-head></div>
+          <div class="c-body">
+            <p class="c-q"><span class="n">Q1</span>How far away is the Moon?</p>
+            <div class="c-pic"><img src="data:image/webp;base64,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" alt=""><span class="count">1 / 10</span></div>
+            <p class="c-big">About <mark>384,400 km</mark> away.</p>
+            <div class="chips"><span class="chip"><i style="background:#1f4fbf">N</i>nasa.gov</span><span class="chip"><i style="background:#22356b">R</i>rmg.co.uk</span></div>
+            <div class="q2">
+              <p class="c-q"><span class="n">Q2</span><span>How long would it take to drive <span class="there">there</span>?</span></p>
+              <p class="c-big">About <mark>160 days</mark> at 100 km/h.</p>
+            </div>
+          </div>
+          <div data-floor></div>
+        </div>
+        <span class="pin mk-n" style="left:1020px;top:282px">1</span>
+        <span class="pin mk-n" style="left:1020px;top:482px">2</span>
+        <span class="pin mk-n" style="left:1020px;top:566px">3</span>
+        <div data-foot></div>
+      </section>
+    </div>
+    <div class="meta">
+      <div><h2><span>06</span>One short answer, with proof</h2><p class="use">Answers “can I trust it?”. Store screenshot 2 or a follow-up post.</p></div>
+      <div class="copybox"><label for="alt-6">Alt text</label><div class="copyrow"><p id="alt-6">One short answer, with proof. A Quick Search card answers “How far away is the Moon?” with a photo of the Moon, “About 384,400 km away”, and sources nasa.gov and rmg.co.uk. A follow-up, “How long would it take to drive there?”, gets “About 160 days, nonstop at 100 km/h.” The answer is also read aloud.</p><button type="button" data-copy="alt-6">Copy</button></div></div>
+    </div>
+  </article>
+
+  <!-- 7 -->
+  <article class="shot">
+    <div class="slot">
+      <section class="frame f7" id="shot-7" data-name="07-free-50-a-day">
+        <div class="bg"></div>
+        <div class="fifty"><span class="n">50</span><span class="w">free searches, <em>every day.</em></span></div>
+        <div class="facts">
+          <div class="fact"><span class="ic"><svg viewBox="0 0 24 24"><use href="#i-user" /></svg></span><div><b>No account, no card</b><span>Install it and ask.</span></div></div>
+          <div class="fact"><span class="ic"><svg viewBox="0 0 24 24"><use href="#i-key" /></svg></span><div><b>Your Tab key still works</b><span>Tap it for a normal Tab. Hold it with Q to ask.</span></div></div>
+          <div class="fact"><span class="ic"><svg viewBox="0 0 24 24"><use href="#i-pc" /></svg></span><div><b>History stays on your PC</b><span>Clear it any time in Settings.</span></div></div>
+          <div class="fact"><span class="ic"><svg viewBox="0 0 24 24"><use href="#i-reload" /></svg></span><div><b>Refills every midnight</b><span>Windows 10 and 11.</span></div></div>
+        </div>
+        <div class="store"><svg viewBox="0 0 24 24"><use href="#i-win" /></svg><div><small>Free on the</small>Microsoft Store</div></div>
+        <div data-foot></div>
+      </section>
+    </div>
+    <div class="meta">
+      <div><h2><span>07</span>Free, 50 a day</h2><p class="use">Closing image. Last screenshot in the Store, last slide of a carousel.</p></div>
+      <div class="copybox"><label for="alt-7">Alt text</label><div class="copyrow"><p id="alt-7">Quick Search AI is free: 50 searches every day. No account or card, your Tab key still works, your history stays on your PC, and searches refill every midnight. Windows 10 and 11, free on the Microsoft Store.</p><button type="button" data-copy="alt-7">Copy</button></div></div>
+    </div>
+  </article>
+</main>
+
+<script>
+(function () {
+  // fill the repeated pieces
+  const tpl = (id) => document.getElementById(id).content;
+  document.querySelectorAll("[data-foot]").forEach((el) => el.replaceWith(tpl("foot-tpl").cloneNode(true)));
+  document.querySelectorAll("[data-head]").forEach((el) => el.replaceWith(tpl("head-tpl").cloneNode(true)));
+  document.querySelectorAll("[data-floor]").forEach((el) => el.replaceWith(tpl("floor-tpl").cloneNode(true)));
+
+  // a still waveform
+  document.querySelectorAll("[data-wave]").forEach((el) => {
+    const n = +el.dataset.wave;
+    for (let i = 0; i < n; i++) {
+      const h = 18 + Math.round(82 * Math.abs(Math.sin(i * 1.7) * Math.cos(i * .45)));
+      const b = document.createElement("i"); b.style.height = h + "%"; el.appendChild(b);
+    }
+  });
+
+  // the crowded tab strip
+  const strip = document.querySelector("[data-tabs]");
+  if (strip) {
+    const colors = ["#ea4335", "#4285f4", "#6c4df6", "#34a853", "#fa7b17", "#12b5cb", "#e52592", "#a142f4"];
+    const titles = ["how many hours of sleep", "is 6 hours sleep enough", "sleep hours by age"];
+    for (let i = 0; i < 24; i++) {
+      const t = document.createElement("span");
+      t.className = "tab" + (i === 0 ? " on" : "") + (i < 3 ? " read" : " ico");
+      t.innerHTML = '<i style="background:' + colors[i % colors.length] + '"></i>' + (i < 3 ? "<span>" + titles[i] + "</span>" : "");
+      strip.appendChild(t);
+    }
+    const c = document.createElement("span"); c.className = "tabcount"; c.textContent = "31 tabs"; strip.appendChild(c);
+  }
+
+  // solo mode for rendering one poster at full size: #shot-3
+  const m = /^#shot-(\d)$/.exec(location.hash);
+  if (m) {
+    const f = document.getElementById("shot-" + m[1]);
+    if (f) { document.documentElement.classList.add("solo"); document.body.appendChild(f); return; }
+  }
+
+  // scale each poster to its slot
+  const fit = (slot) => { slot.style.setProperty("--s", String(slot.clientWidth / 1920)); };
+  const slots = Array.from(document.querySelectorAll(".slot"));
+  slots.forEach((s) => { const f = s.querySelector(".frame"); if (f) f.style.transform = ""; fit(s); });
+  if ("ResizeObserver" in window) { const ro = new ResizeObserver((es) => es.forEach((e) => fit(e.target))); slots.forEach((s) => ro.observe(s)); }
+  else window.addEventListener("resize", () => slots.forEach(fit));
+
+  // copy buttons
+  document.querySelectorAll("[data-copy]").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const p = document.getElementById(btn.dataset.copy);
+      const done = () => { btn.textContent = "Copied"; setTimeout(() => (btn.textContent = "Copy"), 1600); };
+      const fallback = () => { const r = document.createRange(); r.selectNodeContents(p); const s = getSelection(); s.removeAllRanges(); s.addRange(r); btn.textContent = "Selected"; };
+      try { navigator.clipboard.writeText(p.textContent).then(done, fallback); } catch (e) { fallback(); }
+    });
+  });
+})();
+</script>

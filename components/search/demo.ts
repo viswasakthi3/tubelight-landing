@@ -17,6 +17,8 @@ export type DemoQuestion = {
   /** a page of results that don't agree */
   results: DemoResult[];
   big: string;
+  /** the parts of `big` that get the highlighter: the fact you came for */
+  key: string[];
   sub: string;
   pic?: string;
   count: string;
@@ -37,6 +39,7 @@ export const DEMO_QUESTIONS: DemoQuestion[] = [
       { url: "kitchen.example.org", title: "How long to boil an egg? It depends" },
     ],
     big: "6 min runny, 7 jammy, 10 hard.",
+    key: ["6 min", "7", "10"],
     sub: "Then straight into ice water.",
     count: "1 / 6",
     sources: [
@@ -57,6 +60,7 @@ export const DEMO_QUESTIONS: DemoQuestion[] = [
       { url: "blog.example.org", title: "The best month for Tokyo (it’s not what you think)" },
     ],
     big: "Yes. It’s cherry blossom season.",
+    key: ["cherry blossom season"],
     sub: "Mild days, about 15–19 °C. Book hotels early.",
     pic: "/search/pic-blossom.webp",
     count: "1 / 8",
@@ -78,6 +82,7 @@ export const DEMO_QUESTIONS: DemoQuestion[] = [
       { url: "quiz.example.net", title: "Quiz: how far is the Moon?" },
     ],
     big: "About 384,400 km away.",
+    key: ["384,400 km"],
     sub: "Light gets there in 1.3 seconds.",
     pic: "/search/pic-moon.webp",
     count: "1 / 10",

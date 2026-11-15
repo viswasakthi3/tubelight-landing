@@ -1,3 +1,4 @@
+import type { CSSProperties } from "react";
 import { DemoMount, Film, GetButton, PageMount } from "./client";
 import { DEMO_QUESTIONS, type DemoQuestion } from "./demo";
 import { Back, Bolt, Check, Copy, Fwd, Mark, Mic, Pc, Plus, Reload, Search, User } from "./icons";
@@ -45,6 +46,12 @@ function Eggs() {
   );
 }
 
+/** The answer line with its key facts under a soft highlighter, so the eye lands on the number first. */
+function Hl({ text, keys }: { text: string; keys: string[] }) {
+  const re = new RegExp(`(${keys.map((k) => k.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")).join("|")})`);
+  return <>{text.split(re).map((part, i) => (i % 2 ? <mark className="qs-hl" key={i}>{part}</mark> : part))}</>;
+}
+
 function Answer({ d }: { d: DemoQuestion }) {
   return (
     <div className="qs-ans" data-for={d.id}>
@@ -53,11 +60,11 @@ function Answer({ d }: { d: DemoQuestion }) {
         {d.pic ? <img src={d.pic} alt="" /> : <Eggs />}
         <span className="count">{d.count}</span>
       </div>
-      <p className="qs-big">{d.big}</p>
+      <p className="qs-big"><Hl text={d.big} keys={d.key} /></p>
       <p className="qs-sub">{d.sub}</p>
       <div className="qs-meta">
         {d.sources.map((s) => (
-          <span className="qs-chip" key={s.name}><i style={{ background: s.color }}>{s.letter}</i>{s.name}</span>
+          <span className="qs-chip" key={s.name} style={{ "--src": s.color } as CSSProperties}><i style={{ background: s.color }}>{s.letter}</i>{s.name}</span>
         ))}
         <span className="qs-chip tts"><Bars />Reading aloud</span>
       </div>
@@ -94,7 +101,10 @@ export function SearchLanding() {
             <div className="qs-cta" data-hero-cta="">
               <div className="qs-cta-row">
                 <GetButton where="hero" />
-                <a className="qs-film-link" href="#film" data-film-link=""><span className="ring"><svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l11-6.5z" fill="currentColor" /></svg></span>Watch it work · 55s</a>
+                <a className="qs-film-link" href="#film" data-film-link="">
+                  <span className="thumb" aria-hidden="true"><img src="/search/film-poster.jpg" alt="" /><span className="ring"><svg width="11" height="11" viewBox="0 0 24 24"><path d="M8 5.5v13l11-6.5z" fill="currentColor" /></svg></span></span>
+                  <span className="words">Watch it work<small>55-second film</small></span>
+                </a>
               </div>
             </div>
             <ul className="qs-ticks">
@@ -165,7 +175,10 @@ export function SearchLanding() {
               </div>
               <div className="qs-pick" role="group" aria-label="Sample questions">
                 {DEMO_QUESTIONS.map((d, i) => (
-                  <button type="button" key={d.id} data-pick="" aria-pressed={i === 0}>{d.pick}</button>
+                  <button type="button" key={d.id} data-pick="" aria-pressed={i === 0}>
+                    <span className={`thumb ${d.id}`} aria-hidden="true">{d.pic ? <img src={d.pic} alt="" /> : <i />}</span>
+                    {d.pick}
+                  </button>
                 ))}
               </div>
             </div>
@@ -288,16 +301,16 @@ export function SearchLanding() {
               <div className="r r-head" aria-hidden="true"><div className="qs-card-head"><Mark size={22} /><b>Quick Search</b><span className="esc">Esc</span></div></div>
               <div className="r r-q" aria-hidden="true"><p className="qs-q"><span className="n">Q1</span>How far away is the Moon?</p></div>
               <div className="r r-pic" aria-hidden="true"><div className="qs-pic"><img src="/search/pic-moon.webp" alt="" /><span className="count">1 / 10</span></div><i className="qs-mk">1</i></div>
-              <div className="r r-big" aria-hidden="true"><p className="qs-big">About 384,400 km away.</p></div>
+              <div className="r r-big" aria-hidden="true"><p className="qs-big">About <mark className="qs-hl">384,400 km</mark> away.</p></div>
               <div className="r r-src" aria-hidden="true">
                 <div className="qs-meta">
-                  <span className="qs-chip"><i style={{ background: "#1f4fbf" }}>N</i>nasa.gov</span>
-                  <span className="qs-chip"><i style={{ background: "#22356b" }}>R</i>rmg.co.uk</span>
+                  <span className="qs-chip" style={{ "--src": "#1f4fbf" } as CSSProperties}><i style={{ background: "#1f4fbf" }}>N</i>nasa.gov</span>
+                  <span className="qs-chip" style={{ "--src": "#22356b" } as CSSProperties}><i style={{ background: "#22356b" }}>R</i>rmg.co.uk</span>
                 </div>
                 <i className="qs-mk">2</i>
               </div>
               <div className="r r-q2" aria-hidden="true"><p className="qs-q"><span className="n">Q2</span><span>How long would it take to drive <span className="there">there</span>?</span></p><i className="qs-mk">3</i></div>
-              <div className="r r-big2" aria-hidden="true"><p className="qs-big">About 160 days, nonstop at 100 km/h.</p></div>
+              <div className="r r-big2" aria-hidden="true"><p className="qs-big">About <mark className="qs-hl">160 days</mark>, nonstop at 100 km/h.</p></div>
               <div className="r r-floor" aria-hidden="true">
                 <div className="qs-floor"><Search /><span>Ask a follow-up…</span><span className="qs-chip tts"><Bars />Reading aloud</span><i className="mic"><Mic size={16} /></i></div>
                 <i className="qs-mk">4</i>

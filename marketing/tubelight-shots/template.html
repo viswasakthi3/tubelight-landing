@@ -1,0 +1,291 @@
+<title>Tubelight Shots</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600..800&family=DM+Sans:opsz,wght@9..40,500..800&display=swap">
+<style>
+/* Layout: a gallery of five 1920×1080 posters scaled to the column. Each poster is one loud colour field
+   (yellow, violet, blue, green, night) with a real Tubelight picture as the payoff. The posters keep a fixed look;
+   only the page around them follows the viewer's theme. */
+:root {
+  --page: #faf8f4; --page-ink: #221e3f; --page-muted: #625d75; --page-line: #e6e1ef; --page-card: #ffffff; --page-accent: #4b33b8;
+  --display: "Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
+  --body: "DM Sans", "Segoe UI", system-ui, -apple-system, sans-serif;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --page: #15131c; --page-ink: #eeebf7; --page-muted: #a7a1bb; --page-line: #2c2838; --page-card: #1d1a26; --page-accent: #b3a2ff; color-scheme: dark; } }
+:root[data-theme="dark"] { --page: #15131c; --page-ink: #eeebf7; --page-muted: #a7a1bb; --page-line: #2c2838; --page-card: #1d1a26; --page-accent: #b3a2ff; color-scheme: dark; }
+body { background: var(--page); color: var(--page-ink); font-family: var(--body); }
+* { box-sizing: border-box; }
+
+.page { max-width: 1240px; margin: 0 auto; padding-block: 56px 96px; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); display: flex; flex-direction: column; gap: 56px; }
+.intro { display: flex; flex-direction: column; gap: 14px; max-width: 46em; }
+.intro h1 { margin: 0; font: 800 clamp(34px, 5vw, 56px)/1.05 var(--display); letter-spacing: -.02em; text-wrap: balance; }
+.intro p { margin: 0; font: 500 17px/1.65 var(--body); color: var(--page-muted); }
+.intro code { font: 600 14px/1 ui-monospace, Consolas, monospace; color: var(--page-ink); background: var(--page-card); padding: 3px 7px; border-radius: 6px; border: 1px solid var(--page-line); }
+.shot { display: flex; flex-direction: column; gap: 18px; }
+.slot { position: relative; width: 100%; max-width: 100%; aspect-ratio: 16 / 9; border-radius: 14px; overflow: hidden; box-shadow: 0 24px 60px -30px rgba(30, 20, 70, .45), 0 0 0 1px var(--page-line); }
+.slot > .frame { position: absolute; left: 0; top: 0; transform-origin: 0 0; transform: scale(var(--s, .5)); }
+.meta { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.4fr); gap: 10px 32px; align-items: start; }
+.meta h2 { margin: 0; font: 800 22px/1.25 var(--display); letter-spacing: -.01em; display: flex; gap: 12px; align-items: baseline; }
+.meta h2 span { font: 700 13px/1 var(--body); color: var(--page-muted); letter-spacing: .08em; }
+.meta .use { margin: 6px 0 0; font: 600 14px/1.5 var(--body); color: var(--page-muted); }
+.copybox { display: flex; flex-direction: column; gap: 8px; min-width: 0; }
+.copybox label { font: 800 11.5px/1 var(--body); letter-spacing: .1em; text-transform: uppercase; color: var(--page-muted); }
+.copyrow { display: flex; gap: 10px; align-items: flex-start; }
+.copyrow p { margin: 0; flex: 1; min-width: 0; font: 500 15px/1.55 var(--body); padding: 12px 14px; border-radius: 10px; background: var(--page-card); border: 1px solid var(--page-line); }
+.copyrow button { flex: none; font: 700 13px/1 var(--body); padding: 11px 14px; border-radius: 9px; border: 1px solid var(--page-line); background: var(--page-card); color: var(--page-accent); cursor: pointer; }
+.copyrow button:hover { border-color: var(--page-accent); }
+.copyrow button:focus-visible { outline: 3px solid var(--page-accent); outline-offset: 2px; }
+@media (max-width: 760px) { .meta { grid-template-columns: minmax(0, 1fr); } .page { gap: 44px; padding-block: 32px 64px; } }
+
+html.solo, html.solo body { margin: 0; padding: 0; background: #000; overflow: hidden; }
+html.solo .page { display: none; }
+html.solo body > .frame { position: fixed; left: 0; top: 0; transform: none; }
+
+/* ================= POSTERS (fixed palette from the Tubelight site) ================= */
+.frame {
+  --ink: #221e3f; --ink-2: #57536e; --violet: #6c4df6; --violet-ink: #4b33b8; --sun: #ffc93a; --sun-deep: #d6950f;
+  --coral: #ff6a4d; --blue: #2f6bff; --green: #1fc47f; --night: #17142e; --white: #ffffff; --sel: #d9cfff;
+  width: 1920px; height: 1080px; overflow: hidden; color: var(--ink); background: var(--sun);
+  font-family: var(--body); -webkit-font-smoothing: antialiased; color-scheme: light;
+}
+.frame p, .frame h2, .frame h3 { margin: 0; }
+.hd { position: absolute; left: 104px; top: 78px; font: 800 118px/.98 var(--display); letter-spacing: -.04em; text-wrap: balance; }
+.lede { font: 600 36px/1.35 var(--body); letter-spacing: -.005em; }
+
+.foot { position: absolute; left: 104px; bottom: 56px; display: flex; align-items: center; gap: 40px; white-space: nowrap; font: 700 28px/1 var(--body); }
+.foot .brand { display: flex; align-items: center; gap: 14px; }
+.foot .brand img { height: 68px; width: 68px; object-fit: contain; display: block; padding: 9px; border-radius: 50%; background: #fff; }
+.foot .brand b { font: 800 40px/1 var(--display); letter-spacing: -.03em; }
+.foot .url { padding-left: 40px; border-left: 2.5px solid currentColor; height: 40px; display: flex; align-items: center; opacity: .8; }
+
+.key { display: inline-grid; place-items: center; min-width: 120px; height: 120px; padding: 0 26px 8px; border-radius: 26px; background: linear-gradient(#ffffff, #f4f2fa); color: var(--ink);
+  font: 800 52px/1 var(--body); box-shadow: 0 11px 0 #cfc9e2, 0 12px 0 1.5px rgba(34, 30, 63, .25), 0 30px 40px -16px rgba(34, 30, 63, .45); }
+.key.wide { min-width: 170px; }
+.keys { display: inline-flex; align-items: center; gap: 18px; }
+.keys .plus { font: 800 48px/1 var(--body); opacity: .55; }
+
+/* a real Tubelight picture, framed like the player */
+.pic { position: absolute; border-radius: 30px; overflow: hidden; background: #111; box-shadow: 0 50px 90px -40px rgba(20, 12, 60, .7), 0 0 0 6px #ffffff; }
+.pic img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.cap { position: absolute; left: 24px; right: 24px; bottom: 22px; padding: 16px 24px; border-radius: 18px; background: rgba(255, 255, 255, .95); color: var(--ink); font: 700 28px/1.3 var(--body); text-align: center; }
+.voice { display: inline-flex; align-items: center; gap: 12px; padding: 12px 20px; border-radius: 999px; background: var(--ink); color: #fff; font: 800 24px/1 var(--body); }
+.wave { display: inline-flex; align-items: center; gap: 5px; height: 34px; }
+.wave i { display: block; width: 6px; border-radius: 3px; background: currentColor; }
+.sticker { position: absolute; padding: 14px 26px; border-radius: 18px; font: 800 38px/1 var(--display); letter-spacing: -.02em; box-shadow: 0 16px 30px -12px rgba(20, 12, 60, .55); z-index: 3; }
+
+/* 1. HERO — yellow */
+.p1 { background: var(--sun); }
+.p1 .hd .v { color: var(--violet-ink); }
+.p1 .doc { position: absolute; left: 104px; top: 376px; width: 620px; height: 540px; border-radius: 28px; background: #fff; box-shadow: 0 40px 80px -40px rgba(90, 55, 0, .6); overflow: hidden; }
+.doc .bar { height: 58px; display: flex; align-items: center; gap: 10px; padding: 0 22px; background: #f3f0ea; font: 700 20px/1 var(--body); color: #6f6b86; }
+.doc .bar i { width: 14px; height: 14px; border-radius: 50%; background: #d9d4c8; }
+.doc .bd { padding: 34px 40px; display: flex; flex-direction: column; gap: 18px; }
+.doc h3 { font: 800 46px/1.1 var(--display); letter-spacing: -.02em; }
+.doc p { font: 500 32px/1.6 var(--body); color: #4a4662; }
+.doc .sel { background: var(--sel); color: var(--ink); padding: 3px 2px; border-radius: 4px; box-decoration-break: clone; -webkit-box-decoration-break: clone; }
+.p1 .mid { position: absolute; left: 724px; top: 376px; width: 330px; height: 540px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 30px; }
+.p1 .mid .keys { gap: 12px; }
+.p1 .mid .key { min-width: 104px; height: 104px; font-size: 44px; border-radius: 22px; }
+.p1 .mid .key.wide { min-width: 140px; }
+.p1 .mid svg { width: 120px; height: 60px; color: var(--ink); }
+.p1 .pic { left: 1054px; top: 398px; width: 762px; height: 496px; }
+.p1 .sticker { right: 70px; top: 330px; background: var(--violet); color: #fff; transform: rotate(4deg); }
+
+/* 2. PICTURES VOICE CAPTIONS — violet */
+.p2 { background: var(--violet); color: #fff; }
+.p2 .glow { position: absolute; right: -200px; top: -300px; width: 1200px; height: 1200px; border-radius: 50%; background: radial-gradient(circle, rgba(255, 201, 58, .45), rgba(255, 201, 58, 0) 62%); }
+.p2 .hd { top: 96px; font-size: 128px; line-height: 1.02; }
+.p2 .hd .y { color: var(--sun); }
+.p2 .sub { position: absolute; left: 104px; top: 560px; width: 620px; color: rgba(255, 255, 255, .9); }
+.p2 .pic { left: 800px; top: 200px; width: 1016px; height: 640px; }
+.p2 .cap { font-size: 32px; padding: 20px 28px; }
+.p2 .s1 { left: 760px; top: 160px; background: var(--sun); color: var(--ink); transform: rotate(-6deg); }
+.p2 .s2 { left: 1590px; top: 150px; background: #fff; color: var(--violet-ink); transform: rotate(5deg); display: flex; align-items: center; gap: 14px; }
+.p2 .s3 { left: 1000px; top: 850px; background: var(--coral); color: #fff; transform: rotate(-3deg); }
+
+/* 3. TYPE ANY TOPIC — blue */
+.p3 { background: var(--blue); color: #fff; }
+.p3 .hd .y { color: var(--sun); }
+.p3 .grid { position: absolute; left: 104px; top: 262px; width: 1712px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 28px; }
+.tile { position: relative; height: 322px; border-radius: 26px; overflow: hidden; background: #111; box-shadow: 0 30px 60px -30px rgba(5, 20, 90, .8), 0 0 0 5px #ffffff; }
+.tile img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.tile .q { position: absolute; left: 16px; bottom: 16px; max-width: calc(100% - 32px); display: inline-flex; align-items: center; gap: 12px; padding: 12px 20px 12px 16px; border-radius: 999px; background: #fff; color: var(--ink); font: 700 25px/1.2 var(--body); box-shadow: 0 8px 20px -8px rgba(0, 0, 0, .5); }
+.tile .q svg { width: 24px; height: 24px; flex: none; color: var(--violet); }
+
+/* 4. ASK IT SIMPLER — green */
+.p4 { background: var(--green); }
+.p4 .hd .w { color: #fff; }
+.p4 .chips { position: absolute; left: 104px; top: 420px; width: 760px; display: flex; flex-wrap: wrap; gap: 18px; }
+.p4 .chip { padding: 20px 32px; border-radius: 999px; background: #fff; color: var(--ink); font: 800 34px/1 var(--body); box-shadow: 0 9px 0 rgba(8, 80, 50, .35); }
+.p4 .chip.on { background: var(--ink); color: #fff; }
+.p4 .note { position: absolute; left: 104px; top: 700px; width: 700px; color: #0b3a26; }
+.p4 .chat { position: absolute; left: 930px; top: 120px; width: 886px; border-radius: 36px; background: #fff; box-shadow: 0 50px 90px -40px rgba(4, 70, 40, .8); padding: 30px; display: flex; flex-direction: column; gap: 24px; }
+.p4 .chat .pic { position: relative; width: 100%; height: 420px; box-shadow: none; border-radius: 24px; }
+.p4 .me { align-self: flex-end; padding: 22px 32px; border-radius: 30px 30px 8px 30px; background: var(--green); color: #06301f; font: 800 36px/1.2 var(--body); }
+.p4 .it { align-self: flex-start; max-width: 94%; padding: 26px 32px; border-radius: 8px 30px 30px 30px; background: #f1eefa; color: var(--ink); font: 700 38px/1.32 var(--body); letter-spacing: -.005em; }
+
+/* 5. WHERE IT WORKS + CTA — night */
+.p5 { background: var(--night); color: #fff; }
+.p5 .glow { position: absolute; right: -160px; top: -60px; width: 1300px; height: 1300px; border-radius: 50%; background: radial-gradient(circle, rgba(255, 201, 58, .55), rgba(108, 77, 246, .35) 38%, rgba(23, 20, 46, 0) 66%); }
+.p5 .bulb { position: absolute; right: 190px; top: 150px; height: 640px; width: auto; filter: drop-shadow(0 0 80px rgba(255, 201, 58, .7)); }
+.p5 .hd { font-size: 124px; }
+.p5 .hd .y { color: var(--sun); }
+.p5 .apps { position: absolute; left: 104px; top: 372px; width: 1000px; display: flex; flex-wrap: wrap; gap: 16px; }
+.p5 .app { display: inline-flex; align-items: center; gap: 12px; padding: 16px 26px; border-radius: 999px; background: rgba(255, 255, 255, .1); box-shadow: inset 0 0 0 2px rgba(255, 255, 255, .22); font: 700 30px/1 var(--body); }
+.p5 .app i { width: 16px; height: 16px; border-radius: 50%; }
+.p5 .line { position: absolute; left: 104px; top: 560px; width: 940px; color: rgba(255, 255, 255, .85); }
+.p5 .cta { position: absolute; left: 104px; top: 730px; display: inline-flex; align-items: center; gap: 18px; padding: 30px 46px; border-radius: 999px; background: var(--sun); color: var(--ink); font: 800 46px/1 var(--body); box-shadow: 0 10px 0 var(--sun-deep), 0 40px 60px -20px rgba(255, 201, 58, .6); }
+.p5 .cta svg { width: 44px; height: 44px; }
+</style>
+
+<template id="foot-tpl">
+  <div class="foot"><span class="brand"><img src="__MARK__" alt=""><b>tubelight</b></span><span class="url">tubelight.net</span></div>
+</template>
+
+<main class="page">
+  <header class="intro">
+    <h1>Tubelight, in five pictures</h1>
+    <p>Five loud posters, 1920 × 1080. Every picture inside them is a real explanation Tubelight made, so what people see is what they get. The PNG files are in <code>marketing/tubelight-shots/png</code>.</p>
+  </header>
+
+  <!-- 1 -->
+  <article class="shot">
+    <div class="slot">
+      <section class="frame p1" id="shot-1">
+        <h2 class="hd">Confusing paragraph?<br><span class="v">Press Alt + E.</span></h2>
+        <div class="doc">
+          <div class="bar"><i></i><i></i><i></i>&nbsp;rocket-science.pdf</div>
+          <div class="bd">
+            <h3>How rockets fly</h3>
+            <p><span class="sel">Liquid fuel and liquid oxygen are pumped into the combustion chamber, where they burn and rush out through the nozzle.</span> The hot gas going down pushes the rocket up.</p>
+          </div>
+        </div>
+        <div class="mid">
+          <div class="keys"><span class="key wide">Alt</span><span class="plus">+</span><span class="key">E</span></div>
+          <svg viewBox="0 0 120 60"><path d="M6 30h100M82 8l24 22-24 22" fill="none" stroke="currentColor" stroke-width="9" stroke-linecap="round" stroke-linejoin="round" /></svg>
+        </div>
+        <div class="pic"><img src="__ROCKET__" alt=""><p class="cap">The two liquids mix and burn inside the combustion chamber.</p></div>
+        <span class="sticker">Now you get it.</span>
+        <div data-foot></div>
+      </section>
+    </div>
+    <div class="meta">
+      <div><h2><span>01</span>Confusing paragraph? Press Alt + E</h2><p class="use">Lead image. Shows the before, the shortcut and the result in one look.</p></div>
+      <div class="copybox"><label for="alt-1">Alt text</label><div class="copyrow"><p id="alt-1">Tubelight for Windows. On the left, a hard paragraph about rocket engines is selected in a PDF. In the middle, the keys Alt and E. On the right, Tubelight shows a labelled cutaway picture of a rocket engine with the caption “The two liquids mix and burn inside the combustion chamber.”</p><button type="button" data-copy="alt-1">Copy</button></div></div>
+    </div>
+  </article>
+
+  <!-- 2 -->
+  <article class="shot">
+    <div class="slot">
+      <section class="frame p2" id="shot-2">
+        <div class="glow"></div>
+        <h2 class="hd">See it.<br>Hear it.<br><span class="y">Get it.</span></h2>
+        <p class="lede sub">Every explanation is pictures, a voice and captions. About a minute, not a 20-minute video.</p>
+        <div class="pic"><img src="__HEADACHES__" alt=""><p class="cap">“The brain itself has no pain receptors at all.”</p></div>
+        <span class="sticker s1">Pictures</span>
+        <span class="sticker s2"><span class="wave" data-wave="9"></span>A voice</span>
+        <span class="sticker s3">Captions</span>
+        <div data-foot></div>
+      </section>
+    </div>
+    <div class="meta">
+      <div><h2><span>02</span>See it. Hear it. Get it.</h2><p class="use">Shows what an explanation actually is. The headache fact makes people stop.</p></div>
+      <div class="copybox"><label for="alt-2">Alt text</label><div class="copyrow"><p id="alt-2">See it, hear it, get it. A Tubelight explanation of why headaches happen: a picture of a head showing brain tissue, membranes and blood vessels, with the spoken caption “The brain itself has no pain receptors at all.” Every explanation has pictures, a voice and captions.</p><button type="button" data-copy="alt-2">Copy</button></div></div>
+    </div>
+  </article>
+
+  <!-- 3 -->
+  <article class="shot">
+    <div class="slot">
+      <section class="frame p3" id="shot-3">
+        <h2 class="hd">Curious? <span class="y">Just type it.</span></h2>
+        <div class="grid">
+          <div class="tile"><img src="__POLAR__" alt=""><span class="q" data-q>life cycle of a polar bear</span></div>
+          <div class="tile"><img src="__OCEAN__" alt=""><span class="q" data-q>ocean currents</span></div>
+          <div class="tile"><img src="__NEURONS__" alt=""><span class="q" data-q>how neurons build memories</span></div>
+          <div class="tile"><img src="__TV__" alt=""><span class="q" data-q>how does a modern tv work</span></div>
+          <div class="tile"><img src="__KIDNEYS__" alt=""><span class="q" data-q>how kidneys filter blood</span></div>
+          <div class="tile"><img src="__DNA__" alt=""><span class="q" data-q>teach me about dna</span></div>
+        </div>
+        <div data-foot></div>
+      </section>
+    </div>
+    <div class="meta">
+      <div><h2><span>03</span>Curious? Just type it</h2><p class="use">The fun one. Six real explanations show the range.</p></div>
+      <div class="copybox"><label for="alt-3">Alt text</label><div class="copyrow"><p id="alt-3">Curious? Just type it. Six pictures Tubelight made from typed topics: the life cycle of a polar bear, ocean currents, how neurons build memories, how a modern TV works, how kidneys filter blood, and DNA.</p><button type="button" data-copy="alt-3">Copy</button></div></div>
+    </div>
+  </article>
+
+  <!-- 4 -->
+  <article class="shot">
+    <div class="slot">
+      <section class="frame p4" id="shot-4">
+        <h2 class="hd">Didn’t click?<br><span class="w">Ask it simpler.</span></h2>
+        <div class="chips"><span class="chip on">Simpler</span><span class="chip">Step by step</span><span class="chip">With an example</span></div>
+        <p class="lede note">Keep asking until it makes sense. No one’s judging.</p>
+        <div class="chat">
+          <div class="pic"><img src="__ROCKET__" alt=""></div>
+          <span class="me">Explain it simpler</span>
+          <span class="it">Pinch a garden hose and the water shoots out faster. A rocket nozzle does the same.</span>
+        </div>
+        <div data-foot></div>
+      </section>
+    </div>
+    <div class="meta">
+      <div><h2><span>04</span>Didn’t click? Ask it simpler</h2><p class="use">For students. Shows it is a conversation, not a one-shot answer.</p></div>
+      <div class="copybox"><label for="alt-4">Alt text</label><div class="copyrow"><p id="alt-4">Didn’t click? Ask it simpler. Under a picture of a rocket engine, someone asks Tubelight “Explain it simpler” and it answers: “Pinch a garden hose and the water shoots out faster. A rocket nozzle does the same.” You can also ask for step by step, or with an example.</p><button type="button" data-copy="alt-4">Copy</button></div></div>
+    </div>
+  </article>
+
+  <!-- 5 -->
+  <article class="shot">
+    <div class="slot">
+      <section class="frame p5" id="shot-5">
+        <div class="glow"></div>
+        <img class="bulb" src="__MARK__" alt="">
+        <h2 class="hd">Works wherever<br><span class="y">you read.</span></h2>
+        <div class="apps">
+          <span class="app"><i style="background:#ffc93a"></i>Chrome</span><span class="app"><i style="background:#4aa3ff"></i>Edge</span><span class="app"><i style="background:#ff6a4d"></i>PDFs</span><span class="app"><i style="background:#5b8cff"></i>Word</span><span class="app"><i style="background:#ffffff"></i>Notion</span><span class="app"><i style="background:#1fc47f"></i>Slack</span><span class="app"><i style="background:#b3a2ff"></i>VS Code</span>
+        </div>
+        <p class="lede line">Select any text on Windows 10 or 11. Tubelight opens beside your page, so you never lose your place.</p>
+        <span class="cta">Join early access<svg viewBox="0 0 24 24"><path d="M4 12h15M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round" /></svg></span>
+        <div data-foot></div>
+      </section>
+    </div>
+    <div class="meta">
+      <div><h2><span>05</span>Works wherever you read</h2><p class="use">Closing image with the call to join early access.</p></div>
+      <div class="copybox"><label for="alt-5">Alt text</label><div class="copyrow"><p id="alt-5">Tubelight works wherever you read: Chrome, Edge, PDFs, Word, Notion, Slack and VS Code, on Windows 10 and 11. It opens beside your page so you never lose your place. Join early access at tubelight.net.</p><button type="button" data-copy="alt-5">Copy</button></div></div>
+    </div>
+  </article>
+</main>
+
+<script>
+(function () {
+  document.querySelectorAll("[data-foot]").forEach((el) => el.replaceWith(document.getElementById("foot-tpl").content.cloneNode(true)));
+  document.querySelectorAll("[data-q]").forEach((el) => { el.insertAdjacentHTML("afterbegin", '<svg viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l4.5 4.5"/></g></svg>'); });
+  document.querySelectorAll("[data-wave]").forEach((el) => {
+    const n = +el.dataset.wave;
+    for (let i = 0; i < n; i++) { const b = document.createElement("i"); b.style.height = (25 + Math.round(75 * Math.abs(Math.sin(i * 1.7) * Math.cos(i * .45)))) + "%"; el.appendChild(b); }
+  });
+
+  const m = /^#shot-(\d)$/.exec(location.hash);
+  if (m) { const f = document.getElementById("shot-" + m[1]); if (f) { document.documentElement.classList.add("solo"); document.body.appendChild(f); return; } }
+
+  const fit = (slot) => { slot.style.setProperty("--s", String(slot.clientWidth / 1920)); };
+  const slots = Array.from(document.querySelectorAll(".slot"));
+  slots.forEach(fit);
+  if ("ResizeObserver" in window) { const ro = new ResizeObserver((es) => es.forEach((e) => fit(e.target))); slots.forEach((s) => ro.observe(s)); }
+  else window.addEventListener("resize", () => slots.forEach(fit));
+
+  document.querySelectorAll("[data-copy]").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const p = document.getElementById(btn.dataset.copy);
+      const done = () => { btn.textContent = "Copied"; setTimeout(() => (btn.textContent = "Copy"), 1600); };
+      const fallback = () => { const r = document.createRange(); r.selectNodeContents(p); const s = getSelection(); s.removeAllRanges(); s.addRange(r); btn.textContent = "Selected"; };
+      try { navigator.clipboard.writeText(p.textContent).then(done, fallback); } catch (e) { fallback(); }
+    });
+  });
+})();
+</script>

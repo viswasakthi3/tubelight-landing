@@ -54,7 +54,7 @@ export function DemoFilm() {
                 <i aria-hidden="true">
                   <svg viewBox="0 0 24 24"><path d="M7 4.5v15l12.5-7.5z" /></svg>
                 </i>
-                Watch the demo · 1:21
+                Watch the demo · 0:49
               </span>
             </button>
           ) : null}
