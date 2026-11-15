@@ -169,7 +169,7 @@ export function TopicSearch() {
     };
     const out: Item[] = [];
     if (!text) {
-      ["rocket", "kidneys", "supernova"].forEach((k) => {
+      ["rocket", "kidneys", "black-holes"].forEach((k) => {
         const it = watch(k);
         if (it) out.push(it);
       });

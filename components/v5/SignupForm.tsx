@@ -102,9 +102,10 @@ export function InviteFriends() {
   }
   return (
     <div className="invite-box">
-      <strong>Invite a friend for {PRIORITY_POINTS} more points</strong>
-      <p>Earn {PRIORITY_POINTS} priority points when a new person joins through your link.</p>
+      <strong>Invite a friend · +{PRIORITY_POINTS} points</strong>
+      <p>Copy your personal link and send it to a friend. You earn {PRIORITY_POINTS} priority points when they join.</p>
       <button type="button" className="btn sm" onClick={copy}>
+        <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="8" y="8" width="12" height="12" rx="3" /><path d="M15 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h3" /></svg>
         {status === "copied" ? "Link copied" : "Copy invite link"}
       </button>
       <span role="status" className="sr">{status === "copied" ? "Invite link copied" : ""}</span>
@@ -114,5 +115,7 @@ export function InviteFriends() {
 }
 
 export function InviteStatus() {
-  return <p className="invite-status"><strong>Early access</strong> Earn {PRIORITY_POINTS} priority points for each friend who joins.</p>;
+  const { sent } = useWaitlist();
+  if (sent) return <InviteFriends />;
+  return <p className="invite-status"><strong>Early access</strong><span>Join with your email to get your personal invite link.</span></p>;
 }

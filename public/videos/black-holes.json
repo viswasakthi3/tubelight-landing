@@ -1,0 +1,197 @@
+{
+  "slug": "black-holes",
+  "title": "Why Stars Collapse and What Black Holes Are",
+  "duration": 69.192,
+  "cues": [
+    {
+      "start": 0,
+      "end": 2.998,
+      "text": "A star is a constant battle between two forces."
+    },
+    {
+      "start": 2.998,
+      "end": 9.696,
+      "text": "Inside, nuclear fusion, the burning of fuel, creates a massive outward push that keeps the star inflated."
+    },
+    {
+      "start": 9.696,
+      "end": 16.08,
+      "text": "At the same time, gravity, the natural attraction of mass, is constantly pulling everything toward the center."
+    },
+    {
+      "start": 16.08,
+      "end": 20.708,
+      "text": "When the star runs out of fuel, the outward push disappears."
+    },
+    {
+      "start": 20.708,
+      "end": 26.184,
+      "text": "Gravity wins, and the entire star collapses inward at incredible speed."
+    },
+    {
+      "start": 26.184,
+      "end": 31.968,
+      "text": "A massive star is truly enormous, sometimes over a hundred times the mass of our sun."
+    },
+    {
+      "start": 31.968,
+      "end": 40.244,
+      "text": "But the singularity at the center of a black hole is crushed into a point of effectively zero volume,"
+    },
+    {
+      "start": 40.244,
+      "end": 42.456,
+      "text": "a speck of extreme density."
+    },
+    {
+      "start": 42.456,
+      "end": 45.147,
+      "text": "The black hole itself isn't the singularity."
+    },
+    {
+      "start": 45.147,
+      "end": 51.264,
+      "text": "It's the event horizon, a boundary around that point from which nothing, not even light, can escape."
+    },
+    {
+      "start": 51.264,
+      "end": 56.64,
+      "text": "Gravity isn't just a mysterious pull. It is mass warping the fabric of space itself."
+    },
+    {
+      "start": 56.64,
+      "end": 63.144,
+      "text": "Think of a heavy ball on a rubber sheet. It creates a dip, and things nearby naturally slide toward it."
+    },
+    {
+      "start": 63.144,
+      "end": 69.192,
+      "text": "It is not empty space doing the pulling, but the curvature created by the mass that draws everything in."
+    }
+  ],
+  "sheets": [
+    {
+      "index": 0,
+      "title": "The Star's Balancing Act",
+      "src": "/videos/black-holes/p0.webp",
+      "thumb": "/videos/black-holes/p0-s.webp",
+      "start": 0,
+      "end": 26.184,
+      "walk": true,
+      "pw": 1
+    },
+    {
+      "index": 1,
+      "title": "Star vs. Singularity",
+      "src": "/videos/black-holes/p1.webp",
+      "thumb": "/videos/black-holes/p1-s.webp",
+      "start": 26.184,
+      "end": 51.264,
+      "walk": true,
+      "pw": 1
+    },
+    {
+      "index": 2,
+      "title": "How Gravity Pulls",
+      "src": "/videos/black-holes/p2.webp",
+      "thumb": "/videos/black-holes/p2-s.webp",
+      "start": 51.264,
+      "end": 69.192,
+      "walk": true,
+      "pw": 0.9844
+    }
+  ],
+  "beats": [
+    {
+      "start": 0,
+      "end": 9.696,
+      "sheet": 0,
+      "say": "A star is a constant battle between two forces. Inside, nuclear fusion, the burning of fuel, creates a massive outward push that keeps the star inflated.",
+      "ptr": {
+        "x": 0.18,
+        "y": 0.5
+      }
+    },
+    {
+      "start": 9.696,
+      "end": 16.08,
+      "sheet": 0,
+      "say": "At the same time, gravity, the natural attraction of mass, is constantly pulling everything toward the center.",
+      "ptr": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "start": 16.08,
+      "end": 26.184,
+      "sheet": 0,
+      "say": "When the star runs out of fuel, the outward push disappears. Gravity wins, and the entire star collapses inward at incredible speed.",
+      "ptr": {
+        "x": 0.82,
+        "y": 0.5
+      }
+    },
+    {
+      "start": 26.184,
+      "end": 31.968,
+      "sheet": 1,
+      "say": "A massive star is truly enormous, sometimes over a hundred times the mass of our sun.",
+      "ptr": {
+        "x": 0.18,
+        "y": 0.5
+      }
+    },
+    {
+      "start": 31.968,
+      "end": 42.456,
+      "sheet": 1,
+      "say": "But the singularity at the center of a black hole is crushed into a point of effectively zero volume, a speck of extreme density.",
+      "ptr": {
+        "x": 0.82,
+        "y": 0.5
+      }
+    },
+    {
+      "start": 42.456,
+      "end": 51.264,
+      "sheet": 1,
+      "say": "The black hole itself isn't the singularity. It's the event horizon, a boundary around that point from which nothing, not even light, can escape.",
+      "ptr": {
+        "x": 0.82,
+        "y": 0.5
+      }
+    },
+    {
+      "start": 51.264,
+      "end": 56.64,
+      "sheet": 2,
+      "say": "Gravity isn't just a mysterious pull. It is mass warping the fabric of space itself.",
+      "ptr": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "start": 56.64,
+      "end": 63.144,
+      "sheet": 2,
+      "say": "Think of a heavy ball on a rubber sheet. It creates a dip, and things nearby naturally slide toward it.",
+      "ptr": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "start": 63.144,
+      "end": 69.192,
+      "sheet": 2,
+      "say": "It is not empty space doing the pulling, but the curvature created by the mass that draws everything in.",
+      "ptr": {
+        "x": 0.815,
+        "y": 0.5
+      }
+    }
+  ],
+  "typed": "The core of a massive star's life is a constant battle between two forces: the outward push from nuclear fusion in its c"
+}

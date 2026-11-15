@@ -19,11 +19,11 @@ export const MORE: { slug: string; kw: string }[] = [
   { slug: "zombie-cells", kw: "zombie senescent cell cells ageing aging inflammation medical" },
   { slug: "neurons", kw: "neuron neurons memory memories brain synapse learning" },
   { slug: "appendix", kw: "appendix gut bacteria intestine digestion body medical" },
-  { slug: "supernova", kw: "supernova star stars black hole holes space explosion" },
+  { slug: "black-holes", kw: "supernova star stars black hole holes singularity event horizon gravity collapse space explosion" },
   { slug: "dark-matter", kw: "dark matter galaxy galaxies gravity space universe" },
 ];
 
-export const SAVED = ["neurons", "appendix", "supernova", "dark-matter"];
+export const SAVED = ["neurons", "appendix", "black-holes", "dark-matter"];
 
 const STOP: Record<string, number> = { the: 1, how: 1, why: 1, what: 1, does: 1, and: 1, are: 1, for: 1, with: 1, about: 1, work: 1, works: 1, that: 1, this: 1, from: 1, into: 1, your: 1, explain: 1, teach: 1 };
 

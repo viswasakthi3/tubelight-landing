@@ -409,7 +409,7 @@ export function Hero() {
             </p>
             <p className="onlysm micro">Tubelight runs on Windows PCs. Join from your phone and your invite comes by email, so you can open it on your PC.</p>
             <InviteStatus />
-            <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", gap: "2px 22px", marginTop: 2 }}>
+            <div className="hero-links">
               <a href="#how" className="linkbtn">
                 <svg viewBox="0 0 24 24" aria-hidden="true" style={{ width: 18, height: 18, fill: "#4B33B8" }}>
                   <path d="M7 4.5v15l12.5-7.5z" />
@@ -674,7 +674,6 @@ export function Hero() {
               </button>
             ))}
           </div>
-          <p className="real">Real Tubelight explanations in its own voice, made from the topics shown. In the app, Fast makes one in about 11 seconds (Rich takes up to 30); here they play straight away. The page in “Select text” is a sample. Use <span aria-hidden="true">⤢</span> to watch it big.</p>
         </div>
       </div>
     </section>

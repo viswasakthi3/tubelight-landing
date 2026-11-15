@@ -8,7 +8,7 @@ export { DEMO } from "./video-paths";
 
 export const VIDEO_SLUGS = [
   "rocket", "headaches", "dna", "ocean", "tv", "polar-bear", "insurance",
-  "kidneys", "zombie-cells", "neurons", "appendix", "supernova", "dark-matter",
+  "kidneys", "zombie-cells", "neurons", "appendix", "black-holes", "dark-matter",
 ] as const;
 
 const DIR = path.join(process.cwd(), "public", "videos");

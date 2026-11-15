@@ -20,7 +20,7 @@ const ITEMS = [
   { slug: 'zombie-cells', id: 'instant_1790386734228_2lr2h' },
   { slug: 'kidneys', id: 'instant_1788991015305_8ccuf' },
   { slug: 'appendix', id: 'instant_1791435756172_bsm0c' },
-  { slug: 'supernova', id: 'instant_1787465899552_puv9h' },
+  { slug: 'black-holes', id: 'instant_1789932308259_q9um3' },
   { slug: 'dark-matter', id: 'instant_1789981977671_aosyc' },
 ];
 const args0 = process.argv.slice(2);
