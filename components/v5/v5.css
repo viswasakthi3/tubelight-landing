@@ -66,6 +66,14 @@
 .v5 .wbar{display:flex;align-items:center;justify-content:space-between;gap:10px;min-height:42px;padding:0 10px 0 14px;border-bottom:1px solid #F0ECF5;font-size:13.5px;font-weight:600;color:#3A3655}
 .v5 .wbody{flex:1;overflow:hidden;padding:18px 20px;display:flex;flex-direction:column;gap:10px;color:#3A3655;font-size:15px;line-height:1.7}
 .v5 .selx{background:#C9DEFF;color:#1B2A4A;border-radius:3px;padding:1px 0;box-decoration-break:clone;-webkit-box-decoration-break:clone}
+/* The page you are reading is a dark window, so the white Tubelight panel beside it reads at a glance as the thing that appeared. */
+.v5 .wdoc{background:#17161F;box-shadow:0 1px 2px rgba(10,8,30,.3),0 22px 46px -18px rgba(20,14,60,.55)}
+.v5 .wdoc .wbar{background:#1F1E29;border-bottom-color:#2B2A37;color:#C9C5DA}
+.v5 .wdoc .wctl{display:flex;gap:14px;flex:none;font-size:12px;font-weight:500;color:#77738C}
+.v5 .wdoc .wbody{color:#B4B0C6}
+.v5 .wdoc .wkick{margin:0;font-size:12px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:#8A86A0}
+.v5 .wdoc .wtitle{margin:0;font-size:21px;line-height:1.2;font-weight:600;letter-spacing:-.02em;color:#F2F0FA}
+.v5 .wdoc .selx{background:#3D63DD;color:#FFFFFF}
 .v5 .pbody{flex:1;display:flex;flex-direction:column;gap:10px;padding:12px}
 .v5 .pvid{position:relative;aspect-ratio:16 / 9;border-radius:10px;overflow:hidden;background:#151229}
 .v5 .pvid video{display:block;width:100%;height:100%;object-fit:contain}

@@ -474,11 +474,11 @@ export function Hero() {
                   <span aria-hidden="true" style={{ width: 12, height: 12, borderRadius: 4, flex: "none", background: tp.color }} />
                   <span style={{ whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{tp.app}</span>
                 </span>
-                <span aria-hidden="true" style={{ display: "flex", gap: 14, color: "#A29DB5", fontSize: 12, fontWeight: 500, flex: "none" }}>— ▢ ✕</span>
+                <span className="wctl" aria-hidden="true">— ▢ ✕</span>
               </div>
               <div className="wbody">
-                <p style={{ margin: 0, fontSize: 12, fontWeight: 600, letterSpacing: "0.12em", textTransform: "uppercase", color: "#6F6B86" }}>{tp.kicker}</p>
-                <p className="disp" style={{ margin: 0, fontSize: 21, lineHeight: 1.2, fontWeight: 600, letterSpacing: "-0.02em", color: "#221E3F" }}>{tp.title}</p>
+                <p className="wkick">{tp.kicker}</p>
+                <p className="disp wtitle">{tp.title}</p>
                 <p className="wlead" style={{ margin: 0 }}>{tp.lead}</p>
                 <p style={{ margin: 0 }}>
                   <span className="selx">{tp.sel}</span> {tp.tail}
