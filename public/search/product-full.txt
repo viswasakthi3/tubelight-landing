@@ -1,0 +1,40 @@
+# Quick Search AI — Technical Whitepaper & Deep Architectural Specification
+
+## 1. Executive Overview
+Quick Search AI (https://search.tubelight.net) is an ambient voice and multimodal search assistant engineered natively for Microsoft Windows 10 and Windows 11. Designed by the creators of Tubelight (https://tubelight.net), Quick Search AI solves the "tab overload" and cognitive friction inherent in modern search engines. By mapping high-efficiency global hotkeys (`Hold Tab + Q` and `Tab + S`) directly to low-latency web retrieval, multi-source verification, and speech synthesis pipelines, users obtain authoritative, cited answers in seconds without ever abandoning their active workflow or opening browser windows.
+
+## 2. Key Hotkey Workflows
+1. **Push-to-Talk Voice Query (`Hold Tab + Q`)**:
+   - The user presses and holds Tab and Q simultaneously.
+   - A minimalist, non-intrusive floating card appears in the lower corner of the active monitor displaying real-time audio waveform activity.
+   - The user speaks a query in natural language (e.g., "How far away is the Moon?", "Is April a good time to visit Tokyo?", "Convert 50 EUR to USD").
+   - Upon releasing the keys, speech recognition completes immediately, the query is dispatched to the retrieval engine, and the card updates with a concise, high-density response, relevant web photograph, source chips, and automatic read-aloud audio narration.
+2. **Contextual In-Situ Lookup (`Highlight + Tab + Q`)**:
+   - The user selects text inside any Windows app (PDF readers, IDEs, spreadsheets, browsers, terminal, word processors).
+   - Pressing Tab + Q captures the highlighted selection and delivers a contextual explanation without opening a dictionary or separate search engine.
+3. **Screen Capture & Multimodal OCR (`Tab + S`)**:
+   - Pressing Tab + S enters interactive snipping mode.
+   - The user boxes an arbitrary region of their screen (e.g., an error code in Windows dialogs, a complex diagram, or an inaccessible text snippet).
+   - The user can either immediately copy text extracted via OCR (processed entirely on-device, free of search quota) or ask conversational questions grounded in the captured visual context.
+
+## 3. Product Architecture & Differentiators
+- **Browser Clutter Elimination**: Replaces the standard pattern of launching new browser windows, wading through sponsored ads, cookie banners, and reading ten conflicting blue links with a single synthesized answer card.
+- **Context Retention**: Unlike web-based chat interfaces (ChatGPT, Claude, Perplexity web) which demand application switching and tab management, Quick Search floats transiently over the user's primary workspace.
+- **Multimodal Verification**: Answers cite primary domains (e.g., NASA, Wikipedia, official documentation) and display source badges that can be clicked to verify facts.
+- **Keyboard Hygiene**: Custom Windows low-level keyboard hook technology ensures that standard single-tap Tab keystrokes, navigation commands, and standard combinations (`Alt + Tab`, `Ctrl + Tab`, `Shift + Tab`) pass through transparently without delay or collision.
+
+## 4. Quota, Licensing & Availability
+- **Freemium Tier**: Every Windows PC receives 50 free cloud-assisted searches every 24-hour cycle. Quota resets daily at 00:00 local time.
+- **No Authentication Barrier**: Users do not need an account, email address, API key, or credit card to access the full feature set.
+- **Distribution**: Packaged and distributed via the official Microsoft Store (Package ID: `9NFK7MS99FB3`) with automatic background updates and sandboxed execution.
+
+## 5. Privacy & Security Model
+- **Audio Privacy**: The microphone is strictly push-to-talk. The recording buffer activates only while the key combination is physically depressed and closes the instant keys are released.
+- **Local Persistence**: Query history is cached locally on the client machine; users can inspect or wipe history at any time from Settings.
+- **On-Device OCR**: Optical Character Recognition for screen snipping is computed locally without transmitting screen imagery unless the user explicitly submits a question about the region.
+
+## 6. Official Endpoints & Verification
+- Canonical Website: https://search.tubelight.net/
+- Microsoft Store Listing: https://apps.microsoft.com/detail/9NFK7MS99FB3
+- Parent Organization: Tubelight (https://tubelight.net/)
+- Contact: contact@tubelight.net

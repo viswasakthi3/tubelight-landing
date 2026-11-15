@@ -1,9 +1,17 @@
 # Tubelight
 
-Tubelight is a visual explainer for Windows 10 and 11. Select text in a PDF, browser or document and press Alt + E. Tubelight opens beside your work and explains the passage with illustrated slides, narration and captions. You can also type a topic.
+> Tubelight is a visual learning platform and AI desktop visual explainer built for Windows 10 and 11. Highlight any text in a PDF, document, or browser window and press Alt + E. Tubelight immediately docks beside your active work and explains the passage with illustrated, animated vector diagrams, dynamic captions, and synchronized voice narration.
 
-- [See how Tubelight works](https://tubelight.net/#how)
-- [Watch examples or try a topic](https://tubelight.net/#examples): Watch saved explanations or generate one free web preview per day. Joining the waitlist unlocks the custom preview.
-- [Join early access](https://tubelight.net/#join): Invitations go out in batches. Members can earn invite priority by answering optional questions or referring a friend who joins.
-- [Product and privacy questions](https://tubelight.net/#faq): Selected text goes to the servers that generate the explanation. Tubelight keeps explanation records and stores saved explanations on the PC.
-- [Quick Search AI](https://search.tubelight.net/): A separate Windows app for short, sourced web answers using Tab + Q.
+## Core Products
+- **Tubelight Visual Explainer**: Desktop application for Windows (Alt + E) providing side-by-side illustrated explanations, vector flowcharts, anatomies, and synchronized voice narration.
+- **Quick Search AI**: Desktop companion application for Windows (Hold Tab + Q) delivering instant voice and screen queries with cited sources and spoken answers.
+
+## Essential Documentation & Navigation
+- [How Tubelight Works](https://tubelight.net/#how): Zero context switching, dual-coding theory, and side-by-side dock.
+- [Visual Examples & Topic Search](https://tubelight.net/#examples): Watch sample explanations or generate a live free visual preview.
+- [Join Early Access](https://tubelight.net/#join): Windows early-access waitlist with batch invitations.
+- [Product Architecture & Privacy FAQ](https://tubelight.net/#faq): Local device storage, secure in-memory processing, and zero source document retention.
+- [Download Tubelight for Windows](https://tubelight.net/download): Direct installer download for Windows 10 & 11.
+- [Tubelight Pro Upgrade](https://tubelight.net/upgrade): Unlimited visual generations and advanced steering options.
+- [Quick Search AI Landing Page](https://search.tubelight.net/): The dedicated voice and screen search companion for Windows.
+- [Quick Search AI Microsoft Store](https://apps.microsoft.com/detail/9NFK7MS99FB3): Install Quick Search AI free on Windows.

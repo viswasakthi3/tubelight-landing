@@ -26,6 +26,58 @@ export const QS_FAQ: { q: string; a: string }[] = [
   },
 ];
 
+export const QS_SHOTS = [
+  {
+    id: "qs-01",
+    src: "/search/shots/qs-01-hold-tab-q.png",
+    title: "Hold Tab + Q in any app",
+    desc: "Voice search that pops up right over your current window.",
+    alt: "Quick Search AI shortcut: Hold Tab + Q to voice search over any app on Windows",
+  },
+  {
+    id: "qs-02",
+    src: "/search/shots/qs-02-hold-ask-let-go.png",
+    title: "Hold, ask, let go",
+    desc: "Three seconds to an answer. No browser opening, no window tabbing.",
+    alt: "Quick Search AI workflow: Hold, ask out loud, and let go for instant response",
+  },
+  {
+    id: "qs-03",
+    src: "/search/shots/qs-03-stop-opening-tabs.png",
+    title: "Stop opening new tabs",
+    desc: "Replace 30 search tabs with one sourced, authoritative answer card.",
+    alt: "Quick Search AI replaces cluttered browser tabs with a clean concise answer",
+  },
+  {
+    id: "qs-04",
+    src: "/search/shots/qs-04-highlight-a-word.png",
+    title: "Highlight any word or phrase",
+    desc: "Select unfamiliar text in PDFs or documents and press Tab + Q for instant context.",
+    alt: "Highlight text on screen and press Tab + Q for immediate visual AI explanation",
+  },
+  {
+    id: "qs-05",
+    src: "/search/shots/qs-05-ask-about-your-screen.png",
+    title: "Ask about your screen with Tab + S",
+    desc: "Box any error dialog, graph, or image to ask questions or extract text.",
+    alt: "Press Tab + S to snip and search any screen region or copy text with OCR",
+  },
+  {
+    id: "qs-06",
+    src: "/search/shots/qs-06-one-answer-with-proof.png",
+    title: "One answer, cited with proof",
+    desc: "Direct web sources with real photos and links you can verify.",
+    alt: "Quick Search AI cited answer showing web sources and verified photos",
+  },
+  {
+    id: "qs-07",
+    src: "/search/shots/qs-07-free-50-a-day.png",
+    title: "50 free searches every day",
+    desc: "Zero sign-up, no credit card. Search history stays privately on your PC.",
+    alt: "50 free daily searches for Windows users with zero signup and local history",
+  },
+];
+
 /* The crowded tab strip: the same question searched again and again. The first three tabs can still be
    read; the rest are squeezed down to their icons, as in a real browser with 31 tabs. */
 const TAB_C = ["#ea4335", "#4285f4", "#6c4df6", "#34a853", "#fa7b17", "#12b5cb", "#e52592", "#a142f4"];
@@ -86,6 +138,7 @@ export function SearchLanding() {
             </a>
             <div className="qs-nav-links">
               <a className="nl" href="#how">How it works</a>
+              <a className="nl" href="#shots">Gallery</a>
               <a className="nl" href="#faq">FAQ</a>
             </div>
           </div>
@@ -342,8 +395,41 @@ export function SearchLanding() {
           </div>
         </section>
 
+        {/* ============ SCREENSHOTS GALLERY ============ */}
+        <section className="qs-band white" id="shots" aria-labelledby="shots-h">
+          <div className="qs-wrap">
+            <div className="qs-head center">
+              <p className="qs-eyebrow">Visual Tour</p>
+              <h2 className="qs-h2" id="shots-h">Quick Search in <span className="v">action.</span></h2>
+              <p className="qs-lede">Voice queries, screen snipping, and cited answers — designed native for Windows 10 &amp; 11.</p>
+            </div>
+            <div className="qs-shots-grid">
+              {QS_SHOTS.map((s) => (
+                <article className="qs-shot-card" key={s.id}>
+                  <figure className="qs-shot-figure">
+                    <div className="qs-shot-media">
+                      <img
+                        src={s.src}
+                        alt={s.alt}
+                        width={1920}
+                        height={1080}
+                        loading="lazy"
+                        decoding="async"
+                      />
+                    </div>
+                    <figcaption className="qs-shot-body">
+                      <h3 className="qs-shot-title">{s.title}</h3>
+                      <p className="qs-shot-desc">{s.desc}</p>
+                    </figcaption>
+                  </figure>
+                </article>
+              ))}
+            </div>
+          </div>
+        </section>
+
         {/* ============ FAQ ============ */}
-        <section className="qs-band white" id="faq" aria-labelledby="faq-h">
+        <section className="qs-band tint" id="faq" aria-labelledby="faq-h">
           <div className="qs-wrap">
             <div className="qs-head center">
               <p className="qs-eyebrow">Before you install</p>

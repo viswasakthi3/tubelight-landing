@@ -34,6 +34,18 @@ const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://tubelight.net";
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: { default: "Tubelight", template: "%s | Tubelight" },
+  applicationName: "Tubelight",
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "default",
+    title: "Tubelight",
+  },
+  formatDetection: {
+    telephone: false,
+    date: false,
+    address: false,
+    email: false,
+  },
   robots: {
     index: true,
     follow: true,

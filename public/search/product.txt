@@ -1,9 +1,32 @@
 # Quick Search AI
 
-Quick Search AI is a Windows voice search app. Hold Tab + Q in any app, ask a question, and release the keys. A short answer appears with web sources and can be read aloud.
+> Quick Search AI is a native Windows desktop voice and screen search application developed by Tubelight. It allows users to hold Tab + Q anywhere across Windows to ask questions out loud, highlight words for instant explanation, or snip screen areas with Tab + S to receive concise, multi-source web answers with citations and audio narration without opening browser tabs.
 
-- [How to use voice, selected text, or a screen region](https://search.tubelight.net/#how)
-- [Free allowance](https://search.tubelight.net/#free): 50 searches per device per day. No account is required.
-- [Privacy and system requirements](https://search.tubelight.net/#faq)
-- [Download Quick Search AI for Windows](https://apps.microsoft.com/detail/9NFK7MS99FB3)
-- [Tubelight visual explainer](https://tubelight.net/): For illustrated explanations of selected text using Alt + E.
+## Core Capabilities
+- **Voice Search (Hold Tab + Q)**: Press and hold Tab + Q in any active window (browsers, IDEs, PDFs, games, office apps). Speak naturally, then release the keys. Quick Search answers instantly in a corner popup.
+- **Contextual Text Lookup (Select + Tab + Q)**: Highlight unfamiliar words, phrases, or code snippets and press Tab + Q to get immediate visual definitions and explanations without switching tabs.
+- **Screen Snip & OCR Search (Tab + S)**: Box any region of your display (error dialogs, charts, diagrams) to ask questions about it or extract text via local on-device OCR.
+- **Sourced Answers with Citations**: Answers synthesize real-time web results with direct source chips (e.g. Wikipedia, NASA, official docs) and photographic evidence.
+- **Text-to-Speech Narration**: Answers are automatically or optionally read aloud with synchronized text-to-speech.
+
+## Free Allowance & Pricing
+- **Daily Quota**: 50 free searches per device every 24 hours. Quota refreshes automatically at midnight.
+- **Zero Friction**: No account, no email sign-up, no credit card required.
+- **Local OCR**: Copying text out of screen captures with Tab + S runs locally on your PC and does not consume search quota.
+
+## System Requirements & Download
+- **Operating System**: Windows 10 (build 19041+) and Windows 11 (64-bit).
+- **Distribution**: Available free on the official Microsoft Store: https://apps.microsoft.com/detail/9NFK7MS99FB3
+
+## Privacy & Security Architecture
+- **Microphone**: Listens only while holding Tab + Q; stops immediately upon key release. No background ambient listening.
+- **History**: Search history is stored exclusively on the user's local PC and can be cleared at any time in Settings.
+- **Tab Key**: Normal Tab key behavior, Alt+Tab, Ctrl+Tab, and Shift+Tab are completely unaffected. Quick Search activates only when Tab is held simultaneously with Q or S.
+
+## Navigation Links
+- [Interactive Web Preview & Film](https://search.tubelight.net/#top)
+- [How It Works: Three Ways to Ask](https://search.tubelight.net/#how)
+- [Visual Tour & Feature Screenshots](https://search.tubelight.net/#shots)
+- [Free Allowance Details](https://search.tubelight.net/#free)
+- [Frequently Asked Questions](https://search.tubelight.net/#faq)
+- [Tubelight AI Visual Explainer](https://tubelight.net/): Sister application for deep visual explanations using Alt + E.
