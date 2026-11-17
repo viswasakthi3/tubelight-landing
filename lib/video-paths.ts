@@ -22,6 +22,8 @@ export type VideoInfo = {
   beats: Beat[];
   poster: string;
   thumb: string;
+  /** Art-directed landing example, rather than an unedited saved app explanation. */
+  curated?: boolean;
 };
 
 export type VideoMap = Record<string, VideoInfo>;

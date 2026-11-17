@@ -26,3 +26,4 @@ credentials*.json
 secrets/
 .history/
 .lh/
+.media-work/

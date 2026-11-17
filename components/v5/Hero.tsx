@@ -11,18 +11,18 @@ import { Seek } from "./Seek";
 import { useWaitlist } from "./WaitlistContext";
 
 const HERO = [
-  { slug: "rocket", label: "Rockets", color: "#FF6F4F", app: "Rockets.pdf", kicker: "Physics · Chapter 4", title: "How rockets fly",
+  { slug: "hero-rocket", label: "Rockets", color: "#FF6F4F", app: "Rockets.pdf", kicker: "Physics · Chapter 4", title: "How rockets fly",
     lead: "A rocket carries everything it needs to burn, because there is no air in space.",
     sel: "Liquid fuel and liquid oxygen are pumped into the combustion chamber, where they burn and rush out through the nozzle.", tail: "The hot gas going down pushes the rocket up.",
-    typed: "how rocket engine works" },
-  { slug: "headaches", label: "Headaches", color: "#22B573", app: "Health article", kicker: "Wellbeing", title: "Small habits, better weeks",
-    lead: "Keep a bottle of water on your desk and take a short walk after lunch.",
+    typed: "How do rockets work in empty space?" },
+  { slug: "hero-headaches", label: "Headaches", color: "#22B573", app: "Health article", kicker: "How the body works", title: "Where headaches begin",
+    lead: "The brain processes pain, but brain tissue itself has no pain sensors.",
     sel: "Why do headaches happen if the brain itself can’t feel pain?", tail: "The answer is in the layers around it.",
-    typed: "why headaches happen" },
-  { slug: "dna", label: "DNA", color: "#3B8EF0", app: "Biology notes.docx", kicker: "Biology · Unit 3", title: "Genetics",
-    lead: "Every living cell carries a full set of instructions for life.",
-    sel: "DNA is built from nucleotides that pair up and twist into a double helix.", tail: "Its base pairs spell out the genetic code.",
-    typed: "teach me about dna and its fasinating details" },
+    typed: "If the brain can’t feel pain, why do headaches hurt?" },
+  { slug: "hero-black-holes", label: "Black holes", color: "#D79A32", app: "Space notes.docx", kicker: "Astronomy", title: "A bright ring around darkness",
+    lead: "A feeding black hole can be surrounded by a disk of hot, glowing gas.",
+    sel: "Why is there a bright ring around a black hole?", tail: "Follow the gas, then follow its light.",
+    typed: "Why is there a bright ring around a black hole?" },
 ];
 
 type Mode = "idle" | "playing" | "done";
@@ -674,6 +674,7 @@ export function Hero() {
               </button>
             ))}
           </div>
+          <p className="micro" style={{ margin: "10px 0 0", color: "#6F6B86" }}>Curated examples · 3 pictures with narration · the ring follows what’s being explained</p>
         </div>
       </div>
     </section>

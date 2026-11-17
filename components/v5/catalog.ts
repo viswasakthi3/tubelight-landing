@@ -14,6 +14,9 @@ export const GALLERY: GalleryItem[] = [
 
 /* other ready-made videos that search can find (they play from the features section) */
 export const MORE: { slug: string; kw: string }[] = [
+  { slug: "hero-rocket", kw: "rocket rockets engine engines space vacuum fuel oxygen thrust nozzle launch physics" },
+  { slug: "hero-headaches", kw: "headache headaches brain pain lining nerves head health" },
+  { slug: "hero-black-holes", kw: "black hole holes shadow bright ring gas disk disc gravity lensing light space astronomy" },
   { slug: "dna", kw: "dna genetics nucleotide nucleotides double helix genetic code" },
   { slug: "kidneys", kw: "kidney kidneys blood filter urine nephron bladder body medical" },
   { slug: "zombie-cells", kw: "zombie senescent cell cells ageing aging inflammation medical" },

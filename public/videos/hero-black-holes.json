@@ -1,0 +1,221 @@
+{
+  "slug": "hero-black-holes",
+  "title": "Why is there a bright ring around a black hole?",
+  "duration": 27.467,
+  "curated": true,
+  "typed": "Why is there a bright ring around a black hole?",
+  "cues": [
+    {
+      "start": 0,
+      "end": 1.82,
+      "text": "A black hole traps light."
+    },
+    {
+      "start": 1.785,
+      "end": 4.98,
+      "text": "So why is this one surrounded by a bright ring?"
+    },
+    {
+      "start": 4.945,
+      "end": 7.26,
+      "text": "We’re seeing glowing gas outside it,"
+    },
+    {
+      "start": 7.225,
+      "end": 8.35,
+      "text": "around a dark shadow."
+    },
+    {
+      "start": 8.805,
+      "end": 12.02,
+      "text": "From above, the gas forms a flat, swirling disk."
+    },
+    {
+      "start": 11.985,
+      "end": 14.8,
+      "text": "As it moves inward, it heats up and glows."
+    },
+    {
+      "start": 14.765,
+      "end": 16.83,
+      "text": "The gas gives us the light we can see."
+    },
+    {
+      "start": 17.385,
+      "end": 19.32,
+      "text": "Now follow the light."
+    },
+    {
+      "start": 19.285,
+      "end": 21.86,
+      "text": "Gravity bends its path around the black hole."
+    },
+    {
+      "start": 21.825,
+      "end": 24.1,
+      "text": "Light from the far side can reach our eyes,"
+    },
+    {
+      "start": 24.065,
+      "end": 25.48,
+      "text": "making the disk appear to curve"
+    },
+    {
+      "start": 25.445,
+      "end": 27.19,
+      "text": "above and below the shadow."
+    }
+  ],
+  "sheets": [
+    {
+      "index": 0,
+      "title": "The light comes from outside",
+      "src": "/videos/hero-black-holes/p0.webp",
+      "thumb": "/videos/hero-black-holes/p0-s.webp",
+      "start": 0,
+      "end": 8.667,
+      "walk": true,
+      "pw": 1
+    },
+    {
+      "index": 1,
+      "title": "The gas forms a hot disk",
+      "src": "/videos/hero-black-holes/p1.webp",
+      "thumb": "/videos/hero-black-holes/p1-s.webp",
+      "start": 8.667,
+      "end": 17.233,
+      "walk": true,
+      "pw": 1
+    },
+    {
+      "index": 2,
+      "title": "Gravity bends the view",
+      "src": "/videos/hero-black-holes/p2.webp",
+      "thumb": "/videos/hero-black-holes/p2-s.webp",
+      "start": 17.233,
+      "end": 27.467,
+      "walk": true,
+      "pw": 1
+    }
+  ],
+  "beats": [
+    {
+      "start": 0,
+      "end": 1.785,
+      "sheet": 0,
+      "ptr": {
+        "x": 0.5,
+        "y": 0.45
+      }
+    },
+    {
+      "start": 1.785,
+      "end": 4.945,
+      "sheet": 0,
+      "ptr": {
+        "x": 0.5,
+        "y": 0.23
+      }
+    },
+    {
+      "start": 4.945,
+      "end": 7.225,
+      "sheet": 0,
+      "ptr": {
+        "x": 0.8,
+        "y": 0.6
+      }
+    },
+    {
+      "start": 7.225,
+      "end": 8.667,
+      "sheet": 0,
+      "ptr": {
+        "x": 0.5,
+        "y": 0.45
+      }
+    },
+    {
+      "start": 8.667,
+      "end": 11.985,
+      "sheet": 1,
+      "ptr": {
+        "x": 0.55,
+        "y": 0.6
+      }
+    },
+    {
+      "start": 11.985,
+      "end": 14.765,
+      "sheet": 1,
+      "ptr": {
+        "x": 0.66,
+        "y": 0.42
+      }
+    },
+    {
+      "start": 14.765,
+      "end": 17.233,
+      "sheet": 1,
+      "ptr": {
+        "x": 0.61,
+        "y": 0.48
+      }
+    },
+    {
+      "start": 17.233,
+      "end": 19.285,
+      "sheet": 2,
+      "ptr": {
+        "x": 0.14,
+        "y": 0.49
+      }
+    },
+    {
+      "start": 19.285,
+      "end": 21.825,
+      "sheet": 2,
+      "ptr": {
+        "x": 0.45,
+        "y": 0.25
+      }
+    },
+    {
+      "start": 21.825,
+      "end": 24.065,
+      "sheet": 2,
+      "ptr": {
+        "x": 0.9,
+        "y": 0.48
+      }
+    },
+    {
+      "start": 24.065,
+      "end": 25.445,
+      "sheet": 2,
+      "ptr": {
+        "x": 0.4,
+        "y": 0.3
+      }
+    },
+    {
+      "start": 25.445,
+      "end": 27.467,
+      "sheet": 2,
+      "ptr": {
+        "x": 0.4,
+        "y": 0.69
+      }
+    }
+  ],
+  "provenance": {
+    "images": "ChatGPT image_gen",
+    "speechProvider": "Google Vertex AI",
+    "model": "gemini-3.8-flash-tts",
+    "voice": "Aoede",
+    "style": "Warm, clear adult female voice explaining something to one curious person beside you. Natural conversational English, friendly and lightly smiling, with a clear smooth tone. Around 160 words per minute. Gentle curiosity on a question, relaxed confidence on its answer. Connect words fluidly. Brief natural pauses between ideas; a slightly longer pause between paragraphs. No sales-announcer delivery, exaggerated breathiness, vocal fry, theatrical amazement or sing-song rhythm. Read only the supplied transcript, with no introduction or added words.",
+    "transcript": "A black hole traps light. So why is this one surrounded by a bright ring? We’re seeing glowing gas outside it, around a dark shadow.\n\nFrom above, the gas forms a flat, swirling disk. As it moves inward, it heats up and glows. The gas gives us the light we can see.\n\nNow follow the light. Gravity bends its path around the black hole. Light from the far side can reach our eyes, making the disk appear to curve above and below the shadow.",
+    "alignment": "Local Whisper word timestamps matched to approved script",
+    "wordCoverage": 1
+  }
+}

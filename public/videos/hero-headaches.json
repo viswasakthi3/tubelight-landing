@@ -1,0 +1,230 @@
+{
+  "slug": "hero-headaches",
+  "title": "If the brain can’t feel pain, why do headaches hurt?",
+  "duration": 24.333,
+  "curated": true,
+  "typed": "If the brain can’t feel pain, why do headaches hurt?",
+  "cues": [
+    {
+      "start": 0,
+      "end": 1.68,
+      "text": "Your brain helps you feel pain."
+    },
+    {
+      "start": 1.645,
+      "end": 4.78,
+      "text": "But brain tissue itself has no pain sensors."
+    },
+    {
+      "start": 4.745,
+      "end": 6.83,
+      "text": "The lining and nerves around it are different."
+    },
+    {
+      "start": 7.225,
+      "end": 8.4,
+      "text": "Look closer at the lining."
+    },
+    {
+      "start": 8.365,
+      "end": 10.64,
+      "text": "It has pain-sensitive nerve endings."
+    },
+    {
+      "start": 10.605,
+      "end": 11.84,
+      "text": "When these nerves are activated,"
+    },
+    {
+      "start": 11.805,
+      "end": 13.71,
+      "text": "they send a message toward the brain."
+    },
+    {
+      "start": 14.165,
+      "end": 15.58,
+      "text": "The message reaches your brain,"
+    },
+    {
+      "start": 15.545,
+      "end": 17.66,
+      "text": "which processes it as pain."
+    },
+    {
+      "start": 17.625,
+      "end": 20.18,
+      "text": "That’s why a headache can feel deep inside your head,"
+    },
+    {
+      "start": 20.145,
+      "end": 22.86,
+      "text": "even when the signal started in nearby tissue."
+    },
+    {
+      "start": 22.825,
+      "end": 24.11,
+      "text": "Different headaches have different causes."
+    }
+  ],
+  "sheets": [
+    {
+      "index": 0,
+      "title": "Look around the brain",
+      "src": "/videos/hero-headaches/p0.webp",
+      "thumb": "/videos/hero-headaches/p0-s.webp",
+      "start": 0,
+      "end": 7.067,
+      "walk": true,
+      "pw": 1
+    },
+    {
+      "index": 1,
+      "title": "A nerve sends a message",
+      "src": "/videos/hero-headaches/p1.webp",
+      "thumb": "/videos/hero-headaches/p1-s.webp",
+      "start": 7.067,
+      "end": 14.033,
+      "walk": true,
+      "pw": 1
+    },
+    {
+      "index": 2,
+      "title": "The brain processes it",
+      "src": "/videos/hero-headaches/p2.webp",
+      "thumb": "/videos/hero-headaches/p2-s.webp",
+      "start": 14.033,
+      "end": 24.333,
+      "walk": true,
+      "pw": 1
+    }
+  ],
+  "beats": [
+    {
+      "start": 0,
+      "end": 1.645,
+      "sheet": 0,
+      "ptr": {
+        "x": 0.56,
+        "y": 0.4
+      }
+    },
+    {
+      "start": 1.645,
+      "end": 4.745,
+      "sheet": 0,
+      "ptr": {
+        "x": 0.56,
+        "y": 0.4
+      }
+    },
+    {
+      "start": 4.745,
+      "end": 5.4,
+      "sheet": 0,
+      "ptr": {
+        "x": 0.28,
+        "y": 0.43
+      }
+    },
+    {
+      "start": 5.4,
+      "end": 7.067,
+      "sheet": 0,
+      "ptr": {
+        "x": 0.3,
+        "y": 0.55
+      }
+    },
+    {
+      "start": 7.067,
+      "end": 8.365,
+      "sheet": 1,
+      "ptr": {
+        "x": 0.25,
+        "y": 0.36
+      }
+    },
+    {
+      "start": 8.365,
+      "end": 10.605,
+      "sheet": 1,
+      "ptr": {
+        "x": 0.33,
+        "y": 0.4
+      }
+    },
+    {
+      "start": 10.605,
+      "end": 11.805,
+      "sheet": 1,
+      "ptr": {
+        "x": 0.33,
+        "y": 0.4
+      }
+    },
+    {
+      "start": 11.805,
+      "end": 14.033,
+      "sheet": 1,
+      "ptr": {
+        "x": 0.7,
+        "y": 0.53
+      }
+    },
+    {
+      "start": 14.033,
+      "end": 15.545,
+      "sheet": 2,
+      "ptr": {
+        "x": 0.36,
+        "y": 0.7
+      }
+    },
+    {
+      "start": 15.545,
+      "end": 17.625,
+      "sheet": 2,
+      "ptr": {
+        "x": 0.73,
+        "y": 0.4
+      }
+    },
+    {
+      "start": 17.625,
+      "end": 20.145,
+      "sheet": 2,
+      "ptr": {
+        "x": 0.73,
+        "y": 0.4
+      }
+    },
+    {
+      "start": 20.145,
+      "end": 22.825,
+      "sheet": 2,
+      "ptr": {
+        "x": 0.12,
+        "y": 0.6
+      }
+    },
+    {
+      "start": 22.825,
+      "end": 24.333,
+      "sheet": 2,
+      "ptr": {
+        "x": 0.73,
+        "y": 0.4
+      }
+    }
+  ],
+  "provenance": {
+    "images": "ChatGPT image_gen",
+    "speechProvider": "Google Vertex AI",
+    "model": "gemini-3.8-flash-tts",
+    "voice": "Aoede",
+    "style": "Warm, clear adult female voice explaining something to one curious person beside you. Natural conversational English, friendly and lightly smiling, with a clear smooth tone. Around 160 words per minute. Gentle curiosity on a question, relaxed confidence on its answer. Connect words fluidly. Brief natural pauses between ideas; a slightly longer pause between paragraphs. No sales-announcer delivery, exaggerated breathiness, vocal fry, theatrical amazement or sing-song rhythm. Read only the supplied transcript, with no introduction or added words.",
+    "transcript": "Your brain helps you feel pain. But brain tissue itself has no pain sensors. The lining and nerves around it are different.\n\nLook closer at the lining. It has pain-sensitive nerve endings. When these nerves are activated, they send a message toward the brain.\n\nThe message reaches your brain, which processes it as pain. That’s why a headache can feel deep inside your head, even when the signal started in nearby tissue. Different headaches have different causes.",
+    "alignment": "Local Whisper word timestamps matched to approved script",
+    "wordCoverage": 0.987012987012987
+  }
+}

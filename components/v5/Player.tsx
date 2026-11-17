@@ -31,6 +31,7 @@ const IC_SOUND_ON = "M15.5 8.5a5 5 0 0 1 0 7M19 5a10 10 0 0 1 0 14";
 const IC_SOUND_OFF = "M16 9l5 6M21 9l-5 6";
 
 const FOOT_VIDEO = "Unedited output from the Windows app.  Space play/pause · ← → pictures · C captions · F full screen";
+const FOOT_CURATED = "Curated example.  Space play/pause · ← → pictures · C captions · F full screen";
 const FOOT_LIVE = "Your topic is sent to our servers to make the video. It’s made by AI — if something looks off, ask a follow-up in the app.";
 
 export default function Player({ source, videos, onClose }: { source: PlayerSource; videos: VideoMap; onClose: () => void }) {
@@ -488,7 +489,7 @@ function VideoPlayer({ video, t0, onClose }: { video: VideoInfo; t0: number; onC
       onClose={onClose}
       title={video.title}
       run={mmss(dur)}
-      made="Made by Tubelight"
+      made={video.curated ? "Curated example" : "Made by Tubelight"}
       stage={stage}
       tall={ended}
       canSeek
@@ -504,7 +505,7 @@ function VideoPlayer({ video, t0, onClose }: { video: VideoInfo; t0: number; onC
       clock={mmss(t) + " / " + mmss(dur)}
       slides={slides}
       badge={sheets.length + " slides"}
-      foot={FOOT_VIDEO}
+      foot={video.curated ? FOOT_CURATED : FOOT_VIDEO}
     />
   );
 }
