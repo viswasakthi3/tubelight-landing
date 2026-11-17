@@ -1,9 +1,38 @@
-﻿Dockerfile
-.dockerignore
-node_modules
-.next
+﻿# VCS & Docker
 .git
 .gitignore
-.env*.local
+Dockerfile*
+.dockerignore
+
+# Secrets and credentials per SECURITY.md
+.env
+.env.*
+!.env.example
+*.env
+*.pem
+*.key
+*.pfx
+*.p12
+*service-account*.json
+credentials*.json
+secrets/
+
+# Build caches & local dev artifacts
+node_modules
+.next
+.next-dev
+.media-work
 *.log
-README.md
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.turbo
+
+# Local scratch and runtime data
+data/*.json
+!data/README.md
+scratch/
+.history/
+.lh/
+.DS_Store
+Thumbs.db

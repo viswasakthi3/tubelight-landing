@@ -164,8 +164,9 @@ export function WaitlistDialog() {
             </h2>
             <p className="posbox" aria-live="polite">Your invite priority <strong>{fmt(w.points)} points</strong></p>
             <p style={{ margin: 0, color: "#57536E" }}>
-              We’ll email <strong style={{ color: "#221E3F", fontWeight: 600, overflowWrap: "anywhere" }}>{emailShown}</strong> as soon as your invite is ready.
+              Your place is saved for <strong style={{ color: "#221E3F", fontWeight: 600, overflowWrap: "anywhere" }}>{emailShown}</strong>. Continue in the Windows app to make more videos.
             </p>
+            <a href="/download" className="btn" style={{ width: "100%", textAlign: "center", textDecoration: "none" }}>Try Tubelight for Windows</a>
             <InviteFriends />
             <div style={{ width: "100%", display: "flex", flexDirection: "column", gap: 10, padding: 20, borderRadius: 20, background: "#F6F3FB" }}>
               <p style={{ margin: 0, fontSize: 13, fontWeight: 600, letterSpacing: "0.12em", textTransform: "uppercase", color: "#6F6B86" }}>While you wait</p>

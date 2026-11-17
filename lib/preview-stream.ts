@@ -2,7 +2,16 @@
 
 export type PreviewBeat = { say: string; sheet: number };
 export type PreviewSheet = { index: number; title: string };
-export type PreviewErrorCode = "limit_ip" | "limit_day" | "busy" | "disabled" | "bad_topic" | "network";
+export type PreviewErrorCode =
+  | "limit_identity"
+  | "limit_ip"
+  | "limit_day"
+  | "busy"
+  | "disabled"
+  | "bad_topic"
+  | "bad_email"
+  | "preview_unavailable"
+  | "network";
 
 export type PreviewEvent =
   | { type: "plan"; title: string; beats: PreviewBeat[]; sheets: PreviewSheet[] }
@@ -13,7 +22,7 @@ export type PreviewEvent =
   | { type: "done" }
   | { type: "error"; code: PreviewErrorCode };
 
-export type PreviewStatus = "starting" | "planning" | "drawing" | "voicing" | "ready" | "error";
+export type PreviewStatus = "starting" | "planning" | "drawing" | "voicing" | "saving" | "ready" | "error";
 
 export type PreviewState = {
   status: PreviewStatus;
@@ -54,7 +63,7 @@ function progress(s: PreviewState): PreviewState {
   if (s.status === "ready" || s.status === "error" || s.sheets.length === 0) return s;
   if (s.imagesReady < s.sheets.length) return { ...s, status: "drawing" };
   if (s.voicesReady < s.beats.length) return { ...s, status: "voicing" };
-  return { ...s, status: "ready" };
+  return { ...s, status: "saving" };
 }
 
 export function reducePreview(state: PreviewState, event: PreviewEvent): PreviewState {
@@ -120,15 +129,34 @@ export function previewStageText(state: PreviewState): string {
       return "Recording the voice…";
     case "ready":
       return "Ready";
+    case "saving":
+      return "Saving your video…";
   }
 }
 
-const HTTP_CODES: Record<number, PreviewErrorCode> = { 503: "disabled", 400: "bad_topic" };
+const HTTP_CODES: Record<number, PreviewErrorCode> = {
+  503: "preview_unavailable",
+  409: "preview_unavailable",
+  400: "bad_topic",
+  403: "preview_unavailable",
+};
 
 async function codeFromResponse(res: Response): Promise<PreviewErrorCode> {
   if (res.status === 429) {
     const body = (await res.json().catch(() => null)) as { scope?: string } | null;
-    return body?.scope === "ip" ? "limit_ip" : body?.scope === "day" ? "limit_day" : "busy";
+    if (body?.scope === "identity") return "limit_identity";
+    if (body?.scope === "ip") return "limit_ip";
+    if (body?.scope === "day") return "limit_day";
+    if (body?.scope === "busy") return "busy";
+    return "limit_identity";
+  }
+  if (res.status === 409 || res.status === 503) {
+    return "preview_unavailable";
+  }
+  if (res.status === 400) {
+    const body = (await res.json().catch(() => null)) as { error?: string } | null;
+    if (body?.error === "bad_email") return "bad_email";
+    return "bad_topic";
   }
   return HTTP_CODES[res.status] ?? "network";
 }
@@ -157,24 +185,30 @@ function toEvent(frame: Record<string, unknown>): PreviewEvent | null {
     case "done":
       return { type: "done" };
     case "error":
-      return { type: "error", code: "network" };
+      return { type: "error", code: frame.code === "preview_unavailable" ? "preview_unavailable" : "network" };
     default:
       return null; // notice, quota, focus and anything new
   }
 }
 
-/** POST the topic and emit events until the stream ends. Never throws; failures arrive as an "error" event. */
+/** POST the topic and email, and emit events until the stream ends. Never throws; failures arrive as an "error" event. */
 export async function startPreview(
   topic: string,
+  email: string,
   onEvent: (event: PreviewEvent) => void,
   signal?: AbortSignal,
 ): Promise<void> {
   let res: Response;
   try {
+    const bootstrap = await fetch("/api/preview", { method: "GET", cache: "no-store", signal });
+    if (!bootstrap.ok) {
+      if (!signal?.aborted) onEvent({ type: "error", code: await codeFromResponse(bootstrap) });
+      return;
+    }
     res = await fetch("/api/preview", {
       method: "POST",
       headers: { "content-type": "application/json" },
-      body: JSON.stringify({ topic }),
+      body: JSON.stringify({ topic, email }),
       signal,
     });
   } catch {

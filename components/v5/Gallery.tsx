@@ -17,7 +17,7 @@ export function Gallery() {
           <p className="lede">Search any topic and Tubelight makes a free preview video for you, right here. Or play an example below to see how a visual explanation works.</p>
         </div>
         <TopicSearch />
-        <p className="sfine">Free preview: one a day, about 20 seconds to make, and you’ll enter your email to watch it. Your topic is sent to our servers to make the video.</p>
+        <p className="sfine">Free preview: one free video per visitor, about 20 seconds to make, and you’ll enter your email to watch it. Your topic is sent to our servers to make the video.</p>
         <div className="gal">
           {GALLERY.map((g) => {
             const v = videos[g.slug];

@@ -5,7 +5,7 @@ export type GalleryItem = { slug: string; tag: string; bg: string; fg: string; t
 
 export const GALLERY: GalleryItem[] = [
   { slug: "refrigerator", tag: "Everyday science", bg: "#E4F5F6", fg: "#21666D", typed: "how a refrigerator keeps food cold", kw: "fridge refrigerator refrigeration cooling cold food heat refrigerant compressor condenser evaporator" },
-  { slug: "headaches", tag: "Health", bg: "#E3F6EC", fg: "#146B44", typed: "why headaches happen", kw: "headache headaches migraine brain pain head health" },
+  { slug: "kidneys", tag: "Health", bg: "#E3F6EC", fg: "#146B44", typed: "how your kidneys filter blood", kw: "kidney kidneys blood filter urine nephron bladder body medical" },
   { slug: "ocean", tag: "Geography", bg: "#E6F1FF", fg: "#1E5AA8", typed: "Ocean currents", kw: "ocean oceans current currents sea water coriolis climate geography" },
   { slug: "tv", tag: "Tech", bg: "#F1ECFF", fg: "#4B33B8", typed: "how does modern tv worsk so good and high in quality", kw: "tv television screen oled led pixels display picture tech" },
   { slug: "polar-bear", tag: "Nature", bg: "#FFF4D6", fg: "#8A5A00", typed: "life cycle of a polar bear", kw: "polar bear bears arctic animal animals cubs ice nature" },
@@ -18,7 +18,6 @@ export const MORE: { slug: string; kw: string }[] = [
   { slug: "hero-headaches", kw: "headache headaches brain pain lining nerves head health" },
   { slug: "hero-black-holes", kw: "black hole holes shadow bright ring gas disk disc gravity lensing light space astronomy" },
   { slug: "dna", kw: "dna genetics nucleotide nucleotides double helix genetic code" },
-  { slug: "kidneys", kw: "kidney kidneys blood filter urine nephron bladder body medical" },
   { slug: "zombie-cells", kw: "zombie senescent cell cells ageing aging inflammation medical" },
   { slug: "neurons", kw: "neuron neurons memory memories brain synapse learning" },
   { slug: "appendix", kw: "appendix gut bacteria intestine digestion body medical" },

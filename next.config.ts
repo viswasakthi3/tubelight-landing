@@ -9,5 +9,21 @@ export default function config(phase: string): NextConfig {
     reactStrictMode: true,
     output: "standalone",
     distDir: phase === PHASE_DEVELOPMENT_SERVER ? ".next-dev" : ".next",
+    // Relative beforeFiles rewrites stay inside Next even when nginx terminates
+    // HTTPS and the standalone server binds a different internal hostname.
+    async rewrites() {
+      const searchHost = {
+        type: "header" as const,
+        key: "x-forwarded-host",
+        value: "search\\.(?:tubelight\\.net|localhost)(?::[0-9]+)?",
+      };
+      return {
+        beforeFiles: [
+          { source: "/", has: [searchHost], destination: "/search" },
+          { source: "/llms.txt", has: [searchHost], destination: "/search/product.txt" },
+          { source: "/llms-full.txt", has: [searchHost], destination: "/search/product-full.txt" },
+        ],
+      };
+    },
   };
 }

@@ -1,95 +1,65 @@
-# Tubelight — landing page
+# Tubelight — Landing & Quick Search Website
 
-Beta-waitlist landing page for Tubelight, the Windows app that explains whatever you
-highlight. Next.js 15 (App Router) + React 19 + Tailwind v4 + Motion.
+Official marketing site, Quick Search portal, and waitlist for Tubelight, the Windows desktop AI explainer. Next.js 15.5.29 (App Router) + React 19 + Tailwind v4 + Motion.
 
 ```bash
 npm install
-npm run dev      # http://localhost:3000
+npm run dev        # http://localhost:3005
+npm run build      # Production Next.js build
+npm start          # Local production preview on 3005; Docker runs standalone on 8097
 ```
 
-```bash
-npm run build && npm start
-```
+---
 
-## Collecting emails
+## Architecture & Production Domains
 
-The page has two signup forms (hero and the beta CTA, which also asks an optional
-role). Both POST to `app/api/waitlist/route.ts`, which:
+* **`https://tubelight.net/`**: Main marketing landing page and explainer player.
+* **`https://tubelight.net/search`**: Quick Search AI for Windows directly on the apex domain, preserving query strings (`?q=...`), meta tags, and structured data.
+* **`https://search.tubelight.net/`**: Dedicated Quick Search AI portal (`/` maps internally to `/search` through `next.config.ts`).
 
-- validates the address and rejects obvious junk,
-- drops bot submissions via a hidden `company` honeypot field,
-- rate-limits to 5 requests per minute per IP (in-memory, resets on redeploy),
-- appends the signup to `data/waitlist.json` (gitignored),
-- forwards it to a webhook and/or emails you, if configured.
+For full operations, infrastructure, Nginx reverse proxy configuration, and deployment runbooks, see [docs/OPERATIONS.md](docs/OPERATIONS.md).
 
-Copy `.env.example` to `.env.local` and fill in whichever you want:
+---
 
-| Variable | What it does |
-| --- | --- |
-| `WAITLIST_WEBHOOK_URL` | POSTs `{email, role, source, createdAt}` to Zapier/Make/Slack/your CRM |
-| `RESEND_API_KEY` + `WAITLIST_NOTIFY_TO` | Emails you on every signup via [Resend](https://resend.com) |
-| `WAITLIST_NOTIFY_FROM` | From-address for that email (must be a verified Resend domain) |
-| `NEXT_PUBLIC_SITE_URL` | Canonical URL used for OG/Twitter metadata |
+## Free Video Previews: Quota & Security Model
 
-**Deploying to Vercel/Netlify:** the filesystem is read-only there, so
-`data/waitlist.json` silently no-ops and the webhook (or Resend) becomes your only
-record. Set at least one of them before going live.
+Visitors to `tubelight.net` can request one free generated video preview for any topic.
 
-To read the local list:
+1. **Email-First Gating**: A valid email must be submitted before generation starts. The email is durably registered in the PostgreSQL `tubelight_waitlist` table.
+2. **Cryptographic Owner Cookie & Bootstrap**: A signed HttpOnly cookie (`tb_owner`) binds the preview to the visitor's browser session. A bootstrap `GET /api/preview` call mints or verifies this cookie before any generation begins; subsequent `POST /api/preview` calls missing a valid cookie are rejected with HTTP 403. The browser cannot spoof or inject its own `ownerId`.
+3. **Durable Quota Enforcement**: Backend checks lifetime uniqueness per email and per browser owner. One generation is permitted per observable visitor identity across restarts and UTC midnight.
+4. **Instant Replay**: Re-requesting the exact same topic with the matching owner and email streams cached frames from PostgreSQL without invoking Vertex AI / Deepgram. No cross-visitor or cross-owner topic cache exists (different visitors requesting the same topic generate independent runs).
+5. **Second-Topic Limits**: Subsequent requests on new topics return HTTP 429 (`scope: "identity"`). The UI collects waitlist survey answers and directs visitors to download the desktop Windows application.
+6. **No Mailbox Ownership Claims**: Email addresses are collected as submitted abuse signals. Because no email delivery service is configured, the UI does not claim mailbox verification or promise OTP/sent links.
 
-```bash
-cat data/waitlist.json
-```
+---
 
-## Structure
+## Environment Configuration
 
-```
-app/
-  layout.tsx           fonts (Fraunces + Inter), metadata, no-JS reveal fallback
-  page.tsx             section order
-  globals.css          design tokens, paper grain, keycaps, demo-stage grid
-  api/waitlist/route.ts
-components/
-  Hero.tsx             headline, hero form, real product screenshot
-  HowItWorks.tsx       three steps, kept in sync with the animation
-  AltEDemo.tsx         the looping select → Alt+E → panel → drawn diagram demo
-  NightBand.tsx        dark section for the dark product shots
-  Features.tsx         bento of real screenshots, one tint per card
-  BetaCTA.tsx          main signup with optional role chips
-  Faq.tsx  Footer.tsx  Nav.tsx  WaitlistForm.tsx  Reveal.tsx  LiveWaveform.tsx
-lib/
-  waitlist.ts          storage + forwarding
-  useInViewport.ts     scroll-reveal trigger
-public/
-  brand/               logo, mark, icons
-  shots/               cropped product screenshots
-```
+Configuration values are stored in `.env` / `.env.local` (`chmod 600`, git-ignored). Commit template placeholders only in `.env.example`.
 
-## Design notes
+| Variable | Description |
+| :--- | :--- |
+| `DATABASE_URL` | PostgreSQL connection string (`time_to_understand`) |
+| `PORT` | Container HTTP bind port (default `8097`) |
+| `NEXT_PUBLIC_SITE_URL` | Public canonical site URL (`https://tubelight.net`) |
+| `T2U_API_URL` | Upstream backend API base URL (`https://tubelight.net` or shared Docker network) |
+| `WEB_EXPLAIN_SECRET` | Shared secret with backend (>= 32 characters, matching backend) |
+| `OWNER_COOKIE_SECRET` | Dedicated secret for signing `tb_owner` cookies |
+| `WAITLIST_SECRET` | Secret for signing waitlist referral tokens |
+| `RAZORPAY_KEY_ID` | Razorpay payment key identifier |
+| `RAZORPAY_KEY_SECRET` | Razorpay payment key secret |
+| `RAZORPAY_PLAN_ID` | Pro subscription plan ID |
+| `RAZORPAY_MAX_PLAN_ID`| Max subscription plan ID |
+| `MAX_CREDITS` | Credit allowance for Max tier |
+| `MAX_PRICE_PAISE` | Pricing in paise for Max tier |
 
-- **Warm paper, not white.** The palette is built on `--color-paper` (#fbf8f3) and
-  warm ink, with violet as the accent and amber (`--color-filament`) as its warm
-  counterweight, so the page never reads as flat white-and-purple.
-- **Real screenshots.** Every feature card uses actual app output cropped from
-  `time2understand/windows_store_assets` and `store_screenshots` — the colourful
-  generated slides do most of the work of breaking up the palette.
-- **Section rhythm.** Paper → paper → full-width night band → paper → warm CTA. The
-  dark band exists so the dark product shots sit in their native environment.
-- **One real animation.** `AltEDemo` plays the actual product gesture (highlight →
-  keycaps → panel slides in → SVG diagram draws while the waveform runs) and drives
-  the step list beside it. Everything respects `prefers-reduced-motion`.
-- **Reveals can't blank the page.** `useInViewport` uses a throttled rect check
-  rather than IntersectionObserver/rAF (both can stall in an iframe or an offscreen
-  frame and leave content stuck at `opacity: 0`), and a `<noscript>` rule forces
-  everything visible when JS is off.
+---
 
-## Assets
+## Security Practices
 
-Screenshots were cropped from the Time2Understand store assets. To regenerate them,
-re-crop from `D:/projects/time2understand/windows_store_assets` — the arrow overlay
-in the topic-explorer shot is painted out before cropping.
+* **No Secrets in Git or Images**: Verified via `.dockerignore` and `.gitignore`.
+* **Dependency Audit**: Check the actual release tree with `npm audit --omit=dev`; do not infer the running backend's audit from this separate landing project.
+* **Reverse Proxy Trust**: The nginx template trusts official Cloudflare CIDRs, overwrites spoofable headers, and clears incoming `CF-Connecting-IP` before forwarding.
 
-### Local topic previews
-
-When `T2U_API_URL` points to localhost, run `npm run dev:preview` alongside `npm run dev` to generate videos for custom topics. This uses the backend checkout at `../time2understand/t2u_backend` (override with `T2U_BACKEND_DIR`), its installed dependencies and provider credentials, and the landing project's `WEB_EXPLAIN_SECRET`. Saved topic searches play directly from the bundled videos.
+The second example below the topic search is the existing kidney video; the hero retains its headache example. Run `node scripts/test-preview-security.cjs` for the API/client security checks, and `node scripts/check-site.mjs <origin>` for read-only page, route, and asset checks.

@@ -108,11 +108,18 @@ export async function saveSignup(signup: Signup, ref: string | null = null) {
       const duplicate = !inserted.rowCount;
       let referralCode: string = code;
       if (duplicate) {
+        const hasAnswers = signup.answers && Object.keys(signup.answers).length > 0;
+        const answersJson = JSON.stringify(signup.answers ?? {});
         const existing = await client.query(
-          "UPDATE tubelight_waitlist SET referral_code = COALESCE(referral_code, $2) WHERE email = $1 RETURNING referral_code",
-          [signup.email, code],
+          `UPDATE tubelight_waitlist
+             SET referral_code = COALESCE(referral_code, $2),
+                 role = COALESCE($3, role),
+                 answers = CASE WHEN $4 THEN answers || $5::jsonb ELSE answers END
+           WHERE email = $1
+           RETURNING referral_code`,
+          [signup.email, code, signup.role ?? null, Boolean(hasAnswers), answersJson],
         );
-        referralCode = existing.rows[0].referral_code;
+        referralCode = existing.rows[0]?.referral_code ?? code;
       } else if (ref) {
         await client.query(
           "UPDATE tubelight_waitlist SET referrals = referrals + 1, boost = boost + $1 WHERE referral_code = $2 AND email <> $3",
@@ -133,9 +140,17 @@ export async function saveSignup(signup: Signup, ref: string | null = null) {
   return fileMutation(async () => {
     const all = await readAll();
     const existing = all.find((s) => s.email === signup.email);
-    const member = existing ?? signup;
-    member.referralCode ??= code;
-    if (!existing) {
+    let member: Signup;
+    if (existing) {
+      existing.referralCode ??= code;
+      if (signup.role) existing.role = signup.role;
+      if (signup.answers && Object.keys(signup.answers).length > 0) {
+        existing.answers = { ...(existing.answers ?? {}), ...signup.answers };
+      }
+      member = existing;
+    } else {
+      member = signup;
+      member.referralCode ??= code;
       const inviter = ref && all.find((s) => s.referralCode === ref);
       if (inviter) {
         inviter.referrals = (inviter.referrals ?? 0) + 1;

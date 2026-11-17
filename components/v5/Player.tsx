@@ -517,24 +517,81 @@ const liveReducer = (s: PreviewState, a: LiveAction) => (a === "reset" ? initial
 
 const short = (s: string) => (s.length > 80 ? s.slice(0, 79) + "…" : s);
 
-function errorCopy(code: PreviewErrorCode, topic: string, joined: boolean): { text: string; form: boolean; retry: boolean } {
+function errorCopy(code: PreviewErrorCode, topic: string, joined: boolean): {
+  text: string;
+  sub?: string;
+  form: boolean;
+  retry: boolean;
+  ctaDownload: boolean;
+  ctaQuestions: boolean;
+} {
   const saved = `“${short(topic)}”`;
   switch (code) {
+    case "limit_identity":
+      return {
+        text: "You’ve used your free preview video.",
+        sub: "To make more videos, tell us how you’ll use Tubelight and continue in the Windows app.",
+        form: false,
+        retry: false,
+        ctaDownload: false,
+        ctaQuestions: true,
+      };
     case "limit_ip":
-      return joined
-        ? { text: "You’ve used today’s free preview. Come back tomorrow for another — you’re already on the waitlist.", form: false, retry: false }
-        : { text: `You’ve used today’s free preview. Join the waitlist and we’ll save ${saved} with your spot.`, form: true, retry: false };
+      return {
+        text: "This network has reached its free preview limit.",
+        sub: "You can still tell us how you’ll use Tubelight and try the Windows app.",
+        form: false,
+        retry: false,
+        ctaDownload: false,
+        ctaQuestions: true,
+      };
     case "limit_day":
     case "busy":
-      return { text: "Lots of people are trying Tubelight right now. Try again in a minute.", form: false, retry: true };
+      return {
+        text: "Lots of people are creating videos right now.",
+        sub: "Please try again in a minute.",
+        form: false,
+        retry: true,
+        ctaDownload: false,
+        ctaQuestions: false,
+      };
+    case "preview_unavailable":
     case "disabled":
-      return joined
-        ? { text: "Live previews are paused right now. You’re already on the waitlist, so you won’t miss your invite.", form: false, retry: false }
-        : { text: `Live previews are paused right now. Join the waitlist and we’ll save ${saved} with your spot.`, form: true, retry: false };
+      return {
+        text: "Live previews are paused right now.",
+        sub: joined ? "You’re already on the waitlist, so you won’t miss your invite." : `Join the waitlist and we’ll save ${saved} with your spot.`,
+        form: !joined,
+        retry: false,
+        ctaDownload: true,
+        ctaQuestions: joined,
+      };
+    case "bad_email":
+      return {
+        text: "Please enter a valid email address.",
+        sub: "A valid email is required to start your free preview.",
+        form: true,
+        retry: false,
+        ctaDownload: false,
+        ctaQuestions: false,
+      };
     case "bad_topic":
-      return { text: "Try a shorter topic — a few words or a question.", form: false, retry: false };
+      return {
+        text: "Try a shorter topic.",
+        sub: "A few words or a question works best.",
+        form: false,
+        retry: false,
+        ctaDownload: false,
+        ctaQuestions: false,
+      };
     case "network":
-      return { text: "The connection dropped.", form: false, retry: true };
+      return {
+        text: "The connection dropped.",
+        sub: "Please check your internet connection and try again.",
+        form: false,
+        retry: true,
+        ctaDownload: false,
+        ctaQuestions: false,
+      };
   }
 }
 
@@ -548,19 +605,20 @@ function LivePlayer({ topic, onClose }: { topic: string; onClose: () => void }) 
 
   // Stream the preview; leaving (or retrying) aborts it.
   useEffect(() => {
+    if (!w.sent || !w.email) return;
     dispatch("reset");
     const ac = new AbortController();
     // Deferred a tick so React's dev double-mount cannot send the topic twice.
     const id = setTimeout(() => {
       startedAt.current = performance.now();
       track("preview_start");
-      void startPreview(topic, dispatch, ac.signal);
+      void startPreview(topic, w.email, dispatch, ac.signal);
     }, 0);
     return () => {
       clearTimeout(id);
       ac.abort();
     };
-  }, [topic, attempt]);
+  }, [topic, w.sent, w.email, attempt]);
 
   useEffect(() => {
     if (st.status === "ready") track("preview_ready", { ms: Math.round(performance.now() - startedAt.current) });
@@ -569,7 +627,7 @@ function LivePlayer({ topic, onClose }: { topic: string; onClose: () => void }) 
 
   const errored = st.status === "error";
   const ready = st.status === "ready";
-  const enabled = ready && w.sent;
+  const enabled = ready && w.sent && Boolean(w.email);
   const parts = useParts({ beats: st.beats, voices: st.voices, enabled, muted });
   const { cur, ended, blocked, starts, durs, total, time } = parts;
 
@@ -637,14 +695,60 @@ function LivePlayer({ topic, onClose }: { topic: string; onClose: () => void }) 
     stage = (
       <div className="pl-msg" role="alert">
         <p className="disp" style={{ fontSize: 22, lineHeight: 1.25, fontWeight: 600, letterSpacing: "-0.02em", color: "#221E3F", textWrap: "balance" }}>{copy.text}</p>
+        {copy.sub ? <p style={{ margin: "8px 0 16px", color: "#57536E" }}>{copy.sub}</p> : null}
         {copy.form ? (
           <>
-            <SignupForm id="em-gate" placement="preview" label="Join the waitlist" topic={topic} quiet onJoined={joinedCb} />
+            <SignupForm id="em-gate" placement="preview" label="Make my video" topic={topic} quiet onJoined={() => setAttempt((a) => a + 1)} />
             <p className="micro">We’ll only email you about your invite.</p>
           </>
         ) : null}
-        {copy.retry ? <button type="button" className="btn" onClick={retry}>Retry</button> : null}
+        <div style={{ display: "flex", gap: "10px", justifyContent: "center", flexWrap: "wrap", marginTop: "16px" }}>
+          {copy.ctaDownload ? (
+            <a href="/download" className="btn" style={{ textDecoration: "none" }}>
+              Download for Windows
+            </a>
+          ) : null}
+          {copy.ctaQuestions ? (
+            <button
+              type="button"
+              className="btn"
+              style={{ background: "#F5F3FF", color: "#5038ED", border: "1px solid #DDD6FE" }}
+              onClick={() => {
+                w.openModal();
+                onClose();
+              }}
+            >
+              Tell us about your work
+            </button>
+          ) : null}
+          {copy.retry ? (
+            <button type="button" className="btn" onClick={retry}>
+              Retry
+            </button>
+          ) : null}
+        </div>
       </div>
+    );
+  } else if (!w.sent || !w.email) {
+    tall = true;
+    stage = (
+      <>
+        <div className="pl-making-stage">
+          <span className="sg-ic" aria-hidden="true" style={{ width: 52, height: 52, borderRadius: 16, background: "linear-gradient(135deg, #7A5CFA, #5B8CFF)", color: "#FFFFFF" }}>
+            <svg viewBox="0 0 24 24" style={{ width: 24, height: 24, fill: "none", stroke: "currentColor", strokeWidth: 2, strokeLinejoin: "round" }}><path d={IC_SPARK} /></svg>
+          </span>
+          <p className="disp" style={{ margin: 0 }}>“{short(topic)}”</p>
+          <span className="stage-line" role="status">Free preview video</span>
+        </div>
+        <Cover>
+          <p className="disp" style={coverTitle}>Free preview video</p>
+          <p style={{ margin: 0, color: "#57536E" }}>
+            Enter your email to make and watch your video for “{short(topic)}”. Each visitor gets one free preview.
+          </p>
+          <SignupForm id="em-gate" placement="preview" label="Make my video" topic={topic} quiet onJoined={joinedCb} />
+          <p className="micro">This also saves your spot on the waitlist. We’ll only email you about your invite.</p>
+        </Cover>
+      </>
     );
   } else if (enabled) {
     tall = ended || blocked;
@@ -682,28 +786,16 @@ function LivePlayer({ topic, onClose }: { topic: string; onClose: () => void }) 
     );
   } else {
     stage = (
-      <>
-        <div className="pl-making-stage">
-          <span className="sg-ic" aria-hidden="true" style={{ width: 52, height: 52, borderRadius: 16, background: "linear-gradient(135deg, #7A5CFA, #5B8CFF)", color: "#FFFFFF" }}>
-            <svg viewBox="0 0 24 24" style={{ width: 24, height: 24, fill: "none", stroke: "currentColor", strokeWidth: 2, strokeLinejoin: "round" }}><path d={IC_SPARK} /></svg>
-          </span>
-          <p className="disp" style={{ margin: 0 }}>“{short(topic)}”</p>
-          <span className="stage-line" role="status">
-            {ready ? null : <span className="spin" aria-hidden="true" />}
-            {previewStageText(st)}
-          </span>
-        </div>
-        {!w.sent ? (
-          <Cover>
-            <p className="disp" style={coverTitle}>{ready ? "Your video is ready." : "Your video is being made."}</p>
-            <p style={{ margin: 0, color: "#57536E" }}>
-              {ready ? "Enter your email to watch it." : "Enter your email to watch it when it’s ready — usually about 20 seconds."}
-            </p>
-            <SignupForm id="em-gate" placement="preview" label="Watch my video" topic={topic} quiet onJoined={joinedCb} />
-            <p className="micro">This also puts you on the Tubelight waitlist. We’ll only email you about your invite.</p>
-          </Cover>
-        ) : null}
-      </>
+      <div className="pl-making-stage">
+        <span className="sg-ic" aria-hidden="true" style={{ width: 52, height: 52, borderRadius: 16, background: "linear-gradient(135deg, #7A5CFA, #5B8CFF)", color: "#FFFFFF" }}>
+          <svg viewBox="0 0 24 24" style={{ width: 24, height: 24, fill: "none", stroke: "currentColor", strokeWidth: 2, strokeLinejoin: "round" }}><path d={IC_SPARK} /></svg>
+        </span>
+        <p className="disp" style={{ margin: 0 }}>“{short(topic)}”</p>
+        <span className="stage-line" role="status">
+          <span className="spin" aria-hidden="true" />
+          {previewStageText(st)}
+        </span>
+      </div>
     );
   }
 
