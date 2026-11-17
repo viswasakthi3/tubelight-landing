@@ -14,7 +14,7 @@ const HERO = [
   { slug: "hero-rocket", label: "Rockets", color: "#FF6F4F", app: "Rockets.pdf", kicker: "Physics · Chapter 4", title: "How rockets fly",
     lead: "A rocket carries everything it needs to burn, because there is no air in space.",
     sel: "Liquid fuel and liquid oxygen are pumped into the combustion chamber, where they burn and rush out through the nozzle.", tail: "The hot gas going down pushes the rocket up.",
-    typed: "How do rockets work in empty space?" },
+    typed: "How a rocket engine works" },
   { slug: "hero-headaches", label: "Headaches", color: "#22B573", app: "Health article", kicker: "How the body works", title: "Where headaches begin",
     lead: "The brain processes pain, but brain tissue itself has no pain sensors.",
     sel: "Why do headaches happen if the brain itself can’t feel pain?", tail: "The answer is in the layers around it.",
@@ -674,7 +674,7 @@ export function Hero() {
               </button>
             ))}
           </div>
-          <p className="micro" style={{ margin: "10px 0 0", color: "#6F6B86" }}>Curated examples · 3 pictures with narration · the ring follows what’s being explained</p>
+          <p className="micro" style={{ margin: "10px 0 0", color: "#6F6B86" }}>Curated examples · {shs.length} pictures with narration · the ring follows what’s being explained</p>
         </div>
       </div>
     </section>

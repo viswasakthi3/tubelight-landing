@@ -14,7 +14,7 @@ export function Gallery() {
       <div className="wrapx">
         <div className="head">
           <h2 className="h2">Curious about anything?</h2>
-          <p className="lede">Search any topic and Tubelight makes a free preview video for you, right here. Or press play on one it already made — every one below is real.</p>
+          <p className="lede">Search any topic and Tubelight makes a free preview video for you, right here. Or play an example below to see how a visual explanation works.</p>
         </div>
         <TopicSearch />
         <p className="sfine">Free preview: one a day, about 20 seconds to make, and you’ll enter your email to watch it. Your topic is sent to our servers to make the video.</p>
@@ -43,7 +43,7 @@ export function Gallery() {
             );
           })}
         </div>
-        <p style={{ margin: "34px 0 0", fontSize: 15, color: "#6F6B86" }}>Unedited output from the Windows app. It’s AI, so it can slip now and then — if something looks off, ask a follow-up.</p>
+        <p style={{ margin: "34px 0 0", fontSize: 15, color: "#6F6B86" }}>Curated examples and saved explanations from the Windows app. It’s AI, so it can slip now and then — if something looks off, ask a follow-up.</p>
       </div>
     </section>
   );

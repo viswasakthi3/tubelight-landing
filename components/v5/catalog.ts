@@ -1,10 +1,10 @@
 import type { VideoMap } from "@/lib/video-paths";
 
-/* typed = the exact words someone typed into Tubelight to make each video (from the saved library) */
+/* Topic queries for prepared examples; saved library entries retain their original input. */
 export type GalleryItem = { slug: string; tag: string; bg: string; fg: string; typed: string; kw: string };
 
 export const GALLERY: GalleryItem[] = [
-  { slug: "rocket", tag: "Science", bg: "#FFEDE7", fg: "#A63A1E", typed: "how rocket engine works", kw: "rocket rockets engine engines space fuel thrust nozzle launch physics" },
+  { slug: "refrigerator", tag: "Everyday science", bg: "#E4F5F6", fg: "#21666D", typed: "how a refrigerator keeps food cold", kw: "fridge refrigerator refrigeration cooling cold food heat refrigerant compressor condenser evaporator" },
   { slug: "headaches", tag: "Health", bg: "#E3F6EC", fg: "#146B44", typed: "why headaches happen", kw: "headache headaches migraine brain pain head health" },
   { slug: "ocean", tag: "Geography", bg: "#E6F1FF", fg: "#1E5AA8", typed: "Ocean currents", kw: "ocean oceans current currents sea water coriolis climate geography" },
   { slug: "tv", tag: "Tech", bg: "#F1ECFF", fg: "#4B33B8", typed: "how does modern tv worsk so good and high in quality", kw: "tv television screen oled led pixels display picture tech" },

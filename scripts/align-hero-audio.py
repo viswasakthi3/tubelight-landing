@@ -20,6 +20,8 @@ def clean(word):
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--model-dir", type=Path)
+    parser.add_argument("--config", type=Path, default=ROOT / "public/previews/hero-2026-11-17/storyboards-v2.json")
+    parser.add_argument("--work-dir", type=Path, default=WORK)
     args = parser.parse_args()
     if args.model_dir:
         model_dir = args.model_dir
@@ -27,12 +29,12 @@ def main():
         cached = ROOT.parent / "time2understand/scratch/filesgo_audio/revision_3/work/asr_models/models--Systran--faster-whisper-small.en/snapshots"
         model_dir = next(cached.iterdir())
     model = WhisperModel(str(model_dir), device="cpu", compute_type="int8", cpu_threads=4, num_workers=2, local_files_only=True)
-    data = json.loads((ROOT / "public/previews/hero-2026-11-17/storyboards-v2.json").read_text(encoding="utf-8"))
+    data = json.loads(args.config.read_text(encoding="utf-8"))
     def align(topic):
         slug = topic["slug"]
-        audio_path = WORK / f"{slug}-master.wav"
+        audio_path = args.work_dir / f"{slug}-master.wav"
         signature = hashlib.sha256(audio_path.read_bytes()).hexdigest()
-        out = WORK / f"{slug}-alignment.json"
+        out = args.work_dir / f"{slug}-alignment.json"
         if out.exists() and json.loads(out.read_text(encoding="utf-8")).get("audioSha256") == signature:
             print(f"{slug}: reusing matching word alignment", flush=True)
             return

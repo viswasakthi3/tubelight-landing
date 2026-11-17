@@ -27,3 +27,4 @@ secrets/
 .history/
 .lh/
 .media-work/
+__pycache__/

@@ -25,14 +25,16 @@ STYLE = (
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("--only", choices=["rocket", "headaches", "black-hole"])
+    parser.add_argument("--only")
+    parser.add_argument("--config", type=Path, default=ROOT / "public/previews/hero-2026-11-17/storyboards-v2.json")
+    parser.add_argument("--work-dir", type=Path, default=ROOT / ".media-work/hero-v3")
     parser.add_argument("--product-dir", type=Path, default=ROOT.parent / "time2understand")
     args = parser.parse_args()
     client_dir = args.product_dir / "scratch/filesgo_audio"
     sys.path.insert(0, str(client_dir))
     from vertex_audio import synth
-    data = json.loads((ROOT / "public/previews/hero-2026-11-17/storyboards-v2.json").read_text(encoding="utf-8"))
-    work = ROOT / ".media-work/hero-v3"
+    data = json.loads(args.config.read_text(encoding="utf-8"))
+    work = args.work_dir
     work.mkdir(parents=True, exist_ok=True)
     def generate(topic):
         slug = topic["slug"]
@@ -51,6 +53,8 @@ def main():
                                        style=STYLE, transcript=text, signature=signature,
                                        duration=duration), indent=2, ensure_ascii=False), encoding="utf-8")
     topics = [t for t in data["storyboards"] if not args.only or t["slug"] == args.only]
+    if not topics:
+        raise ValueError("No matching topic in the selected configuration")
     with concurrent.futures.ThreadPoolExecutor(max_workers=2) as pool:
         list(pool.map(generate, topics))
     print("Requested hero narration saved locally.", flush=True)

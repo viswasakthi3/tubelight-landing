@@ -1,0 +1,214 @@
+{
+  "version": 4,
+  "date": "2026-11-17",
+  "storyboards": [
+    {
+      "slug": "rocket",
+      "outputSlug": "hero-rocket",
+      "title": "How a Rocket Engine Works",
+      "imageProvenance": "Original two saved Tubelight rocket illustrations, reused unchanged as source artwork",
+      "scenes": [
+        {
+          "title": "Pumping and combustion",
+          "image": "/videos/rocket/p0.webp",
+          "narration": "A rocket engine carries its own fuel and oxygen. That’s why it can work without air. These pumps push the liquids down into the chamber below. There, they mix and burn, making very hot gas under high pressure.",
+          "captions": [
+            "A rocket engine carries its own fuel and oxygen.",
+            "That’s why it can work without air.",
+            "These pumps push the liquids down",
+            "into the chamber below.",
+            "There, they mix and burn,",
+            "making very hot gas under high pressure."
+          ],
+          "focus": [
+            [
+              0.58,
+              0.25
+            ],
+            null,
+            [
+              0.16,
+              0.27
+            ],
+            [
+              0.48,
+              0.52
+            ],
+            [
+              0.84,
+              0.27
+            ],
+            [
+              0.48,
+              0.52
+            ]
+          ],
+          "extraFocus": [
+            {
+              "word": "oxygen",
+              "point": [
+                0.45,
+                0.2
+              ]
+            }
+          ]
+        },
+        {
+          "title": "The exhaust nozzle",
+          "image": "/videos/rocket/p1.webp",
+          "narration": "The gas flows through this narrow throat. In the wider nozzle beyond it, the gas expands and speeds up. As the engine throws gas down, the gas pushes the rocket up. The engine turns stored chemical energy into motion.",
+          "captions": [
+            "The gas flows through this narrow throat.",
+            "In the wider nozzle beyond it,",
+            "the gas expands and speeds up.",
+            "As the engine throws gas down,",
+            "the gas pushes the rocket up.",
+            "The engine turns stored chemical energy into motion."
+          ],
+          "focus": [
+            [
+              0.25,
+              0.59
+            ],
+            [
+              0.77,
+              0.47
+            ],
+            [
+              0.77,
+              0.65
+            ],
+            [
+              0.78,
+              0.88
+            ],
+            [
+              0.92,
+              0.32
+            ],
+            null
+          ],
+          "extraFocus": []
+        }
+      ]
+    },
+    {
+      "slug": "refrigerator",
+      "outputSlug": "refrigerator",
+      "title": "How a Refrigerator Keeps Food Cold",
+      "imageProvenance": "User-supplied evaporator illustration plus two matching ChatGPT image_gen illustrations",
+      "scenes": [
+        {
+          "title": "Absorb heat inside",
+          "image": "/previews/refrigerator-v4/01-absorbing-heat.png",
+          "narration": "A refrigerator moves heat out of the food compartment. A fluid called refrigerant flows through these inside coils. As it boils into gas, it absorbs heat from the air and food.",
+          "captions": [
+            "A refrigerator moves heat out of the food compartment.",
+            "A fluid called refrigerant flows through these inside coils.",
+            "As it boils into gas,",
+            "it absorbs heat from the air and food."
+          ],
+          "focus": [
+            [
+              0.58,
+              0.5
+            ],
+            [
+              0.36,
+              0.38
+            ],
+            [
+              0.34,
+              0.25
+            ],
+            [
+              0.47,
+              0.51
+            ]
+          ],
+          "extraFocus": []
+        },
+        {
+          "title": "Release heat to the room",
+          "image": "/previews/refrigerator-v4/02-releasing-heat.png",
+          "narration": "The compressor squeezes the gas, raising its pressure and temperature. It then flows through the outside coils. Here it releases heat into the room and turns back into liquid. That’s why a fridge can feel warm at the back.",
+          "captions": [
+            "The compressor squeezes the gas,",
+            "raising its pressure and temperature.",
+            "It then flows through the outside coils.",
+            "Here it releases heat into the room",
+            "and turns back into liquid.",
+            "That’s why a fridge can feel warm at the back."
+          ],
+          "focus": [
+            [
+              0.48,
+              0.75
+            ],
+            [
+              0.45,
+              0.62
+            ],
+            [
+              0.55,
+              0.31
+            ],
+            [
+              0.72,
+              0.33
+            ],
+            [
+              0.61,
+              0.51
+            ],
+            [
+              0.55,
+              0.31
+            ]
+          ],
+          "extraFocus": []
+        },
+        {
+          "title": "Drop the pressure and return",
+          "image": "/previews/refrigerator-v4/03-expansion-return.png",
+          "narration": "Next, the liquid passes through a narrow valve. Its pressure drops, and some of it evaporates, making a cold mixture. That flows back through the inside coils to absorb more heat. The same fluid goes around again.",
+          "captions": [
+            "Next, the liquid passes through a narrow valve.",
+            "Its pressure drops,",
+            "and some of it evaporates, making a cold mixture.",
+            "That flows back through the inside coils",
+            "to absorb more heat.",
+            "The same fluid goes around again."
+          ],
+          "focus": [
+            [
+              0.23,
+              0.54
+            ],
+            [
+              0.23,
+              0.54
+            ],
+            [
+              0.35,
+              0.57
+            ],
+            [
+              0.64,
+              0.47
+            ],
+            [
+              0.73,
+              0.5
+            ],
+            [
+              0.63,
+              0.2
+            ]
+          ],
+          "extraFocus": []
+        }
+      ]
+    }
+  ]
+}

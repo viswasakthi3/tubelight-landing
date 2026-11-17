@@ -7,7 +7,7 @@ export type { Beat, Cue, Sheet, VideoInfo, VideoMap } from "./video-paths";
 export { DEMO } from "./video-paths";
 
 export const VIDEO_SLUGS = [
-  "hero-rocket", "hero-headaches", "hero-black-holes",
+  "hero-rocket", "hero-headaches", "hero-black-holes", "refrigerator",
   "rocket", "headaches", "dna", "ocean", "tv", "polar-bear", "insurance",
   "kidneys", "zombie-cells", "neurons", "appendix", "black-holes", "dark-matter",
 ] as const;

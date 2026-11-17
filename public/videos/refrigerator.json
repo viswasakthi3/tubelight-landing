@@ -1,0 +1,277 @@
+{
+  "slug": "refrigerator",
+  "title": "How a Refrigerator Keeps Food Cold",
+  "duration": 35.167,
+  "curated": true,
+  "typed": "How a Refrigerator Keeps Food Cold",
+  "cues": [
+    {
+      "start": 0,
+      "end": 3.145,
+      "text": "A refrigerator moves heat out of the food compartment."
+    },
+    {
+      "start": 3.145,
+      "end": 6.405,
+      "text": "A fluid called refrigerant flows through these inside coils."
+    },
+    {
+      "start": 6.405,
+      "end": 7.885,
+      "text": "As it boils into gas,"
+    },
+    {
+      "start": 7.885,
+      "end": 9.77,
+      "text": "it absorbs heat from the air and food."
+    },
+    {
+      "start": 10.125,
+      "end": 12.145,
+      "text": "The compressor squeezes the gas,"
+    },
+    {
+      "start": 12.145,
+      "end": 14.105,
+      "text": "raising its pressure and temperature."
+    },
+    {
+      "start": 14.105,
+      "end": 16.605,
+      "text": "It then flows through the outside coils."
+    },
+    {
+      "start": 16.605,
+      "end": 18.425,
+      "text": "Here it releases heat into the room"
+    },
+    {
+      "start": 18.425,
+      "end": 20.225,
+      "text": "and turns back into liquid."
+    },
+    {
+      "start": 20.225,
+      "end": 22.37,
+      "text": "That’s why a fridge can feel warm at the back."
+    },
+    {
+      "start": 22.785,
+      "end": 25.525,
+      "text": "Next, the liquid passes through a narrow valve."
+    },
+    {
+      "start": 25.525,
+      "end": 26.745,
+      "text": "Its pressure drops,"
+    },
+    {
+      "start": 26.745,
+      "end": 29.565,
+      "text": "and some of it evaporates, making a cold mixture."
+    },
+    {
+      "start": 29.565,
+      "end": 31.665,
+      "text": "That flows back through the inside coils"
+    },
+    {
+      "start": 31.665,
+      "end": 33.365,
+      "text": "to absorb more heat."
+    },
+    {
+      "start": 33.365,
+      "end": 34.97,
+      "text": "The same fluid goes around again."
+    }
+  ],
+  "sheets": [
+    {
+      "index": 0,
+      "title": "Absorb heat inside",
+      "src": "/videos/refrigerator/p0.webp",
+      "thumb": "/videos/refrigerator/p0-s.webp",
+      "start": 0,
+      "end": 9.967,
+      "walk": true,
+      "pw": 1
+    },
+    {
+      "index": 1,
+      "title": "Release heat to the room",
+      "src": "/videos/refrigerator/p1.webp",
+      "thumb": "/videos/refrigerator/p1-s.webp",
+      "start": 9.967,
+      "end": 22.633,
+      "walk": true,
+      "pw": 1
+    },
+    {
+      "index": 2,
+      "title": "Drop the pressure and return",
+      "src": "/videos/refrigerator/p2.webp",
+      "thumb": "/videos/refrigerator/p2-s.webp",
+      "start": 22.633,
+      "end": 35.167,
+      "walk": true,
+      "pw": 1
+    }
+  ],
+  "beats": [
+    {
+      "start": 0,
+      "end": 3.145,
+      "sheet": 0,
+      "ptr": {
+        "x": 0.58,
+        "y": 0.5
+      }
+    },
+    {
+      "start": 3.145,
+      "end": 6.405,
+      "sheet": 0,
+      "ptr": {
+        "x": 0.36,
+        "y": 0.38
+      }
+    },
+    {
+      "start": 6.405,
+      "end": 7.885,
+      "sheet": 0,
+      "ptr": {
+        "x": 0.34,
+        "y": 0.25
+      }
+    },
+    {
+      "start": 7.885,
+      "end": 9.967,
+      "sheet": 0,
+      "ptr": {
+        "x": 0.47,
+        "y": 0.51
+      }
+    },
+    {
+      "start": 9.967,
+      "end": 12.145,
+      "sheet": 1,
+      "ptr": {
+        "x": 0.48,
+        "y": 0.75
+      }
+    },
+    {
+      "start": 12.145,
+      "end": 14.105,
+      "sheet": 1,
+      "ptr": {
+        "x": 0.45,
+        "y": 0.62
+      }
+    },
+    {
+      "start": 14.105,
+      "end": 16.605,
+      "sheet": 1,
+      "ptr": {
+        "x": 0.55,
+        "y": 0.31
+      }
+    },
+    {
+      "start": 16.605,
+      "end": 18.425,
+      "sheet": 1,
+      "ptr": {
+        "x": 0.72,
+        "y": 0.33
+      }
+    },
+    {
+      "start": 18.425,
+      "end": 20.225,
+      "sheet": 1,
+      "ptr": {
+        "x": 0.61,
+        "y": 0.51
+      }
+    },
+    {
+      "start": 20.225,
+      "end": 22.633,
+      "sheet": 1,
+      "ptr": {
+        "x": 0.55,
+        "y": 0.31
+      }
+    },
+    {
+      "start": 22.633,
+      "end": 25.525,
+      "sheet": 2,
+      "ptr": {
+        "x": 0.23,
+        "y": 0.54
+      }
+    },
+    {
+      "start": 25.525,
+      "end": 26.745,
+      "sheet": 2,
+      "ptr": {
+        "x": 0.23,
+        "y": 0.54
+      }
+    },
+    {
+      "start": 26.745,
+      "end": 29.565,
+      "sheet": 2,
+      "ptr": {
+        "x": 0.35,
+        "y": 0.57
+      }
+    },
+    {
+      "start": 29.565,
+      "end": 31.665,
+      "sheet": 2,
+      "ptr": {
+        "x": 0.64,
+        "y": 0.47
+      }
+    },
+    {
+      "start": 31.665,
+      "end": 33.365,
+      "sheet": 2,
+      "ptr": {
+        "x": 0.73,
+        "y": 0.5
+      }
+    },
+    {
+      "start": 33.365,
+      "end": 35.167,
+      "sheet": 2,
+      "ptr": {
+        "x": 0.63,
+        "y": 0.2
+      }
+    }
+  ],
+  "provenance": {
+    "images": "User-supplied evaporator illustration plus two matching ChatGPT image_gen illustrations",
+    "speechProvider": "Google Vertex AI",
+    "model": "gemini-3.8-flash-tts",
+    "voice": "Aoede",
+    "style": "Warm, clear adult female voice explaining something to one curious person beside you. Natural conversational English, friendly and lightly smiling, with a clear smooth tone. Around 160 words per minute. Gentle curiosity on a question, relaxed confidence on its answer. Connect words fluidly. Brief natural pauses between ideas; a slightly longer pause between paragraphs. No sales-announcer delivery, exaggerated breathiness, vocal fry, theatrical amazement or sing-song rhythm. Read only the supplied transcript, with no introduction or added words.",
+    "transcript": "A refrigerator moves heat out of the food compartment. A fluid called refrigerant flows through these inside coils. As it boils into gas, it absorbs heat from the air and food.\n\nThe compressor squeezes the gas, raising its pressure and temperature. It then flows through the outside coils. Here it releases heat into the room and turns back into liquid. That’s why a fridge can feel warm at the back.\n\nNext, the liquid passes through a narrow valve. Its pressure drops, and some of it evaporates, making a cold mixture. That flows back through the inside coils to absorb more heat. The same fluid goes around again.",
+    "alignment": "Local Whisper word timestamps matched to approved script",
+    "wordCoverage": 1
+  }
+}
