@@ -70,7 +70,7 @@ def readonly_check():
 
 
 def upload(path, destination):
-    run(['scp', '-o', 'BatchMode=yes', '-o', 'ConnectTimeout=5', str(path), SERVER + ':' + destination], timeout=180)
+    run(['scp', '-o', 'BatchMode=yes', '-o', 'ConnectTimeout=5', str(path), SERVER + ':' + destination], timeout=1200)
 
 
 def execute(arguments):
