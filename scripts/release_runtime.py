@@ -438,8 +438,12 @@ def source_allowed(relative):
     denied_dirs = {'node_modules', '.git', 'storage', 'secrets', 'backups', 'backup', 'uploads', 'logs', 'cache', '.cache', 'tmp', 'scratch', 'releases', 'updates', 'eval'}
     patterns = ('.env*', '*.env', '*.pem', '*.key', '*.pfx', '*.p12', '*.crt', '*credential*', '*service-account*', '*service_account*', '*secret*', '*adc*.json', '*.sql*', '*.dump*', '*.bak*', '*.log*', '*.gz', '*.zip', '*.tar', '*.tgz', '*.7z', 'backup*', 'rollback*')
     parts = Path(relative).parts
-    if any(part.lower() in denied_dirs or any(fnmatch.fnmatch(part.lower(), pattern) for pattern in patterns) for part in parts):
-        return False
+    for part in parts:
+        lower = part.lower()
+        if lower in denied_dirs:
+            return False
+        if lower != 'secretscheck.js' and any(fnmatch.fnmatch(lower, pattern) for pattern in patterns):
+            return False
     name = parts[-1]
     return name in ('Dockerfile', '.dockerignore', '.gitignore') or Path(name).suffix.lower() in {'.js', '.mjs', '.cjs', '.json', '.md', '.html', '.css', '.svg', '.png', '.jpg', '.jpeg', '.webp', '.woff', '.woff2', '.ttf', '.py', '.txt'}
 
