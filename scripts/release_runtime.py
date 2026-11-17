@@ -384,26 +384,49 @@ def request_http(url, headers=None):
 def assert_probe(port, backend=False, bootstrap=False, request=request_http):
     headers = {'Host': 'tubelight.net', 'X-Forwarded-Host': 'tubelight.net', 'X-Real-IP': '127.0.0.1', 'X-Forwarded-Proto': 'https', 'Origin': 'https://tubelight.net'}
     path = '/api/health' if backend else '/api/preview' if bootstrap else '/'
-    status, response_headers, body = request('http://127.0.0.1:%d%s' % (port, path), headers)
+    endpoint = 'http://127.0.0.1:%d%s' % (port, path)
+    status, response_headers, body = request(endpoint, headers)
+    cookie_str = response_headers.get('Set-Cookie', '') if hasattr(response_headers, 'get') else ''
+    cookie_present = bool('tb_owner=' in cookie_str)
+    html_present = b'<html' in body.lower()
+    needle_present = b'understand anything' in body.lower()
+
     if status != 200:
-        raise ReleaseError('Candidate HTTP readiness failed')
+        raise ReleaseError(f'Candidate HTTP readiness failed [{endpoint} status={status}]')
     if backend:
+        ok_bool = False
+        db_bool = False
         try:
             health = json.loads(body)
-            if health.get('ok') is not True or health.get('database') is not True:
-                raise ValueError()
+            if isinstance(health, dict):
+                ok_bool = health.get('ok') is True
+                db_bool = health.get('database') is True
         except (ValueError, TypeError):
-            raise ReleaseError('Candidate backend/database readiness failed') from None
+            pass
+        if not ok_bool or not db_bool:
+            raise ReleaseError(
+                f'Candidate backend/database readiness failed [{endpoint} status={status} '
+                f'ok={ok_bool} db={db_bool}]'
+            )
     elif bootstrap:
+        ok_bool = False
         try:
-            valid = json.loads(body).get('ok') is True
+            payload = json.loads(body)
+            if isinstance(payload, dict):
+                ok_bool = payload.get('ok') is True
         except (ValueError, TypeError):
-            valid = False
-        cookie = response_headers.get('Set-Cookie', '')
-        if not valid or not all(value in cookie for value in ('tb_owner=', 'HttpOnly', 'Secure', 'SameSite=Lax')):
-            raise ReleaseError('Candidate ownership bootstrap failed')
-    elif b'<html' not in body.lower() or b'understand anything' not in body.lower():
-        raise ReleaseError('Candidate landing did not return the expected Tubelight content')
+            pass
+        has_flags = all(value in cookie_str for value in ('tb_owner=', 'HttpOnly', 'Secure', 'SameSite=Lax'))
+        if not ok_bool or not has_flags:
+            raise ReleaseError(
+                f'Candidate ownership bootstrap failed [{endpoint} status={status} '
+                f'ok={ok_bool} cookie={cookie_present}]'
+            )
+    elif not html_present or not needle_present:
+        raise ReleaseError(
+            f'Candidate landing did not return the expected Tubelight content [{endpoint} status={status} '
+            f'html={html_present} needle={needle_present}]'
+        )
 
 
 def assert_backend_auth_route(port):
@@ -421,16 +444,19 @@ def assert_backend_auth_route(port):
         raise ReleaseError('Candidate preview route is missing or not protected')
 
 
-def wait_probe(probe, seconds=75):
+def wait_probe(probe, seconds=75, interval=2):
     deadline = time.monotonic() + seconds
+    last_error = None
     while True:
         try:
             probe()
             return
-        except (ReleaseError, OSError, ValueError):
+        except (ReleaseError, OSError, ValueError) as error:
+            last_error = error
             if time.monotonic() >= deadline:
-                raise ReleaseError('Readiness deadline exceeded') from None
-            time.sleep(2)
+                cause = str(last_error) if isinstance(last_error, ReleaseError) else type(last_error).__name__
+                raise ReleaseError(f'Readiness deadline exceeded: {cause}') from last_error
+            time.sleep(interval)
 
 
 def source_allowed(relative):
@@ -568,23 +594,54 @@ def search_status():
 def public_probes(request=request_http):
     for url, needle in [('https://tubelight.net/', b'understand anything'), ('https://tubelight.net/search', b'quick search')]:
         status, _, body = request(url)
-        if status != 200 or b'<html' not in body.lower() or needle not in body.lower():
-            raise ReleaseError('Public landing/search probe failed')
+        html_present = b'<html' in body.lower()
+        needle_present = needle in body.lower()
+        if status != 200 or not html_present or not needle_present:
+            raise ReleaseError(
+                f'Public landing/search probe failed [{url} status={status} '
+                f'html={html_present} needle={needle_present}]'
+            )
     status, _, body = request('https://tubelight.net/api/health')
+    ok_bool = False
+    db_bool = False
     try:
         health = json.loads(body)
-        valid = health.get('ok') is True and health.get('database') is True
+        if isinstance(health, dict):
+            ok_bool = health.get('ok') is True
+            db_bool = health.get('database') is True
     except (ValueError, TypeError):
-        valid = False
-    if status != 200 or not valid:
-        raise ReleaseError('Public backend/database probe failed')
+        pass
+    if status != 200 or not ok_bool or not db_bool:
+        raise ReleaseError(
+            f'Public backend/database probe failed [https://tubelight.net/api/health status={status} '
+            f'ok={ok_bool} db={db_bool}]'
+        )
     status, headers, body = request('https://tubelight.net/api/preview', {'Origin': 'https://tubelight.net'})
+    ok_bool = False
     try:
-        valid = json.loads(body).get('ok') is True
+        payload = json.loads(body)
+        if isinstance(payload, dict):
+            ok_bool = payload.get('ok') is True
     except (ValueError, TypeError):
-        valid = False
-    if status != 200 or not valid or 'tb_owner=' not in headers.get('Set-Cookie', ''):
-        raise ReleaseError('Public ownership bootstrap failed')
+        pass
+    cookie_str = headers.get('Set-Cookie', '') if hasattr(headers, 'get') else ''
+    cookie_present = bool('tb_owner=' in cookie_str)
+    if status != 200 or not ok_bool or not cookie_present:
+        raise ReleaseError(
+            f'Public ownership bootstrap failed [https://tubelight.net/api/preview status={status} '
+            f'ok={ok_bool} cookie={cookie_present}]'
+        )
+
+
+def assert_search_host(request=request_http):
+    status, _, body = request('https://search.tubelight.net/')
+    html_present = b'<html' in body.lower()
+    needle_present = any(needle in body.lower() for needle in (b'quick search', b'stop opening'))
+    if status != 200 or not html_present or not needle_present:
+        raise ReleaseError(
+            f'Public search hostname did not return Quick Search content [https://search.tubelight.net/ '
+            f'status={status} html={html_present} needle={needle_present}]'
+        )
 
 
 MIGRATION_CHECK = """
@@ -765,12 +822,15 @@ class Deployer:
         self.stage('7/8 Validating nginx candidate and atomically activating routes.')
         activate_nginx((self.directory / 'nginx.after.conf').read_text(), self.directory)
         self.stage('8/8 Asserting public HTTP, database and cookie-presence checks (no capabilities logged).')
-        public_probes()
-        self.state['search_domain'] = search_status()
+        wait_probe(public_probes, seconds=75)
+        search_status_deadline = time.monotonic() + 15
+        while time.monotonic() < search_status_deadline:
+            self.state['search_domain'] = search_status()
+            if self.state['search_domain'] == 'tls_ready':
+                break
+            time.sleep(1)
         if self.state['search_domain'] == 'tls_ready':
-            status, _, body = request_http('https://search.tubelight.net/')
-            if status != 200 or b'<html' not in body.lower() or not any(needle in body.lower() for needle in (b'quick search', b'stop opening')):
-                raise ReleaseError('Public search hostname did not return Quick Search content')
+            wait_probe(assert_search_host, seconds=75)
         self.state['status'] = 'healthy'
         self.state['images'] = self.images
         self.save_state()

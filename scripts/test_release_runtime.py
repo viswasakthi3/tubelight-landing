@@ -277,6 +277,73 @@ server { listen 80; server_name tubelight.net; return 301 https://$host$request_
             r.persist_preview_settings(path, {'WEB_EXPLAIN_SECRET': 'new-preview-key'})
             self.assertEqual(path.read_text(), 'DATABASE_URL=host-db-kept-verbatim\n# comment\nWEB_EXPLAIN_SECRET=new-preview-key\n')
 
+    def test_wait_probe_recovers_from_transient_failures(self):
+        attempts = 0
+        def transient_probe():
+            nonlocal attempts
+            attempts += 1
+            if attempts < 3:
+                raise r.ReleaseError('Transient 503 preview guard')
+            return True
+        r.wait_probe(transient_probe, seconds=2, interval=0.01)
+        self.assertEqual(attempts, 3)
+
+    def test_wait_probe_persistent_failure_preserves_sanitized_ultimate_cause(self):
+        def failing_probe():
+            raise r.ReleaseError('Public ownership bootstrap failed [https://tubelight.net/api/preview status=503 ok=False cookie=False]')
+        with self.assertRaises(r.ReleaseError) as context:
+            r.wait_probe(failing_probe, seconds=0.05, interval=0.01)
+        error_message = str(context.exception)
+        self.assertIn('Readiness deadline exceeded:', error_message)
+        self.assertIn('status=503 ok=False cookie=False', error_message)
+        self.assertIsNotNone(context.exception.__cause__)
+
+    def test_public_probes_and_search_diagnostics_sanitize_and_exclude_secrets(self):
+        secret_token = 'super-secret-token-do-not-print-12345'
+        cookie_val = f'tb_owner={secret_token}; Path=/'
+        # Test 1: preview 503 during reload
+        def preview_503(url, headers=None):
+            if url.endswith('/api/preview'):
+                return 503, {'Set-Cookie': cookie_val}, b'Service Unavailable'
+            if url.endswith('/api/health'):
+                return 200, {}, b'{"ok":true,"database":true}'
+            return 200, {}, b'<html>Understand anything. Quick Search.</html>'
+        with self.assertRaises(r.ReleaseError) as cm:
+            r.public_probes(preview_503)
+        msg = str(cm.exception)
+        self.assertIn('Public ownership bootstrap failed', msg)
+        self.assertIn('status=503', msg)
+        self.assertNotIn(secret_token, msg)
+
+        # Test 2: landing wrong site 200 (TheLuvit)
+        def wrong_site(url, headers=None):
+            return 200, {}, b'<html><title>TheLuvit Movies</title></html>'
+        with self.assertRaises(r.ReleaseError) as cm:
+            r.public_probes(wrong_site)
+        msg = str(cm.exception)
+        self.assertIn('Public landing/search probe failed', msg)
+        self.assertIn('status=200 html=True needle=False', msg)
+
+    def test_assert_search_host_validation(self):
+        # Valid search host
+        def valid_search(url, headers=None):
+            return 200, {}, b'<html><title>Tubelight Quick Search</title><body>Quick Search. Stop opening dozens of tabs.</body></html>'
+        r.assert_search_host(valid_search)
+
+        # Wrong site 200 on search host
+        def wrong_search(url, headers=None):
+            return 200, {}, b'<html><title>TheLuvit</title></html>'
+        with self.assertRaises(r.ReleaseError) as cm:
+            r.assert_search_host(wrong_search)
+        self.assertIn('status=200 html=True needle=False', str(cm.exception))
+
+        # 404 on search host
+        def not_found(url, headers=None):
+            return 404, {}, b'<html>404 Not Found</html>'
+        with self.assertRaises(r.ReleaseError) as cm:
+            r.assert_search_host(not_found)
+        self.assertIn('status=404', str(cm.exception))
+
 
 if __name__ == '__main__':
     unittest.main(verbosity=2)
