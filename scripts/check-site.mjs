@@ -26,7 +26,7 @@ for (const [origin, path, host, expected] of checks) {
     if (response.status === 200 && response.headers.get('content-type')?.includes('text/html')) {
       for (const match of body.matchAll(/(?:src|href|poster)="([^"<>]+)"/g)) {
         const value = match[1].replaceAll('&amp;', '&');
-        if (value.startsWith('/') && !value.startsWith('//') && /\.(png|jpe?g|webp|svg|ico|mp4|mp3|wav|woff2?|js|css)(\?|$)/i.test(value)) assets.set(value, { origin, host });
+        if (value.startsWith('/') && !value.startsWith('//') && !value.startsWith('/cdn-cgi/') && /\.(png|jpe?g|webp|svg|ico|mp4|mp3|wav|woff2?|js|css)(\?|$)/i.test(value)) assets.set(value, { origin, host });
       }
     }
   } catch (error) { results.push({ path, host, ok: false, error: error.message }); }

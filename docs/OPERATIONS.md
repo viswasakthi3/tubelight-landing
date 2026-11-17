@@ -6,11 +6,19 @@ records discovery history; the deployed release receipt takes precedence over it
 
 ## Release status
 
-Application changes are implemented and tested. Backend feature commit
-`3354c89f763f44edc8d3fdb79d981f38e1f7959c` is pushed to `time2understand/main`.
-Production activation and the final landing commit remain pending until a release
-receipt is recorded. Do not equate a CLI launch, dry run, or successful build with a
-live deployment. The search DNS record was still absent at the last verification.
+Production release `20261117_141119_c64db26f` is active, healthy, and fully verified.
+Both services are running in production on `root@88.198.81.89`:
+- `tubelight-landing` (`tubelight-landing:preview_20261117_141119_c64db26f`) on `127.0.0.1:8097`
+- `tubelight-backend` (`tubelight-backend:preview_20261117_141119_c64db26f`) on `127.0.0.1:8787`
+
+Active source code is retained in the private release directory:
+`/root/tubelight-preview-releases/20261117_141119_c64db26f/landing-build` and `backend-build`.
+Legacy baseline `/root/tubelight_backend` remains preserved.
+
+Both hosts (`https://tubelight.net/` and `https://search.tubelight.net/`) are active, TLS-verified,
+and passing all whole-site checks (11 pages, 56 assets, 67/67 passing). Single live preview generation
+smoke QA completed with real media (2 images, 6 voice segments), cached replay, identity rate-limiting,
+and SQL loopback prefix enforcement. Full release receipt: `docs/RELEASE-2026-11-17.md`.
 
 ## Projects and services
 
