@@ -1,5 +1,31 @@
 # Three hero explanations: visual review, 17 November 2026
 
+## Current revision: three-picture storyboards (v2)
+
+The owner requested less text inside the art and three images for each topic. V2 replaces the review page with **nine generated illustrations**, keeping only one to three short part labels per image plus useful leaders and arrows. The first image of each topic edits the approved illustration; the next two use that illustration as a style reference and show the next part of the explanation.
+
+- Rockets: onboard fuel/oxygen → chamber and nozzle close-up → rocket and gas moving opposite ways.
+- Headaches: distinguish brain/lining/nerves → magnify the sensory nerve in the lining → schematic message arriving at the brain.
+- Black holes: shadow versus surrounding gas → overhead view of the hot disk → schematic light paths reaching an observer.
+
+Easy scripts are in `docs/hero-explanation-scripts-v2.md`; canonical scene data and caption phrases are in `public/previews/hero-2026-11-17/storyboards-v2.json`. Prompt and reference provenance is in `docs/hero-storyboard-prompts-v2.json`. Source v1 PNGs remain available unchanged.
+
+Each topic now has a silent 1280×720 H.264 MP4 (30, 31 and 31 seconds), VTT captions, a three-image thumbnail rail and click-to-seek script steps. Captions are displayed as native HTML beneath the video to keep words off the artwork and avoid overlap with phone playback controls. Voice remains pending. Preview times are provisional reading times and must be replaced with measured Vertex audio durations later.
+
+Rebuild with `node scripts/build-hero-storyboards.mjs`; for text-only updates use `--page-only`. Serve with `node scripts/serve-hero-review.mjs` at `http://127.0.0.1:3012/previews/hero-2026-11-17/`. This static server loads no project environment files or backend, and supports HTTP byte ranges for native MP4 seeking. A plain Python static server on port 3011 did not expose a seekable range, so it is not the recommended video-review URL.
+
+The following sections record the original v1 direction and its checks.
+
+### V2 verification
+
+- All nine generated illustrations were visually inspected for reduced text, meaningful markings and the intended scene progression. Each frame contains only one to three short labels; source v1 images were preserved.
+- FFprobe confirmed three 1280×720 video-only exports, lasting 30, 31 and 31 seconds. Narration is pending and reading times are provisional.
+- The builder verifies that each topic has exactly three existing image files and that caption phrases reproduce its narration exactly.
+- In the browser, all nine thumbnail selections reached their intended scene times (0.08, 10.08 and 20.08 seconds), and the selected script and thumbnail states agreed. Playback started, and switching topics paused the previous video.
+- Desktop and 375 px phone layouts were inspected. Phone layout had no horizontal overflow. Captions are shown beneath the artwork at a readable native text size; full-size image links and complete scripts remain available.
+- Static HTTP returned 200; a bounded MP4 range request returned 206 with the expected Content-Range. Native playback exposed the full seekable duration after switching to the range-capable server.
+- No browser console errors were captured. JavaScript syntax checks and `git diff --check` passed. No application build, provider voice request, database operation or production deployment was needed.
+
 ## Scope and state
 
 The owner asked to read the visual-design book, understand the product in `D:/projects/time2understand`, choose three compelling explanations, create visuals with ChatGPT's image model and show them **before making the Gemini/Vertex voice**. This change completes that visual-review stage. No TTS request has been made. The existing hero videos and their audio remain intact until the new media can be reviewed together.

@@ -1,0 +1,166 @@
+{
+  "version": 2,
+  "date": "2026-11-17",
+  "generator": "ChatGPT built-in image_gen",
+  "audio": "pending",
+  "timing": "Provisional reading pace; replace with measured narration durations when Vertex audio is made.",
+  "storyboards": [
+    {
+      "slug": "rocket",
+      "label": "Rockets",
+      "title": "How do rockets work in empty space?",
+      "color": "#ff9c60",
+      "summary": "Carry the ingredients. Send gas backward. Move forward.",
+      "source": "https://science.nasa.gov/learn/basics-of-space-flight/chapter3-2/",
+      "kind": "Simplified mechanism",
+      "scenes": [
+        {
+          "id": "01-onboard",
+          "title": "Carry both ingredients",
+          "image": "rocket-01-onboard-v2.png",
+          "seconds": 10,
+          "narration": "There’s no air in space. But this rocket carries its own fuel and oxygen, so it has both ingredients it needs to burn.",
+          "captions": [
+            "There’s no air in space.",
+            "But this rocket carries its own fuel and oxygen,",
+            "so it has both ingredients it needs to burn."
+          ],
+          "alt": "A centered silver rocket cutaway with coral fuel and blue oxygen tanks, separate pipes leading to the same glowing chamber. Only Fuel and Oxygen are labelled."
+        },
+        {
+          "id": "02-nozzle",
+          "title": "Make gas rush out",
+          "image": "rocket-02-nozzle-v2.png",
+          "seconds": 10,
+          "narration": "The fuel and oxygen meet in this chamber. They burn and make hot gas. The nozzle speeds that gas out of the engine.",
+          "captions": [
+            "The fuel and oxygen meet in this chamber.",
+            "They burn and make hot gas.",
+            "The nozzle speeds that gas out of the engine."
+          ],
+          "alt": "Close-up of the same rocket’s combustion chamber and widening nozzle, with gold flow arrows passing through the narrow throat and out of the nozzle."
+        },
+        {
+          "id": "03-thrust",
+          "title": "Go the other way",
+          "image": "rocket-03-thrust-v2.png",
+          "seconds": 10,
+          "narration": "As the engine throws gas backward, the gas pushes the rocket forward. It doesn’t need to push against air. That’s how a rocket can fly through empty space.",
+          "captions": [
+            "As the engine throws gas backward,",
+            "the gas pushes the rocket forward.",
+            "It doesn’t need to push against air.",
+            "That’s how a rocket can fly through empty space."
+          ],
+          "alt": "Silver rocket angled upward to the right with a cyan forward arrow, and golden exhaust angled backward to the left with an amber arrow."
+        }
+      ]
+    },
+    {
+      "slug": "headaches",
+      "label": "Headaches",
+      "title": "If the brain can’t feel pain, why do headaches hurt?",
+      "color": "#83ba96",
+      "summary": "Look around the brain. Follow the nerves. Understand the pain.",
+      "source": "https://newsinhealth.nih.gov/2014/03/headache-pain",
+      "kind": "Simplified anatomy; signal route is schematic",
+      "scenes": [
+        {
+          "id": "01-tissues",
+          "title": "Look around the brain",
+          "image": "headaches-01-tissues-v2.png",
+          "seconds": 10,
+          "narration": "Your brain helps you feel pain. But brain tissue itself has no pain sensors. The lining and nerves around it are different.",
+          "captions": [
+            "Your brain helps you feel pain.",
+            "But brain tissue itself has no pain sensors.",
+            "The lining and nerves around it are different."
+          ],
+          "alt": "Right-facing medical head cutaway showing lavender brain tissue, its surrounding lining, and branching gold sensory nerves. Three short labels: Brain, Lining, Nerves."
+        },
+        {
+          "id": "02-nerve",
+          "title": "A nerve sends a message",
+          "image": "headaches-02-nerve-v2.png",
+          "seconds": 10,
+          "narration": "Look closer at the lining. It has pain-sensitive nerve endings. When these nerves are activated, they send a message toward the brain.",
+          "captions": [
+            "Look closer at the lining.",
+            "It has pain-sensitive nerve endings.",
+            "When these nerves are activated,",
+            "they send a message toward the brain."
+          ],
+          "alt": "Magnified tissue layers outside brain tissue: ivory skull above, a membrane with blood vessels and golden nerves in the middle, lavender brain below. Arrows travel along a nerve."
+        },
+        {
+          "id": "03-message",
+          "title": "The brain processes it",
+          "image": "headaches-03-message-v2.png",
+          "seconds": 11,
+          "narration": "The message reaches your brain, which processes it as pain. That’s why a headache can feel deep inside your head, even when the signal started in nearby tissue. Different headaches have different causes.",
+          "captions": [
+            "The message reaches your brain,",
+            "which processes it as pain.",
+            "That’s why a headache can feel deep inside your head,",
+            "even when the signal started in nearby tissue.",
+            "Different headaches have different causes."
+          ],
+          "alt": "Schematic gold sensory nerve sends arrow-marked signals toward a lavender brain, with a subtle violet processing highlight. Labels read Signal and Brain."
+        }
+      ]
+    },
+    {
+      "slug": "black-hole",
+      "label": "Black holes",
+      "title": "Why is there a bright ring around a black hole?",
+      "color": "#efb959",
+      "summary": "Separate the shadow from the gas. Then follow the light.",
+      "source": "https://science.nasa.gov/universe/black-holes/anatomy/",
+      "kind": "Illustration; light paths are schematic",
+      "scenes": [
+        {
+          "id": "01-shadow",
+          "title": "The light comes from outside",
+          "image": "black-hole-01-shadow-v2.png",
+          "seconds": 10,
+          "narration": "A black hole traps light. So why is this one surrounded by a bright ring? We’re seeing glowing gas outside it, around a dark shadow.",
+          "captions": [
+            "A black hole traps light.",
+            "So why is this one surrounded by a bright ring?",
+            "We’re seeing glowing gas outside it,",
+            "around a dark shadow."
+          ],
+          "alt": "Dark black-hole shadow surrounded by a luminous copper-gold accretion disk with lensed arcs. Two labels identify Shadow and Hot gas."
+        },
+        {
+          "id": "02-disk",
+          "title": "The gas forms a hot disk",
+          "image": "black-hole-02-disk-v2.png",
+          "seconds": 10,
+          "narration": "From above, the gas forms a flat, swirling disk. As it moves inward, it heats up and glows. The gas gives us the light we can see.",
+          "captions": [
+            "From above, the gas forms a flat, swirling disk.",
+            "As it moves inward, it heats up and glows.",
+            "The gas gives us the light we can see."
+          ],
+          "alt": "Nearly overhead view of a flat glowing gas disk around a dark central shadow, with three consistent counterclockwise curved arrows and one Hot gas label."
+        },
+        {
+          "id": "03-light",
+          "title": "Gravity bends the view",
+          "image": "black-hole-03-light-v2.png",
+          "seconds": 11,
+          "narration": "Now follow the light. Gravity bends its path around the black hole. Light from the far side can reach our eyes, making the disk appear to curve above and below the shadow.",
+          "captions": [
+            "Now follow the light.",
+            "Gravity bends its path around the black hole.",
+            "Light from the far side can reach our eyes,",
+            "making the disk appear to curve",
+            "above and below the shadow."
+          ],
+          "alt": "Schematic light rays start on the far-side gas disk, curve outside the dark black hole, and reach a blue observer-eye symbol on the right. Only Light and Observer are labelled."
+        }
+      ]
+    }
+  ]
+}
