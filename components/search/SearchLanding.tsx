@@ -1,5 +1,6 @@
 import type { CSSProperties } from "react";
 import { DemoMount, Film, GetButton, PageMount } from "./client";
+import { ShotsCarousel } from "./ShotsCarousel";
 import { DEMO_QUESTIONS, type DemoQuestion } from "./demo";
 import { Back, Bolt, Check, Copy, Fwd, Mark, Mic, Pc, Plus, Reload, Search, User } from "./icons";
 
@@ -30,50 +31,43 @@ export const QS_SHOTS = [
   {
     id: "qs-01",
     src: "/search/shots/qs-01-hold-tab-q.png",
-    title: "Hold Tab + Q in any app",
-    desc: "Voice search that pops up right over your current window.",
+    title: "Ask from any app",
     alt: "Quick Search AI shortcut: Hold Tab + Q to voice search over any app on Windows",
   },
   {
     id: "qs-02",
     src: "/search/shots/qs-02-hold-ask-let-go.png",
     title: "Hold, ask, let go",
-    desc: "Three seconds to an answer. No browser opening, no window tabbing.",
     alt: "Quick Search AI workflow: Hold, ask out loud, and let go for instant response",
   },
   {
     id: "qs-03",
     src: "/search/shots/qs-03-stop-opening-tabs.png",
     title: "Stop opening new tabs",
-    desc: "Replace 30 search tabs with one sourced, authoritative answer card.",
     alt: "Quick Search AI replaces cluttered browser tabs with a clean concise answer",
   },
   {
     id: "qs-04",
     src: "/search/shots/qs-04-highlight-a-word.png",
-    title: "Highlight any word or phrase",
-    desc: "Select unfamiliar text in PDFs or documents and press Tab + Q for instant context.",
+    title: "Highlight. Get it explained.",
     alt: "Highlight text on screen and press Tab + Q for immediate visual AI explanation",
   },
   {
     id: "qs-05",
     src: "/search/shots/qs-05-ask-about-your-screen.png",
-    title: "Ask about your screen with Tab + S",
-    desc: "Box any error dialog, graph, or image to ask questions or extract text.",
+    title: "Snip it. Ask about it.",
     alt: "Press Tab + S to snip and search any screen region or copy text with OCR",
   },
   {
     id: "qs-06",
     src: "/search/shots/qs-06-one-answer-with-proof.png",
-    title: "One answer, cited with proof",
-    desc: "Direct web sources with real photos and links you can verify.",
+    title: "One answer. With sources.",
     alt: "Quick Search AI cited answer showing web sources and verified photos",
   },
   {
     id: "qs-07",
     src: "/search/shots/qs-07-free-50-a-day.png",
     title: "50 free searches every day",
-    desc: "Zero sign-up, no credit card. Search history stays privately on your PC.",
     alt: "50 free daily searches for Windows users with zero signup and local history",
   },
 ];
@@ -401,30 +395,8 @@ export function SearchLanding() {
             <div className="qs-head center">
               <p className="qs-eyebrow">Visual Tour</p>
               <h2 className="qs-h2" id="shots-h">Quick Search in <span className="v">action.</span></h2>
-              <p className="qs-lede">Voice queries, screen snipping, and cited answers — designed native for Windows 10 &amp; 11.</p>
             </div>
-            <div className="qs-shots-grid">
-              {QS_SHOTS.map((s) => (
-                <article className="qs-shot-card" key={s.id}>
-                  <figure className="qs-shot-figure">
-                    <div className="qs-shot-media">
-                      <img
-                        src={s.src}
-                        alt={s.alt}
-                        width={1920}
-                        height={1080}
-                        loading="lazy"
-                        decoding="async"
-                      />
-                    </div>
-                    <figcaption className="qs-shot-body">
-                      <h3 className="qs-shot-title">{s.title}</h3>
-                      <p className="qs-shot-desc">{s.desc}</p>
-                    </figcaption>
-                  </figure>
-                </article>
-              ))}
-            </div>
+            <ShotsCarousel shots={QS_SHOTS} />
           </div>
         </section>
 

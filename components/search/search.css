@@ -164,46 +164,48 @@
 .qs-h1 .v { color: var(--violet); }
 .qs-hero-sub { font: 500 clamp(18px, 1.5vw, 21px)/1.65 var(--body); color: var(--ink-2); max-width: 28em; text-wrap: pretty; }
 
-/* ---------- the demo stage: a big light Chrome window, the popup in its corner ---------- */
+/* ---------- the demo stage: a big dark-mode Chrome window, the white popup in its corner ----------
+   The browser is dark on purpose: the white Quick Search card is then the brightest thing in the
+   picture, so a visitor sees at a glance which window is the product. */
 .qs-demo { min-width: 0; display: flex; flex-direction: column; gap: 22px; }
 .qs-stage { position: relative; height: 600px; }
 .qs-browser {
-  position: absolute; inset: 0; border-radius: 20px; overflow: hidden; background: #ffffff;
-  box-shadow: 0 40px 90px -46px rgba(30, 25, 60, .35), 0 0 0 .5px rgba(0, 0, 0, .12);
+  position: absolute; inset: 0; border-radius: 20px; overflow: hidden; background: #202124;
+  box-shadow: 0 40px 90px -40px rgba(20, 14, 60, .55), 0 0 0 .5px rgba(0, 0, 0, .4);
 }
-.qs-tabs { display: flex; align-items: flex-end; gap: 6px; height: 50px; padding: 9px 10px 0; background: #ebebef; }
+.qs-tabs { display: flex; align-items: flex-end; gap: 6px; height: 50px; padding: 9px 10px 0; background: #17181b; }
 .qs-tabs-strip { flex: 1 1 auto; min-width: 0; height: 41px; display: flex; align-items: flex-end; overflow: hidden; }
 .qs-tab {
   position: relative; flex: none; width: 27px; height: 37px; display: flex; align-items: center; justify-content: center; gap: 8px;
   padding: 0; border-radius: 11px 11px 0 0; overflow: hidden;
 }
 /* a thin divider between tabs, as in a real browser */
-.qs-tab:not(.on)::after { content: ""; position: absolute; right: 0; top: 11px; bottom: 9px; width: 1.5px; border-radius: 1px; background: #cdcdd4; }
-.qs-tab.on { background: #ffffff; box-shadow: 0 -1px 0 rgba(31, 29, 43, .06); }
+.qs-tab:not(.on)::after { content: ""; position: absolute; right: 0; top: 11px; bottom: 9px; width: 1.5px; border-radius: 1px; background: #3c3d42; }
+.qs-tab.on { background: #2b2c30; }
 .qs-tab.w1 { width: 214px; justify-content: flex-start; padding: 0 12px; }
 .qs-tab.w2 { width: 146px; justify-content: flex-start; padding: 0 12px; }
 .qs-tab.w3 { width: 104px; justify-content: flex-start; padding: 0 12px; }
 .qs-tab i { flex: none; display: block; width: 14px; height: 14px; border-radius: 4px; }
 .qs-tab:not(.w1):not(.w2):not(.w3) i { width: 12px; height: 12px; }
-.qs-tab span { min-width: 0; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; font: 600 13px/1.2 var(--body); color: #3c4043; }
-.qs-tab:not(.on) span { color: #5f6368; }
-.qs-newtab { flex: none; align-self: center; display: grid; place-items: center; width: 28px; height: 28px; margin-top: -6px; border-radius: 8px; color: #5f6368; }
+.qs-tab span { min-width: 0; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; font: 600 13px/1.2 var(--body); color: #e8eaed; }
+.qs-tab:not(.on) span { color: #9aa0a6; }
+.qs-newtab { flex: none; align-self: center; display: grid; place-items: center; width: 28px; height: 28px; margin-top: -6px; border-radius: 8px; color: #9aa0a6; }
 .qs-tabcount {
   flex: none; align-self: center; margin-top: -6px; display: inline-flex; align-items: center; height: 26px; padding: 0 11px; border-radius: 999px;
   background: var(--red); color: #ffffff; font: 800 12.5px/1 var(--body); white-space: nowrap; font-variant-numeric: tabular-nums;
   box-shadow: 0 4px 12px -4px rgba(229, 72, 77, .7);
 }
-.qs-addr { display: flex; align-items: center; gap: 14px; height: 56px; padding: 0 16px; color: #8e8e93; border-bottom: 1px solid #ededf0; }
+.qs-addr { display: flex; align-items: center; gap: 14px; height: 56px; padding: 0 16px; color: #9aa0a6; background: #2b2c30; border-bottom: 1px solid #3c3d42; }
 .qs-addr svg { flex: none; }
-.qs-addr div { flex: 1 1 auto; min-width: 0; display: flex; align-items: center; gap: 10px; height: 36px; padding: 0 16px; border-radius: 999px; background: var(--fill); color: var(--label); font: 500 14.5px/1 var(--body); white-space: nowrap; overflow: hidden; }
-.qs-addr div svg { color: #6e6e73; }
+.qs-addr div { flex: 1 1 auto; min-width: 0; display: flex; align-items: center; gap: 10px; height: 36px; padding: 0 16px; border-radius: 999px; background: #1c1d20; color: #e8eaed; font: 500 14.5px/1 var(--body); white-space: nowrap; overflow: hidden; }
+.qs-addr div svg { color: #9aa0a6; }
 .qs-addr div span { overflow: hidden; text-overflow: ellipsis; }
 /* results that don't agree, on the left; the popup covers the right */
 .qs-results { display: flex; flex-direction: column; gap: 26px; padding: 26px 28px; width: calc(100% - 430px); min-width: 220px; }
 .qs-res { display: flex; flex-direction: column; gap: 5px; }
-.qs-res .u { font: 600 13px/1.3 var(--body); color: #137333; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.qs-res .t { font: 700 17px/1.35 var(--body); color: #1f51c9; text-wrap: pretty; }
-.qs-res .s { display: block; height: 9px; margin-top: 4px; border-radius: 5px; background: #ededf0; width: 92%; }
+.qs-res .u { font: 600 13px/1.3 var(--body); color: #9aa0a6; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.qs-res .t { font: 700 17px/1.35 var(--body); color: #8ab4f8; text-wrap: pretty; }
+.qs-res .s { display: block; height: 9px; margin-top: 4px; border-radius: 5px; background: #303134; width: 92%; }
 
 /* the corner card: a plain white sheet with a hairline edge and a soft neutral shadow, like a system popover.
    Colour is used lightly and only where it means something: the brand on the title bar, the key fact
@@ -223,6 +225,8 @@
 .qs-q .n { flex: none; padding: 3px 7px; border-radius: 6px; background: var(--violet-soft); color: var(--violet-ink); font: 700 11.5px/1.2 var(--body); }
 .qs-pic { position: relative; height: 138px; border-radius: 16px; overflow: hidden; background: #eee; }
 .qs-pic img { display: block; width: 100%; height: 100%; object-fit: cover; }
+/* Keep the photographed lunar disc intact in the wide answer cards. */
+.qs-pic img[src$="pic-moon.webp"] { object-fit: contain; object-position: center; background: #000; }
 .qs-pic .count { position: absolute; right: 10px; top: 10px; padding: 3px 9px; border-radius: 999px; background: rgba(255, 255, 255, .78); color: #2a2540; font: 800 11px/1.3 var(--body); }
 .qs-big { font: 800 21px/1.3 var(--body); color: #1c1a33; letter-spacing: -.005em; }
 /* a highlighter stroke across the lower half of the words, not a box */
@@ -557,69 +561,46 @@
 .qs-final .qs-ticks { justify-content: center; color: rgba(255, 255, 255, .92); }
 .qs-final .qs-ticks svg { color: var(--glow); }
 
-/* gallery of shots */
-.qs-shots-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
-  gap: 32px;
-  margin-top: 56px;
+/* A picture-first tour, one screenshot at a time. Native scrolling also supports touch. */
+.qs-carousel { max-width: 920px; margin: 44px auto 0; }
+.qs-carousel-track {
+  display: flex; overflow-x: auto; overscroll-behavior-x: contain;
+  scroll-snap-type: x mandatory; scrollbar-width: none;
+  border: 1px solid var(--line); border-radius: 24px;
+  background: var(--lav); box-shadow: 0 20px 50px -28px rgba(40, 30, 90, .24);
 }
-.qs-shot-card {
-  display: flex;
-  flex-direction: column;
-  background: var(--surface);
-  border-radius: 22px;
-  overflow: hidden;
-  box-shadow: 0 16px 36px -16px rgba(40, 30, 90, .14), 0 0 0 1px var(--line);
-  transition: transform .2s ease, box-shadow .2s ease;
+.qs-carousel-track::-webkit-scrollbar { display: none; }
+.qs-carousel-slide { flex: 0 0 100%; min-width: 0; scroll-snap-align: start; scroll-snap-stop: always; }
+.qs-carousel-slide img { display: block; width: 100%; height: auto; aspect-ratio: 16 / 9; object-fit: contain; }
+.qs-carousel-footer { display: flex; align-items: center; justify-content: space-between; gap: 20px; padding: 22px 4px 8px; }
+.qs-carousel-caption { display: flex; align-items: center; gap: 18px; min-width: 0; }
+.qs-carousel-count { flex: none; color: var(--muted); font: 700 13px/1.4 var(--body); font-variant-numeric: tabular-nums; letter-spacing: .06em; }
+.qs-carousel-caption h3 { color: var(--ink); font: 800 22px/1.25 var(--display); letter-spacing: -.01em; }
+.qs-carousel-controls { display: flex; align-items: center; gap: 10px; flex: none; }
+.qs-carousel-controls button {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 46px;
+  border: 1px solid var(--line); border-radius: 999px; cursor: pointer;
+  transition: background .2s ease, color .2s ease; font: 800 14px/1 var(--body);
 }
-.qs-shot-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 24px 50px -18px rgba(40, 30, 90, .22), 0 0 0 1px var(--violet-soft);
-}
-.qs-shot-figure {
-  margin: 0;
-  display: flex;
-  flex-direction: column;
-}
-.qs-shot-media {
-  position: relative;
-  width: 100%;
-  aspect-ratio: 16 / 9;
-  background: #ebe9f5;
-  overflow: hidden;
-}
-.qs-shot-media img {
-  display: block;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  transition: transform .3s ease;
-}
-.qs-shot-card:hover .qs-shot-media img {
-  transform: scale(1.03);
-}
-.qs-shot-body {
-  padding: 22px 24px 26px;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-.qs-shot-title {
-  font: 800 20px/1.25 var(--display);
-  letter-spacing: -.01em;
-  color: var(--ink);
-}
-.qs-shot-desc {
-  font: 500 15px/1.55 var(--body);
-  color: var(--ink-2);
-}
+.qs-carousel-prev { width: 46px; background: var(--surface); color: var(--ink-2); }
+.qs-carousel-prev:hover { background: var(--violet-soft); color: var(--violet-ink); }
+.qs-carousel-controls .qs-carousel-next { padding: 0 20px; background: var(--violet); color: #fff; border-color: var(--violet); }
+.qs-carousel-controls .qs-carousel-next:hover { background: var(--violet-hover); }
+.qs-carousel-dots { display: flex; justify-content: center; gap: 2px; margin-top: 12px; }
+.qs-carousel-dots button { display: grid; place-items: center; width: 30px; height: 44px; padding: 0; border: 0; background: transparent; cursor: pointer; }
+.qs-carousel-dots span { width: 7px; height: 7px; border-radius: 999px; background: #d8d1ee; transition: width .2s ease, background .2s ease; }
+.qs-carousel-dots button[aria-current="true"] span { width: 24px; background: var(--violet); }
+.qs-carousel-dots button:hover span { background: var(--violet); }
 @media (max-width: 640px) {
-  .qs-shots-grid {
-    grid-template-columns: minmax(0, 1fr);
-    gap: 24px;
-    margin-top: 36px;
-  }
+  .qs-carousel { margin-top: 30px; }
+  .qs-carousel-track { border-radius: 16px; }
+  .qs-carousel-footer { gap: 12px; padding: 18px 0 0; }
+  .qs-carousel-caption { flex-direction: column; align-items: flex-start; gap: 5px; }
+  .qs-carousel-caption h3 { font-size: 18px; }
+  .qs-carousel-count { font-size: 11px; }
+  .qs-carousel-controls { gap: 6px; }
+  .qs-carousel-controls .qs-carousel-next { padding: 0 14px; }
+  .qs-carousel-dots { margin-top: 8px; }
 }
 
 /* footer */
