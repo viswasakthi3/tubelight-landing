@@ -2,7 +2,11 @@ const DEFAULT_BASE = 'http://127.0.0.1:8787';
 const TIMEOUT_MS = Number(process.env.PANEL_BACKEND_TIMEOUT_MS) || 20_000;
 
 export function backendBase(): string {
-  return (process.env.PANEL_BACKEND_URL || process.env.T2U_API_URL || DEFAULT_BASE).replace(/\/+$/, '');
+  const custom = (process.env.PANEL_BACKEND_URL || '').trim();
+  if (custom && custom !== 'https://tubelight.net' && custom !== 'http://127.0.0.1:8787') {
+    return custom.replace(/\/+$/, '');
+  }
+  return 'https://tubelight.net/api/backend';
 }
 
 export function adminAuthHeader(): string | null {
