@@ -1,4 +1,5 @@
 export const MAIN_SITE = "https://tubelight.net";
+export const QUICK_SEARCH_URL = `${MAIN_SITE}/search`;
 export const SEARCH_SITE = "https://search.tubelight.net";
 
 export const SEARCH_HOSTS = new Set(["search.tubelight.net", "search.localhost"]);
@@ -15,8 +16,4 @@ export function cleanHost(headers: Pick<Headers, "get">): string {
 export function isSearchHost(headers: Pick<Headers, "get">): boolean {
   const host = cleanHost(headers);
   return SEARCH_HOSTS.has(host);
-}
-
-export function siteForHost(headers: Pick<Headers, "get">): string {
-  return isSearchHost(headers) ? SEARCH_SITE : MAIN_SITE;
 }

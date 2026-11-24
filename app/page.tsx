@@ -12,9 +12,10 @@ import { Hero } from "@/components/v5/Hero";
 import { Nav } from "@/components/v5/Nav";
 import { V5Providers } from "@/components/v5/Providers";
 import { Who } from "@/components/v5/Who";
+import { MAIN_SITE } from "@/lib/site-host";
 import { getVideos } from "@/lib/videos";
 
-const site = "https://tubelight.net/";
+const site = `${MAIN_SITE}/`;
 const title = "Tubelight | AI Visual Explainer for Windows (Alt + E)";
 const description =
   "Select text and press Alt + E to get a narrated visual explanation beside your work. Dual-coding visual learning for Windows 10 & 11.";
@@ -94,10 +95,6 @@ const structuredData = {
       name: "Tubelight",
       url: site,
       logo: site + "brand/icon-512.png",
-      sameAs: [
-        "https://search.tubelight.net",
-        "https://apps.microsoft.com/detail/9NFK7MS99FB3",
-      ],
     },
     {
       "@type": "SoftwareApplication",

@@ -1,17 +1,14 @@
 import type { MetadataRoute } from "next";
-import { headers } from "next/headers";
-import { siteForHost } from "@/lib/site-host";
+import { MAIN_SITE } from "@/lib/site-host";
 
-export const dynamic = "force-dynamic";
-
-export default async function robots(): Promise<MetadataRoute.Robots> {
-  const site = siteForHost(await headers());
+export default function robots(): MetadataRoute.Robots {
+  const disallow = ["/api/", "/checkout"];
   return {
     rules: [
       {
         userAgent: "*",
         allow: "/",
-        disallow: ["/api/", "/checkout"],
+        disallow,
       },
       {
         userAgent: [
@@ -19,6 +16,8 @@ export default async function robots(): Promise<MetadataRoute.Robots> {
           "ChatGPT-User",
           "OAI-SearchBot",
           "ClaudeBot",
+          "Claude-SearchBot",
+          "Claude-User",
           "Claude-Web",
           "anthropic-ai",
           "PerplexityBot",
@@ -27,16 +26,10 @@ export default async function robots(): Promise<MetadataRoute.Robots> {
           "cohere-ai",
           "CCBot",
         ],
-        allow: [
-          "/",
-          "/llms.txt",
-          "/llms-full.txt",
-          "/search/product.txt",
-          "/search/product-full.txt",
-        ],
-        disallow: ["/api/", "/checkout"],
+        allow: "/",
+        disallow,
       },
     ],
-    sitemap: `${site}/sitemap.xml`,
+    sitemap: `${MAIN_SITE}/sitemap.xml`,
   };
 }

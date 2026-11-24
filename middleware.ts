@@ -1,10 +1,14 @@
 import { NextResponse, type NextRequest } from "next/server";
-import { isSearchHost, SEARCH_SITE } from "./lib/site-host";
+import { isSearchHost, MAIN_SITE, SEARCH_SITE } from "./lib/site-host";
 
 export function middleware(request: NextRequest) {
-  if (isSearchHost(request.headers) && request.nextUrl.pathname === "/search") {
-    // Redirects use the public canonical origin, never a container hostname.
-    return NextResponse.redirect(new URL("/" + request.nextUrl.search, SEARCH_SITE), 308);
+  if (isSearchHost(request.headers)) {
+    if (request.nextUrl.pathname === "/sitemap.xml") {
+      return NextResponse.redirect(new URL("/sitemap.xml", MAIN_SITE), 308);
+    }
+    if (request.nextUrl.pathname === "/search") {
+      return NextResponse.redirect(new URL("/" + request.nextUrl.search, SEARCH_SITE), 308);
+    }
   }
 
   // On main host (tubelight.net, www.tubelight.net, localhost):
@@ -13,4 +17,4 @@ export function middleware(request: NextRequest) {
   return NextResponse.next();
 }
 
-export const config = { matcher: ["/search"] };
+export const config = { matcher: ["/search", "/sitemap.xml"] };
