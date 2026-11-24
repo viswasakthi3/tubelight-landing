@@ -61,7 +61,7 @@ export default function LoginPage() {
     setError('');
 
     try {
-      const res = await fetch('/api/auth/login', {
+      const res = await fetch('/api/panel-auth/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -105,7 +105,7 @@ export default function LoginPage() {
 
   return (
     <div className="login-page">
-      <form className="login-card" onSubmit={submit} method="POST" action="/api/auth/login">
+      <form className="login-card" onSubmit={submit} method="POST" action="/api/panel-auth/login">
         <div className="brand" style={{ marginBottom: 16 }}>
           <span className="brand-dot" />
           <span>Tubelight</span>

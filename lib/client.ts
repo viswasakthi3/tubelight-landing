@@ -40,6 +40,6 @@ export async function post(path: string, body?: any) {
 }
 
 export async function signOut() {
-  await fetch('/api/auth/logout', { method: 'POST', cache: 'no-store' }).catch(() => {});
+  await fetch('/api/panel-auth/logout', { method: 'POST', cache: 'no-store' }).catch(() => {});
   window.location.href = '/login';
 }
