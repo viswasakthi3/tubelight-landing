@@ -110,7 +110,7 @@ async function handleQuickSearch(req: NextRequest) {
           count(DISTINCT device_id) AS total_users,
           count(DISTINCT device_id) FILTER (WHERE created_at > now() - interval '24 hours') AS active_today,
           count(DISTINCT device_id) FILTER (WHERE created_at > now() - interval '7 days') AS active_7d,
-          round(avg(ms)) FILTER (WHERE ms > 0) AS avg_latency_ms
+          round(avg(ms) FILTER (WHERE ms > 0)) AS avg_latency_ms
         FROM t2u_user_questions
       `),
       db.query(`
