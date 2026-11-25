@@ -12,6 +12,7 @@ export type WaitlistApi = {
   email: string;
   setEmail: (v: string) => void;
   err: string;
+  errPlacement: Placement | null;
   submitting: boolean;
   sent: boolean;
   /**
@@ -50,6 +51,7 @@ const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 export function WaitlistProvider({ children }: { children: React.ReactNode }) {
   const [email, setEmailRaw] = useState("");
   const [err, setErr] = useState("");
+  const [errPlacement, setErrPlacement] = useState<Placement | null>(null);
   const [submitting, setSubmitting] = useState(false);
   const [referralUrl, setReferralUrl] = useState("");
   const [sent, setSent] = useState(false);
@@ -81,6 +83,7 @@ export function WaitlistProvider({ children }: { children: React.ReactNode }) {
   const setEmail = useCallback((v: string) => {
     setEmailRaw(v);
     setErr("");
+    setErrPlacement(null);
   }, []);
   const setOtherText = useCallback((v: string) => {
     const t = v.slice(0, 80);
@@ -112,10 +115,12 @@ export function WaitlistProvider({ children }: { children: React.ReactNode }) {
       const v = email.trim();
       if (!EMAIL_RE.test(v)) {
         setErr("That email doesn’t look quite right — mind checking it?");
+        setErrPlacement(placement);
         return false;
       }
       setSubmitting(true);
       setErr("");
+      setErrPlacement(null);
       try {
         const searched = (opts?.topic ?? "").trim().slice(0, 120);
         const res = await fetch("/api/waitlist", {
@@ -126,6 +131,7 @@ export function WaitlistProvider({ children }: { children: React.ReactNode }) {
         const j = await res.json().catch(() => ({}));
         if (!res.ok || !j.ok) {
           setErr(typeof j.error === "string" ? j.error : "Something went wrong. Please try again in a moment.");
+          setErrPlacement(placement);
           return false;
         }
         token.current = typeof j.token === "string" ? j.token : "";
@@ -136,16 +142,18 @@ export function WaitlistProvider({ children }: { children: React.ReactNode }) {
           url.searchParams.set("ref", j.referralCode);
           setReferralUrl(url.href);
         }
+        const nextIdx = typeof j.nextQuestion === "number" ? Math.max(0, Math.min(QS.length, j.nextQuestion)) : 0;
         setSent(true);
         setPicked([]);
-        setQiBoth(0);
+        setQiBoth(nextIdx);
         setAnswerErr("");
         clearTexts();
-        if (!opts?.quiet) setModal("q");
+        if (!opts?.quiet) setModal(nextIdx >= QS.length ? "done" : "q");
         track("waitlist_submit", { placement, duplicate: !!j.duplicate });
         return true;
       } catch {
         setErr("Couldn’t reach the server. Check your connection and try again.");
+        setErrPlacement(placement);
         return false;
       } finally {
         setSubmitting(false);
@@ -175,6 +183,7 @@ export function WaitlistProvider({ children }: { children: React.ReactNode }) {
 
   const openModal = useCallback(() => {
     setErr("");
+    setErrPlacement(null);
     setModal(!sent ? "email" : qiRef.current >= QS.length ? "done" : "q");
   }, [sent]);
   const closeModal = useCallback(() => setModal(null), []);
@@ -264,8 +273,8 @@ export function WaitlistProvider({ children }: { children: React.ReactNode }) {
   }, [advance]);
 
   const value = useMemo<WaitlistApi>(
-    () => ({ referralUrl, email, setEmail, err, submitting, sent, submit, points, modal, openModal, closeModal, qi, picked, otherText, setOtherText, aboutText, setAboutText, savingAnswer, answerErr, pick, nextQ, skipQ }),
-    [referralUrl, email, setEmail, err, submitting, sent, submit, points, modal, openModal, closeModal, qi, picked, otherText, setOtherText, aboutText, setAboutText, savingAnswer, answerErr, pick, nextQ, skipQ],
+    () => ({ referralUrl, email, setEmail, err, errPlacement, submitting, sent, submit, points, modal, openModal, closeModal, qi, picked, otherText, setOtherText, aboutText, setAboutText, savingAnswer, answerErr, pick, nextQ, skipQ }),
+    [referralUrl, email, setEmail, err, errPlacement, submitting, sent, submit, points, modal, openModal, closeModal, qi, picked, otherText, setOtherText, aboutText, setAboutText, savingAnswer, answerErr, pick, nextQ, skipQ],
   );
 
   return <Ctx.Provider value={value}>{children}</Ctx.Provider>;

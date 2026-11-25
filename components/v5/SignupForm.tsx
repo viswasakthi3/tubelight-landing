@@ -60,7 +60,7 @@ export function SignupForm({
           {label}
         </button>
       </form>
-      {w.err ? (
+      {w.err && w.errPlacement === placement ? (
         <p className="err" role="alert">
           {w.err}
         </p>

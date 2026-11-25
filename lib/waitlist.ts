@@ -168,12 +168,13 @@ export async function saveSignup(signup: Signup, ref: string | null = null) {
 
 type Queryable = Pick<Pool, "query">;
 
-async function pgStatus(q: Queryable, email: string): Promise<{ position: number; boost: number } | null> {
-  const result = await q.query<{ position: number; boost: number }>(
+async function pgStatus(q: Queryable, email: string): Promise<{ position: number; boost: number; nextQuestion: number } | null> {
+  const result = await q.query<{ position: number; boost: number; answers: Answers }>(
     `SELECT 1 + (SELECT COUNT(*)::int FROM tubelight_waitlist other
-       WHERE (-other.boost, other.created_at, other.id) < (-me.boost, me.created_at, me.id)) AS position, me.boost
+       WHERE (-other.boost, other.created_at, other.id) < (-me.boost, me.created_at, me.id)) AS position, me.boost, me.answers
      FROM tubelight_waitlist me WHERE me.email = $1`, [email]);
-  return result.rows[0] ?? null;
+  const row = result.rows[0];
+  return row ? { position: row.position, boost: row.boost, nextQuestion: nextQuestionFor(row.answers) } : null;
 }
 
 function fileRanked(all: Signup[]): { s: Signup; i: number }[] {
@@ -201,7 +202,9 @@ export async function getWaitlistStatus(email: string) {
   }
   const all = await readAll();
   const member = all.find((s) => s.email === email);
-  return member ? { position: filePosition(all, email), boost: member.boost ?? 0 } : null;
+  return member
+    ? { position: filePosition(all, email), boost: member.boost ?? 0, nextQuestion: nextQuestionFor(member.answers) }
+    : null;
 }
 
 export async function getTotal(): Promise<number> {
@@ -219,8 +222,17 @@ export async function getTotal(): Promise<number> {
 /** Only the six questions (keys "0"-"5") count; other keys such as "searched" never move anyone up. */
 const QUESTION_KEYS = ["0", "1", "2", "3", "4", "5"];
 
+function isAnswered(v: AnswerValue | undefined): boolean {
+  return Array.isArray(v) ? v.length > 0 : typeof v === "string" && v.trim() !== "";
+}
+
+function nextQuestionFor(answers: Answers | null | undefined): number {
+  const idx = QUESTION_KEYS.findIndex((k) => !isAnswered(answers?.[k]));
+  return idx < 0 ? QUESTION_KEYS.length : idx;
+}
+
 function countAnswered(answers: Answers): number {
-  return QUESTION_KEYS.map((k) => answers[k]).filter((v) => (Array.isArray(v) ? v.length > 0 : typeof v === "string" && v.trim() !== "")).length;
+  return QUESTION_KEYS.map((k) => answers[k]).filter(isAnswered).length;
 }
 
 /** Boost is always recomputed from the stored answers, so repeats can't inflate it. */
